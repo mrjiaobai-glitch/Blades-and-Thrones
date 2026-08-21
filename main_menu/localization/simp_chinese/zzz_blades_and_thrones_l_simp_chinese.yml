@@ -460,7 +460,7 @@
  blades_and_thrones_volunteer_company_name: "佣兵军团"
  blades_and_thrones_volunteer_company_name_ADJ: "佣兵军团"
  blades_and_thrones_company.1.title: "军团的命运：忠诚还是自立？"
- blades_and_thrones_company.1.desc: "军旗已经绣好，战马已经备鞍——[Root.GetName]第[Root.GetVariable('blades_and_thrones_company_counter').GetValue]军团即将踏上征途。它将离开你的直接指挥，成为一支挂着你的纹章、却要自己闯荡的无地军团。将军们问：这支军团，是要以忠诚立身，还是收编为王室军团，抑或你要放下王冠亲自执掌？"
+ blades_and_thrones_company.1.desc: "军旗已经绣好，战马已经备鞍——[ROOT.GetName]第[ROOT.GetVariable('blades_and_thrones_company_counter').GetValue|V0]军团即将踏上征途。它将离开你的直接指挥，成为一支挂着你的纹章、却要自己闯荡的无地军团。将军们问：这支军团，是要以忠诚立身，还是收编为王室军团，抑或你要放下王冠亲自执掌？"
  blades_and_thrones_company.1.a.tt: "军团获得忠诚待遇：忠诚度较高，可正常进贡，不会索饷闹独立——但佣兵本性不改，仍不参与宗主的战争。军团自谋生计：靠掠夺与佣兵合同维生，无需宗主拨款。"
  STATIC_MODIFIER_NAME_blades_and_thrones_loyal_company: "忠诚远征军团"
  STATIC_MODIFIER_DESC_blades_and_thrones_loyal_company: "这支军团保持对王室的忠诚，按时进贡。"
