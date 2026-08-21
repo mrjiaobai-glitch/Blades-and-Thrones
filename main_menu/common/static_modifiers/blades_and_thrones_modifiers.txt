@@ -1,34 +1,10 @@
 ﻿# 雇佣津贴：低级佣兵军团（合同工）的宗主津贴——半额（佣兵自食其力为主）
-mercenary_mutiny_army_country_subsidy = {
-	game_data = {
-		category = country
-	}
-	monthly_gold_income = 25
-}
 
 # 军费拨款：低级代管军团（国家代管军队）的全额军费
-mercenary_mutiny_trusted_subsidy = {
-	game_data = {
-		category = country
-	}
-	monthly_gold_income = 50
-}
 
 # 老兵雇佣津贴：高级佣兵（强力佣兵国）的合同金（升级后由 +25 切换到此档）
-mercenary_mutiny_veteran_stipend = {
-	game_data = {
-		category = country
-	}
-	monthly_gold_income = 50
-}
 
 # 大军团军费拨款：高级代管（大型代管军团）的全额军费（升级后由 +50 切换到此档）
-mercenary_mutiny_grand_subsidy = {
-	game_data = {
-		category = country
-	}
-	monthly_gold_income = 75
-}
 
 # 削藩记恨：宗主收回藩地后军阀的忠诚惩罚（10 年）
 blades_and_thrones_revoked_land_modifier = {
