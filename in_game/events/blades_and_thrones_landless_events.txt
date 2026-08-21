@@ -8,6 +8,8 @@ blades_and_thrones_landless.1 = { #安家立业：获得第一块土地后的抉
 	outcome = neutral
 	major = yes
 	trigger = {
+		# 防重复：安家一次后不可再触发（控制台直接触发会绕过脉冲门槛）
+		NOT = { has_variable = blades_and_thrones_landless_settled }
 	}
 
 	option = {
@@ -106,6 +108,8 @@ blades_and_thrones_landless.3 = { #还都：光复故都，结束流亡
 	outcome = neutral
 	major = yes
 	trigger = {
+		# 防重复：复国一次后不可再触发
+		NOT = { has_variable = blades_and_thrones_landless_settled }
 	}
 
 	option = {
