@@ -1,9 +1,17 @@
-blades_and_thrones_military_junta_reform = {
+﻿blades_and_thrones_military_junta_reform = {
 	# potential 以“政变变量”门控：仅政变事件添加改革时设置该变量，
 	# 正常游玩永不满足 → 改革不出现在改革面板，只能通过军事政变获得。
 	potential = {
 		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 		has_variable = blades_and_thrones_junta_reform_eligible
+	}
+
+	# 2024-08 需求：军政府改革不可被主动移除/替换——locked = always = yes
+	# （玩家无法在改革面板交互），只能由 loyalty.4 核心抉择的 remove_reform
+	# 效果结束。先例：原版 pirate_brethren_reform（locked = { always = yes }）
+	# 同样被事件/和约效果 remove_reform 移除——locked 只挡 UI 不挡效果。
+	locked = {
+		always = yes
 	}
 
 	country_modifier = {
