@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # 褰╄泲鍥斤紙BLT 鑷敱鍐涘洟锛夊紑灞€淇锛氱嫭绔嬫棤鍦板浗瀹舵病鏈夊ぉ鐒剁伯椋熻幏鍙栨潈
 # 锛堥檮搴搁潬 subject type 鐨?food_access = yes 娲伙紱鐙珛鍥藉闈犺嚜宸辩殑棰嗗湡鎴栧叧绯伙級锛?
 # 鍐涢槦浼氶タ姝烩€斺€斿紑灞€涓?CHI锛堝痉鍖栨墍鍦ㄥ浗锛夊缓绔嬮暱鏈?food_access 鍏崇郴锛?
@@ -507,13 +507,6 @@ blades_and_thrones_war_pulse = {
 			limit = {
 				has_variable = blades_and_thrones_war_months
 				var:blades_and_thrones_war_months >= 24
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = -1
-				min = 0
-				max = 100
 			}
 		}
 		if = {
