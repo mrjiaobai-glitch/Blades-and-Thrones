@@ -430,7 +430,7 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
 1. 完全关闭游戏和启动器后再启用模组，新开档测试，不要读旧档。
 2. 先跑调试事件：
 event mercenary_mutiny_test.1
-event blades_and_thrones_junta.99
+event blades_and_thrones_loyalty.3   # 政变链（选"接受军人接管"→ 5 年后 loyalty.4 抉择）
 event blades_and_thrones_war.99
 event blades_and_thrones_intel.99
 event blades_and_thrones_militia.99
