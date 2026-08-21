@@ -1,4 +1,4 @@
-mercenary_mutiny_company_count = {
+﻿mercenary_mutiny_company_count = {
 	value = 0
 	ordered_hired_mercenary = {
 		add = 1
@@ -280,15 +280,6 @@ mercenary_mutiny_pop_conversion_ratio = {
 }
 
 # 安全读取可选变量（变量未设置时返回 0，避免 scale 求值报错）
-blades_and_thrones_junta_stability_value = {
-	if = {
-		limit = { has_variable = blades_and_thrones_junta_stability }
-		value = var:blades_and_thrones_junta_stability
-	}
-	else = {
-		value = 0
-	}
-}
 
 blades_and_thrones_war_months_value = {
 	if = {
@@ -736,85 +727,13 @@ blades_and_thrones_levy_state_ai_bias = {
 	}
 }
 
-blades_and_thrones_military_junta_spawn_chance = {
-	value = 1
-}
 
-blades_and_thrones_junta_change_stability_part = {
-	value = 0.5
-	add = {
-		value = root.stability
-		multiply = 0.02
-	}
-}
 
-blades_and_thrones_junta_change_legitimacy_part = {
-	value = 0
-	if = {
-		limit = {
-			root = { legitimacy > 50 }
-		}
-		add = {
-			value = root.legitimacy
-			subtract = 50
-			divide = 50
-		}
-	}
-	if = {
-		limit = {
-			root = { legitimacy < 50 }
-		}
-		subtract = {
-			value = 50
-			subtract = root.legitimacy
-			divide = 50
-		}
-	}
-}
 
-blades_and_thrones_junta_change_loyalty_part = {
-	value = root.blades_and_thrones_army_loyalty
-	subtract = 0.5
-	multiply = 2
-}
 
-blades_and_thrones_junta_change_war_part = {
-	value = 0
-	add = {
-		value = root.war_exhaustion
-		multiply = -0.1
-	}
-	if = {
-		limit = {
-			root = {
-				has_variable = blades_and_thrones_war_months
-			}
-		}
-		subtract = {
-			value = var:blades_and_thrones_war_months
-			multiply = 0.05
-		}
-	}
-}
 
-blades_and_thrones_junta_stability_change = {
-	value = blades_and_thrones_junta_change_stability_part
-	add = blades_and_thrones_junta_change_legitimacy_part
-	add = blades_and_thrones_junta_change_loyalty_part
-	add = blades_and_thrones_junta_change_war_part
-}
 
-blades_and_thrones_junta_soldier_handout_cost = {
-	value = mercenary_mutiny_monthly_pay_cost
-	multiply = 6
-	min = 5
-}
 
-blades_and_thrones_junta_estate_bribe_cost = {
-	value = root.monthly_income_total
-	multiply = 0.25
-	min = 5
-}
 
 blades_and_thrones_junta_admin_cost = {
 	value = root.monthly_income_total
