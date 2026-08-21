@@ -344,6 +344,12 @@ blades_and_thrones_company_pulse = {
 		if = {
 			limit = {
 				NOT = { has_variable = mercenary_mutiny_company_demand_cooldown }
+				# 2024-08 修复：触发索饷前必须确认仍有不忠附庸——否则佣兵已跑路
+				# （独立/解除关系）后，company_ref 分支仍会触发 test.10 → 第二次索饷
+				any_subject = {
+					has_variable = mercenary_mutiny_disloyal_subject
+					NOT = { has_country_modifier = mercenary_mutiny_placated }
+				}
 			}
 			trigger_event_non_silently = {
 				id = mercenary_mutiny_test.10
