@@ -1,4 +1,4 @@
-# 雇佣津贴：低级佣兵军团（合同工）的宗主津贴——半额（佣兵自食其力为主）
+﻿# 雇佣津贴：低级佣兵军团（合同工）的宗主津贴——半额（佣兵自食其力为主）
 mercenary_mutiny_army_country_subsidy = {
 	game_data = {
 		category = country
@@ -99,18 +99,6 @@ blades_and_thrones_loyal_company = {
 	loyalty_to_overlord = 25
 }
 
-blades_and_thrones_military_junta_modifier = {
-	game_data = {
-		category = country
-		decaying = yes
-	}
-	global_crown_estate_power = -0.25
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.50
-	army_maintenance_efficiency = 0.15
-	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.02
-	monthly_towards_centralization = societal_value_monthly_move
-	monthly_towards_quality = societal_value_minor_monthly_move
-}
 
 blades_and_thrones_army_purged_modifier = {
 	game_data = {
@@ -221,30 +209,7 @@ blades_and_thrones_junta_cogovernance_modifier = {
 	government_reform_slots = 1
 }
 
-blades_and_thrones_junta_restoration_pain_modifier = {
-	game_data = {
-		category = country
-		decaying = yes
-	}
-	stability_cost_efficiency = -0.20
-	monthly_rebel_growth = 0.001
-	monthly_legitimacy = -0.05
-}
 
-blades_and_thrones_junta_forced_cogovernance_modifier = {
-	game_data = {
-		category = country
-	}
-	global_crown_estate_power = 0.10
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.10
-	global_nobles_estate_power = 0.05
-	global_burghers_estate_power = 0.05
-	country_cabinet_efficiency = 0.05
-	army_maintenance_efficiency = -0.05
-	monthly_legitimacy = 0.02
-	diplomatic_reputation = diplomatic_reputation_mild_penalty
-	government_reform_slots = 1
-}
 
 blades_and_thrones_junta_hardened_modifier = {
 	game_data = {
