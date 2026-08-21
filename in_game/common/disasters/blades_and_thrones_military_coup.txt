@@ -4,6 +4,10 @@
 
 	can_start = {
 		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		# 2024-08 需求：只有接纳"职业军队"思潮（professional_armies，文艺复兴
+		# 时代）后，军队才可能演变成有组织、有自我意识的夺权力量——中世纪早期
+		# 的封建征召兵谈不上"军事政变"。游戏早期（1337+）政变被时代门槛挡住。
+		has_embraced_institution = institution:professional_armies
 		OR = {
 			blades_and_thrones_army_loyalty < 0.15
 			# 因果链衔接：哗变被强硬镇压后军人记恨（blades_and_thrones_army_grudge，
