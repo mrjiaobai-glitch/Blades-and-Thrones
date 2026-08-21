@@ -142,7 +142,9 @@ blades_and_thrones_junta_purge_aftermath_modifier = {
 	}
 	global_crown_estate_power = 0.10
 	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.20
-	army_tradition_decay = 0.005
+	# 2024-08 叙事统一（清洗旧精英而非军官）：删除原 army_tradition_decay
+	# （军队受损残留），补正统惩罚呼应 desc "正统与稳定受损"
+	monthly_legitimacy = -0.01
 	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.01
 }
 
@@ -155,6 +157,8 @@ blades_and_thrones_junta_purge_legacy_modifier = {
 	country_cabinet_efficiency = 0.10
 	stability_cost_efficiency = 0.10
 	monthly_rebel_growth = -0.001
+	# 2024-08 叙事统一：铁腕清洗的国际名声代价（内部秩序重建 vs 外部骂名）
+	diplomatic_reputation = diplomatic_reputation_mild_penalty
 }
 
 blades_and_thrones_junta_collapse_modifier = {
