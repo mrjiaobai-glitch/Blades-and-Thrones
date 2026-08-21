@@ -1,4 +1,4 @@
-mercenary_mutiny_create_rebel_effect = {
+﻿mercenary_mutiny_create_rebel_effect = {
 	if = {
 		limit = {
 			NOT = { has_variable = mercenary_mutiny_loyal_military_at_start }
@@ -50,7 +50,6 @@ mercenary_mutiny_create_rebel_effect = {
 			}
 			every_pop = {
 				limit = {
-					owner = root
 				}
 				add_pop_satisfaction = pop_satisfaction_radical_penalty
 				change_pop_allegiance = scope:mercenary_mutiny_rebel_scope
@@ -62,7 +61,6 @@ mercenary_mutiny_create_rebel_effect = {
 		capital = {
 			every_pop = {
 				limit = {
-					owner = root
 				}
 				add_pop_satisfaction = pop_satisfaction_radical_penalty
 				change_pop_allegiance = scope:mercenary_mutiny_rebel_scope
