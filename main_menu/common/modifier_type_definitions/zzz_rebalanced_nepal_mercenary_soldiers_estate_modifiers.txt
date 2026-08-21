@@ -1,4 +1,4 @@
-zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = {
+﻿zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = {
 	percent = yes
 	game_data = {
 		category = country
@@ -204,13 +204,6 @@ global_zzz_rebalanced_nepal_mercenary_soldiers_pressure = {
 	}
 }
 
-global_zzz_rebalanced_nepal_mercenary_soldiers_junta_stability = {
-	color = neutral
-	game_data = {
-		category = country
-		should_show_in_modifiers_tab = yes
-	}
-}
 
 global_zzz_rebalanced_nepal_mercenary_soldiers_war_months = {
 	color = neutral
