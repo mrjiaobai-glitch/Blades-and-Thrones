@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_veterans
+﻿namespace = blades_and_thrones_veterans
 
 # ============ 老兵返乡：战后裁军抉择 ============
 # 和平到来时，士兵阶层迎来"解甲归田"的抉择：
@@ -25,7 +25,6 @@ blades_and_thrones_veterans.1 = { #老兵返乡：战后裁军抉择（遣散费
 			every_owned_location = {
 				every_pop = {
 					limit = {
-						owner = root
 						pop_type = pop_type:soldiers
 					}
 					root = {
@@ -62,7 +61,6 @@ blades_and_thrones_veterans.1 = { #老兵返乡：战后裁军抉择（遣散费
 			every_owned_location = {
 				every_pop = {
 					limit = {
-						owner = root
 						pop_type = pop_type:soldiers
 					}
 					add_pop_size = {
@@ -93,7 +91,6 @@ blades_and_thrones_veterans.1 = { #老兵返乡：战后裁军抉择（遣散费
 			every_owned_location = {
 				every_pop = {
 					limit = {
-						owner = root
 						pop_type = pop_type:soldiers
 					}
 					add_pop_size = {
