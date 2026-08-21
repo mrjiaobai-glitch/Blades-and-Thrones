@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_intel
+﻿namespace = blades_and_thrones_intel
 
 blades_and_thrones_intel.1 = { #军事情报汇总：月度军情报告
 	type = country_event
@@ -16,8 +16,11 @@ blades_and_thrones_intel.1 = { #军事情报汇总：月度军情报告
 
 	option = {
 		name = blades_and_thrones_intel.1.b
-		trigger_event_non_silently = {
-			id = blades_and_thrones_conversion.1
+		# 包 hidden_effect：trigger_event 在选项体会被预览重复触发（2024-08 教训）
+		hidden_effect = {
+			trigger_event_non_silently = {
+				id = blades_and_thrones_conversion.1
+			}
 		}
 	}
 }
@@ -34,9 +37,11 @@ blades_and_thrones_intel.99 = { #调试：手动情报汇总
 
 	option = {
 		name = blades_and_thrones_intel.99.a
-		blades_and_thrones_prepare_intel_report_effect = yes
-		trigger_event_non_silently = {
-			id = blades_and_thrones_intel.1
+		hidden_effect = {
+			blades_and_thrones_prepare_intel_report_effect = yes
+			trigger_event_non_silently = {
+				id = blades_and_thrones_intel.1
+			}
 		}
 	}
 }
