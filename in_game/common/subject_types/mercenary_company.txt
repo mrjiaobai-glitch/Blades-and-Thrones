@@ -1,4 +1,4 @@
-# ============================================================================
+﻿# ============================================================================
 # 鍐涘洟鍥介檮搴哥被鍨嬩綋绯伙紙浜旂骇鏍戠姸锛夛細
 #   鍚堝悓宸ヤ剑鍏碉紙浣庣骇锛夆攢鈹€瑙勬ā鈹€鈹€> 寮哄姏浣ｅ叺鍥斤紙楂樼骇锛夆攢鈹€鈹?
 #                                                 鈹溾攢鈹€> 鍦版柟鍐涢榾锛堜富骞诧紝鏈夊湴鐩橈級
@@ -169,13 +169,15 @@ mercenary_company_trusted = {
 	overlord_modifier = {
 		monthly_legitimacy = 0.01
 		# 军团经济补助（月度支出）：对应附庸侧 subject_modifier 的正收入
-		monthly_gold_income = -50
+		# 2024-08 平衡：50 → 35（1337 年小国月入才二三十金，50 负担过重；
+		# 阶梯 25/35/50/75——自由团 25、代管 35、强力佣兵 50、大型代管 75）
+		monthly_gold_income = -35
 	}
 	subject_modifier = {
 		discipline = 0.025
 		country_cabinet_efficiency = -0.10
 		# 宗主经济补助（月度，替代旧的年度一次性拨款）：原版先例 sco_auld_alliance_funding
-		monthly_gold_income = 50
+		monthly_gold_income = 35
 		# 扩军倾向：AI 军团的目标军队规模放大（expected_army_size_modifier，原版 warrior_banners 同款）
 		expected_army_size_modifier = 0.25
 		# 人力池（max_manpower 千人）：无地军团无领土 POP，靠此基础人力补充部队损耗
