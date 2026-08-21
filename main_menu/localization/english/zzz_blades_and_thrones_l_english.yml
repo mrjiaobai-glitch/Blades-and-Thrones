@@ -464,7 +464,7 @@
  blades_and_thrones_volunteer_company_name_ADJ: "Mercenary"
  blades_and_thrones_company.1.title: "The Company's Fate: Loyalty or Independence?"
  blades_and_thrones_company.1.desc: "The banner is embroidered, the horses saddled - the [Root.GetName] [Root.GetVariable('blades_and_thrones_company_counter').GetValue] Legion is about to take the road. It will leave your direct command and become a territory-free legion marching under your arms. The generals ask: shall this legion stand on loyalty, or be left to its own devices?"
- blades_and_thrones_company.1.a.tt: "The company receives loyal treatment: high loyalty, pays tribute, and never demands pay or plots independence - but it remains a company of mercenaries and will not fight the overlord's wars."
+ blades_and_thrones_company.1.a.tt: "The company receives loyal treatment: high loyalty, pays tribute, and never demands pay or plots independence - but it remains a company of mercenaries and will not fight the overlord's wars. The company lives by its own means: plunder and mercenary contracts, no overlord subsidies."
  blades_and_thrones_company.1.b.tt: "The company becomes a disloyal subject: refuses levies and tribute, may demand pay, rebel, or even betray you - mercenaries serve only money."
  STATIC_MODIFIER_NAME_blades_and_thrones_loyal_company: "Loyal Expeditionary Company"
  STATIC_MODIFIER_DESC_blades_and_thrones_loyal_company: "The company remains loyal to the crown and pays its tribute."
