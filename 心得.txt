@@ -1,4 +1,4 @@
-﻿《刀锋与王座》开发心得
+《刀锋与王座》开发心得
 
 本文是《刀锋与王座》开发过程中长期对话沉淀下来的独立心得，适合在动手改模组之前先读一遍。
 （原 README 中的【设计心得】【开发心得】章节已并入本文，README 只留指引。）
@@ -305,6 +305,68 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
     （抉择弹窗间隙国家持有军政府改革）。经验：重构时"删除"比"修改"干净——
     旧子系统（支持事件/派系斗争/掌控力）整体移除，7 个永久修正保留并映射到
     新抉择（还政=文官复位、制度化=军政府制度化、铁腕=清洗遗产+清洗余波）。
+
+34. 选项预览执行副作用（政变链卡顿教训，2024-08）：EU5 悬停事件选项会执行
+    选项体的效果（但不执行 set_variable）——create_character / set_new_ruler /
+    trigger_event_non_silently 写在选项体会**每次悬停重复执行** → 预览卡顿 +
+    事件堆积导致无响应（用户实测：悬停 loyalty.3 选项一卡顿，选择后 loyalty.4
+    多弹窗堆积卡死）。修复：副作用效果一律包 hidden_effect（预览不执行隐藏
+    效果）。高危清单：create_character、set_new_ruler、trigger_event_*、
+    add_pop/add_pop_size、remove_reform/add_reform、change_country_type、
+    set_personality、every_owned_location（铁腕清洗的削 POP 悬停就执行！）。
+    自查：扫描"选项体直接写这些效果"模式；简单效果（add_stability 等）直接
+    写选项体是 vanilla 惯例，不受影响。
+
+35. 控制台 event 绕过事件 trigger：`event <id>` 是强制触发（跳过 trigger）——
+    事件级防重复（trigger = NOT xxx_resolved）只对脚本触发（trigger_event_xxx）
+    生效；游戏内路径（灾难 on_start 等）会检查 trigger（references：脚本触发
+    不满足 trigger 时运行 on_trigger_fail）。所以"控制台还能再触发"是预期调试
+    行为，不是 bug——防重复要"灾难层 + 事件层"双保险，事件层挡脚本路径，
+    灾难层挡 can_start。
+
+36. 改革 locked = { always = yes }（"无法主动移除/替换"）：玩家无法在改革面板
+    交互，但 remove_reform / add_reform 效果不受 locked 影响（先例：原版
+    pirate_brethren_reform 同样 locked = always 且被事件/和约效果移除）。
+    适合"只能由特定事件结束"的改革（军政府改革：只有 loyalty.4 抉择能结束）。
+
+37. 改革 potential 的"身份门控"（四海为家教训）：限制"只有无主军团才能选择"=
+    country_type = army + NOT is_subject + 军团标记 OR（exiles/original/
+    volunteer）+ setup tag 放行（has_or_had_tag = BLT——setup 授予同样检查
+    potential，不放行会被静默丢弃，见踩坑 3/29）。有主军团靠附庸机制
+    （subject food_access = yes）生存，不需要四海为家——身份门槛必须与
+    机制配套，否则被排除的实体活不下去。
+
+38. 灾难时代门槛：can_start 加 has_embraced_institution = institution:xxx
+    （如 professional_armies 职业军队）——用 vanilla 思潮做时代门控
+    （中世纪封建军队谈不上"军事政变"，1337 早期政变不会发生）；调试不受
+    影响（事件直接触发绕过 can_start）。
+
+39. loc 的 GetValue 必须带格式符：`[ROOT.GetVariable('x').GetValue|V0]`——
+    裸 `.GetValue]` 报 "Failed converting statement for 'Root.GetVariable(...)'"；
+    Root/ROOT 大小写 vanilla 两种都有，统一用大写。自查：grep
+    `GetVariable\([^)]*\)\.GetValue\]`（无 | 格式符）。变量引用前确保初始化
+    （事件 immediate 兜底 set 0，防控制台/异常路径触发时 desc 求值报错）。
+
+40. 重构清理方法论（删灾难/事件后的连带残留）：删掉机制后要清——
+    loc 键（已删事件的键，实测 28 个）、desc 里的变量行（情报/转化面板的
+    "军政府掌控力"行——intel 效果已删但 desc 还在引用显示变量）、static_
+    modifier 死代码、modifier 类型定义与图标、gui 面板文件。死代码检测：
+    grep 全 mod 引用数（只有定义=死，实测 4 个补贴 static_modifier 零引用）。
+
+41. 数值阶梯一致性：subject_modifier 月度补贴与年度账单（bill 的 add 值）必须
+    同步（modifier 月付 vs bill 年付通知，不同步会"通知 600 实际 35×12"）；
+    改补贴要同时改：subject_types 正负两处、bill 四档、注释档位表、平衡表。
+    阶梯设计（20/25/35/50）保持服务等级溢价（自由团→王室军团→强力佣兵→大军团）。
+
+42. change_variable 前必须兜底初始化：实测 987 条错误（329 次选项执行 ×3 类
+    @761 比较 + 1 条 @745 change_variable），根因是旧档/旧路径创建的不忠军团
+    宗主侧缺 mercenary_mutiny_company_refusals（初始化只在"创建时"做，老档
+    无变量）。修复 = 事件选项 hidden_effect 内先
+    `if NOT has_variable → set_variable value = 0` 再 change_variable（幂等，
+    不重置已有计数）；crisis 同款兜底。教训：所有 change_variable 目标变量
+    都要在"使用处"做存在性兜底，不能只依赖创建路径初始化（旧档、调试路径、
+    删除旧选项后的残留都会绕开初始化）。loc 侧同批 688 条错误是 GetValue 缺
+    |V0（旧文件），与脚本错误独立，修 loc 即可。
 
 八、事件写法规范（参考创意工坊 3659311464「1644」+ 原版，长期适用）
 
