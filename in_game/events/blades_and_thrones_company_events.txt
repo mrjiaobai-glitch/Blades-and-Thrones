@@ -20,6 +20,18 @@ blades_and_thrones_company.1 = { #军团性质抉择：忠诚远征 or 收编 or
 					save_scope_as = blades_and_thrones_founded_company
 				}
 			}
+			# 2024-08 修复：desc 引用 blades_and_thrones_company_counter——
+			# 若事件被直接触发（控制台/异常路径）而计数器未初始化，desc 求值报错。
+			# 这里兜底初始化（正常组建路径已在 found_company_effect 递增，不会重置）
+			if = {
+				limit = {
+					NOT = { has_variable = blades_and_thrones_company_counter }
+				}
+				set_variable = {
+					name = blades_and_thrones_company_counter
+					value = 0
+				}
+			}
 		}
 	}
 
