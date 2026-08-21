@@ -746,6 +746,28 @@ mercenary_mutiny_test.10 = { #军团索饷：不忠附属国的巨额军饷要�
 				limit = {
 					exists = scope:mercenary_mutiny_company_scope
 				}
+				# 2024-08 兜底：refusals/crisis 可能因异常路径（旧档军团、调试创建、
+				# B 选项删除前的残留）而未初始化——先补 0 再递增，幂等不重置计数。
+				# 缺失会刷 "Failed to fetch variable" / "Variable not of the
+				# 'value' scope type"（实测 329×3 条）。
+				if = {
+					limit = {
+						NOT = { has_variable = mercenary_mutiny_company_refusals }
+					}
+					set_variable = {
+						name = mercenary_mutiny_company_refusals
+						value = 0
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_variable = blades_and_thrones_military_crisis }
+					}
+					set_variable = {
+						name = blades_and_thrones_military_crisis
+						value = 0
+					}
+				}
 				# refusals 变量在"佣兵自立门户"效果与"放任自立"选项处初始化 = 0，
 				# 这里只递增（变量必须已存在，否则引擎报 fetch 错误且计数失效）
 				change_variable = {
