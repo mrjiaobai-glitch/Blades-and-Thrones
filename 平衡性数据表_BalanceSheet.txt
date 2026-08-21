@@ -1,4 +1,4 @@
-================================================================================
+﻿================================================================================
 刀锋与王座 · 平衡性数据表（Balance Sheet）
 Blades and Thrones · Balance Sheet
 ================================================================================
@@ -212,6 +212,14 @@ English (scaled by current_age):
 - 掌控力：支持事件花金币/稳定/正统换掌控力；站稳脚跟制度化（+5 威望）或维持现状；
   分裂时清洗/崩溃/二次夺权（+5 威望）；高稳定主动还政（正统大额恢复+稳定弱奖励）、
   军政共治、或继续统治（36 月冷却）；低稳定被迫还政（阵痛修正 10 年，36 月政变冷却）。
+  【2024-08 重构 A+B：以上稳定度小游戏已全部删除——军政府不再是独立灾难，
+  改为：政变处理（loyalty.3）三选一（镇压 +5 威望 / 政治妥协 +5 稳定 /
+  接受军人接管 +2.5 正统，需已接纳"职业军队"思潮）→ 接受接管即获军政府改革
+  （locked = always yes，玩家不可移除/替换），执政 5 年（1825 天，军政府修正与
+  AI 好战倾向持续生效）→ 核心抉择（loyalty.4）：还政王室（永久"文官复位"+正统
+  大额恢复+稳定弱奖励，士兵不满）/ 制度化巩固（永久"军政府制度化"+5 威望，
+  士兵满意）/ 铁腕清洗（贵族教士市民人口各 -10% + 永久"清洗后的铁腕秩序"+
+  10 年"军政府清洗余波"）；抉择后移除改革；军政府一生一次（coup_resolved 防重复）。】
 
 English:
 - Junta reform modifiers: crown -0.25 / soldier +0.50 / nobles -0.20 /
@@ -229,6 +237,18 @@ English:
   legitimacy + weak stability bonus), co-governance, or keep ruling (36-month
   cooldown); low stability: forced restoration (10-year pain modifier, 36-month
   coup cooldown).
+  [2024-08 refactor A+B: the stability minigame above is fully deleted -- the
+  junta is no longer a standalone disaster. Now: coup event (loyalty.3) three
+  choices (crush +5 prestige / political compromise +5 stability / accept
+  military rule +2.5 legitimacy; requires Professional Armies institution) --
+  accepting grants the junta reform (locked = always yes, player cannot
+  remove/replace), 5-year reign (1825 days, junta modifiers and AI belligerence
+  stay active) -- then core decision (loyalty.4): restore the crown (permanent
+  "civil restoration" + severe legitimacy + weak stability, soldiers unhappy) /
+  institutionalize (permanent "junta institutionalized" +5 prestige, soldiers
+  happy) / iron purge (nobles/clergy/burghers -10% pops + permanent "purged
+  iron order" + 10-year "purge aftermath"); the choice removes the reform;
+  junta once per game (coup_resolved prevents repeats).]
 
 --------------------------------------------------------------------------------
 九、事件选项小甜头 Event Option Rewards
@@ -237,14 +257,18 @@ English:
 - 政变·接受军人接管：+2.5 正统
 - 政变·血腥镇压：+5 威望
 - 政变·政治妥协：+5 稳定
-- 军政府·制度化 / 二次夺权：+5 威望
+- 军政府·还政王室：正统大额恢复 + 稳定弱奖励（士兵不满）
+- 军政府·制度化巩固：+5 威望（士兵满意）
+- 军政府·铁腕清洗：无小甜头（人口削减 + 永久修正，见第八节）
 - 无地国·在此扎根：+5 威望；约束军纪：+2.5 正统
 - 还政·主动还政：正统大额恢复 + 稳定弱奖励（原有）
 English:
 - Coup·Accept military rule: +2.5 legitimacy
 - Coup·Crush the mutiny: +5 prestige
 - Coup·Political compromise: +5 stability
-- Junta·Institutionalize / second coup: +5 prestige
+- Junta·Restore the crown: severe legitimacy + weak stability (soldiers unhappy)
+- Junta·Institutionalize: +5 prestige (soldiers happy)
+- Junta·Iron purge: no bonus (pop cuts + permanent modifier, see section 8)
 - Landless·Settle: +5 prestige; Keep discipline: +2.5 legitimacy
 - Restoration·Voluntary: severe legitimacy + weak stability (existing)
 
@@ -280,5 +304,42 @@ promote into soldiers at the highest weight (SOLDIERS=40), creating a
 "soldier estate perpetual engine" that permanently cancels the demobilization
 step of the core loop (resettlement / veterans return). So the training ground
 only strengthens the source of troops, it does not manufacture soldier pops.
+
+--------------------------------------------------------------------------------
+十二、军团形态与补贴 Company Tiers & Subsidies
+--------------------------------------------------------------------------------
+中文：
+- 形态五档（树状升级）：合同佣兵团（低级）→ 强力佣兵团（高级）→ 藩镇（有地）；
+  王室军团（低级）→ 大军团（高级）。
+  命名（2024-08 改名）：代管军团 → 王室军团；大型代管 → 大军团。
+- 宗主月度补贴（subject_modifier monthly_gold_income，负数 = 宗主支出、
+  正数 = 附庸收入）：合同佣兵团 -20/+20 → 强力佣兵团 -35/+35；
+  王室军团 -25/+25 → 大军团 -50/+50。
+  阶梯设计：自由团 < 王室军团 < 强力佣兵 < 大军团（服务等级溢价）。
+- 年度账单（blades_and_thrones_company.9，宗主支出）：雇佣津贴 240 /
+  军费拨款（王室军团）300 / 老兵雇佣津贴（强力佣兵团）420 /
+  大军团军费拨款 600——与月度补贴 ×12 对齐（240 = 20×12，300 = 25×12，
+  420 = 35×12，600 = 50×12）。
+- 索饷（不忠附庸 mercenary_mutiny_test.10）：金额按军团当前形态取账单档位；
+  支付 = 危机 -10 + 安分 5 年；拒绝 = 危机 +5，累计两次 → 独立（危机 +20）。
+- 收编赎买：收编军团（外派者免费归队）/ 赎买（和解自立者，每千人 100 金）。
+English:
+- Five tiers (tree upgrade): Contract Company (low) -> Strong Company (high) ->
+  Fanzhen (landed); Royal Company (low) -> Grand Company (high).
+  Renamed 2024-08: Trusted Company -> Royal Company; Grand Trusted -> Grand Company.
+- Overlord monthly subsidy (subject_modifier monthly_gold_income; negative =
+  overlord pays, positive = subject receives): Contract Company -20/+20 ->
+  Strong Company -35/+35; Royal Company -25/+25 -> Grand Company -50/+50.
+  Ladder: free company < royal company < strong mercs < grand company
+  (service-level premium).
+- Annual bill (blades_and_thrones_company.9, overlord pays): hire subsidy 240 /
+  military appropriation (Royal Company) 300 / veteran hire subsidy (Strong
+  Company) 420 / grand military appropriation 600 -- aligned with monthly
+  subsidy x12 (240 = 20x12, 300 = 25x12, 420 = 35x12, 600 = 50x12).
+- Mutiny pay demand (disloyal subject, mercenary_mutiny_test.10): amount = bill
+  tier of the company's current form; paying = crisis -10 + placated 5 years;
+  refusing = crisis +5, twice refuses -> independence (crisis +20).
+- Buyout: reinstate a company (outside-company returns free) / ransom
+  (self-established company, 100 gold per 1000 troops).
 
 ================================================================================
