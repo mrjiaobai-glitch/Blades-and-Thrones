@@ -250,6 +250,9 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 	major = yes
 	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
 	trigger = {
+		# 防重复（2024-08 教训）：灾难 can_start 已有 NOT coup_resolved，
+		# 但控制台/脚本直接触发事件会绕过灾难门槛——事件本体必须自带门槛
+		NOT = { has_variable = blades_and_thrones_coup_resolved }
 	}
 
 	option = {
@@ -381,6 +384,9 @@ blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度�
 	major = yes
 	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
 	trigger = {
+		# 防重复：loyalty.4 只应在持有军政府改革时触发（loyalty.3.a 设置后
+		# 弹出）；控制台重复触发时 reform 已移除 → 事件不弹 → 永久修正不可刷
+		has_reform = government_reform:blades_and_thrones_military_junta_reform
 	}
 
 	option = {
