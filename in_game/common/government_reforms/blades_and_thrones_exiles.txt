@@ -1,0 +1,25 @@
+mercenary_mutiny_exiles_reform = {
+	potential = {
+		country_type = army
+		OR = {
+			has_variable = mercenary_mutiny_exiles_country
+			has_variable = mercenary_mutiny_original_exile_marker
+			# 主动外派军团（组建军团 action）设置 blades_and_thrones_volunteer_company；
+			# 缺此分支会导致 potential 不满足，引擎月度检查时自动移除改革，
+			# 军团国随之失去人力池/军团港等改革门槛建筑的建造权。
+			has_variable = blades_and_thrones_volunteer_company
+			# 彩蛋国 BLT（自由军团）是 setup 直接创建的无地军队国，
+			# 没有流亡者事件变量——按原版威尼斯先例（has_or_had_tag = VEN）
+			# 显式放行，否则 potential 不满足会在开局被静默丢弃
+			has_or_had_tag = BLT
+		}
+	}
+
+	country_modifier = {
+		government_reform_slots = 1
+		hire_mercenary_premium_cost_modifier = -0.15
+		mercenary_maintenance_efficiency = 0.1
+		pure_tooltip_entry = mercenary_mutiny_manpower_pool_unlock_tt
+		pure_tooltip_entry = mercenary_mutiny_company_port_unlock_tt
+	}
+}

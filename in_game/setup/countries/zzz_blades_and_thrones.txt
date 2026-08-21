@@ -1,0 +1,13 @@
+# 彩蛋开局国家：自由军团（无主无地军队国家）
+# 所有 Country setup 使用的 TAG 都必须在此定义（Setup modding 官方要求）。
+# 彩蛋设定：开封犹太文化（qayfengi——原版 israelite.txt 的开封犹太社群）+
+# 什叶派国教——一支由开封犹太裔组成的什叶派佣兵军团。
+# 编码要求：本文件（setup/countries）必须为 UTF-8 BOM（用 PowerShell 恢复）。
+BLT = {
+	color = rgb { 65 65 70 }
+	color2 = rgb { 150 25 25 }
+	culture_definition = qayfengi
+	religion_definition = shia
+	description_category = military
+	difficulty = 5
+}

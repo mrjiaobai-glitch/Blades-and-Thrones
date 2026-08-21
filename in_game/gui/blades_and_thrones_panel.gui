@@ -1,0 +1,352 @@
+# 军事转化面板：主窗口（5 个转化按钮，直接执行通用行动）
+# 按钮执行 left_action = { action_name = X }，行动自带目标选择流程
+window = {
+	name = "blades_and_thrones_main_window"
+	parentanchor = center
+	position = { 0 0 }
+	size = { 620 780 }
+	allow_outside = yes
+	visible = "[GetVariableSystem.Exists('blades_and_thrones_main_visible')]"
+	enabled = "[GetVariableSystem.Exists('blades_and_thrones_main_visible')]"
+
+	widget = {
+		size = { 100% 100% }
+		using = bg_window_default_alt
+		allow_outside = yes
+
+		button_close_alt = {
+			parentanchor = right|top
+			position = { -5 5 }
+			size = { 40 40 }
+			blockoverride "close_on_action" {
+				on_action = "[GetVariableSystem.Clear('blades_and_thrones_main_visible')]"
+			}
+		}
+
+		vbox = {
+			using = window_margin_alt
+			spacing = 6
+
+			text_single = {
+				text = "BLADES_CONVERSION_TITLE"
+				fontsize = 22
+				align = center|nobaseline
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_SUBTITLE"
+				fontsize = 13
+				align = center|nobaseline
+				maximumsize = { 560 -1 }
+				autoresize = yes
+			}
+
+			# 军情报告：实时显示本月军饷、军队忠诚、士兵满意度、佣兵威胁、
+			# 军政府掌控力、战争持续月数与军事危机（变量由月度脉冲刷新）
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_TITLE"
+				fontsize = 15
+				align = center|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_PAY"
+				fontsize = 13
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_LOYALTY"
+				fontsize = 13
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_SATISFACTION"
+				fontsize = 13
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_PRESSURE"
+				fontsize = 13
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_JUNTA"
+				fontsize = 13
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_WAR"
+				fontsize = 13
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_CRISIS"
+				fontsize = 13
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
+				text = "[Player.Custom('blades_and_thrones_crisis_flavor')]"
+				fontsize = 12
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+				autoresize = yes
+			}
+
+			# 危机变化原因（本月各分项贡献；仅当该项 > 0 时显示）
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_CHANGE_TITLE"
+				fontsize = 12
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+				visible = "[Or(Or(Or(Or(GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_threat_display').GetValue), '(float)0'), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_loyalty_display').GetValue), '(float)0')), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_satisfaction_display').GetValue), '(float)0')), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_war_display').GetValue), '(float)0')), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_decay_display').GetValue), '(float)0'))]"
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_CHANGE_THREAT"
+				fontsize = 12
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_threat_display').GetValue), '(float)0')]"
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_CHANGE_LOYALTY"
+				fontsize = 12
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_loyalty_display').GetValue), '(float)0')]"
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_CHANGE_SATISFACTION"
+				fontsize = 12
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_satisfaction_display').GetValue), '(float)0')]"
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_CHANGE_WAR"
+				fontsize = 12
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_war_display').GetValue), '(float)0')]"
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_REPORT_CHANGE_DECAY"
+				fontsize = 12
+				align = left|nobaseline
+				layoutpolicy_horizontal = expanding
+				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_decay_display').GetValue), '(float)0')]"
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_integrate_mercs"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_integrate_mercs" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_integrate_mercs"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_found_company"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_found_company" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_found_company"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_reinstate_company"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_reinstate_company" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_reinstate_company"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_demobilize_army"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_demobilize_army" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_demobilize_army"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_resettle_soldiers"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_resettle_soldiers" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_resettle_soldiers"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_appoint_company_ruler"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_appoint_company_ruler" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_appoint_company_ruler"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_revoke_warlord_land"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_revoke_warlord_land" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_revoke_warlord_land"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			action_button_regular = {
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				text = "blades_and_thrones_exchange_warlord_land"
+				actor = "[Player]"
+				left_action = { action_name = "blades_and_thrones_exchange_warlord_land" }
+				default_format = "#High"
+				tooltipwidget = {
+					ContextualTooltipType = {
+						blockoverride "title_text" {
+							text = "blades_and_thrones_exchange_warlord_land"
+						}
+						block "concept_link" {
+						}
+						blockoverride "tooltip_content" {
+							using = action_tooltip_inner_content
+						}
+						block "title_icon" {
+						}
+					}
+				}
+			}
+
+			text_single = {
+				text = "BLADES_CONVERSION_FOOTER"
+				fontsize = 11
+				align = center|nobaseline
+				maximumsize = { 560 -1 }
+				autoresize = yes
+			}
+		}
+	}
+}

@@ -1,0 +1,2 @@
+gui/blades_and_thrones_entry.gui = blades_and_thrones_entry_window
+gui/blades_and_thrones_panel.gui = blades_and_thrones_main_window

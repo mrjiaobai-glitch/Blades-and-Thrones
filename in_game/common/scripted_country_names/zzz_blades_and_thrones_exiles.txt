@@ -1,0 +1,133 @@
+# 军团国身份命名（形态链：佣兵军团 → 自由军团 → 军阀 → 大藩王国/帝国）：
+# 1. "佣兵军团"：所有佣兵集团的军团——主动外派（volunteer）与夺舍灾变和解自立（exiles_country）统一同名；
+#    来源标记保留用于机制区分（外派可收编归队，和解自立者不可）。
+# 2. "流亡者"：吞并救援的流亡军团与夺舍结局的旧国残部是同一类存在（夺舍即一种特殊的吞并）。
+#    流亡者显示名由 country_name_construction 提供"流亡××"模板（见同名文件，
+#    整体覆盖 + 条目插在 fallback 前），故此处不设 scripted 块（避免整名替换覆盖动态名）。
+#    注意：夺舍残部同时带 mercenary_mutiny_exiles_country 变量，故所有军团块
+#    必须排除 mercenary_mutiny_original_exile_marker，否则残部会被误命名。
+# 3. "自由军团"：佣兵军团撕毁臣属条约独立后（Free Company——不受任何君主束缚）；
+#    低阶（county/duchy 及无地）显示"自由军团"，大藩（kingdom/empire）升级为"自由军团王国/帝国"。
+# 4. "佣兵军阀/代管军阀"：有地盘的军团（藩镇化形态，半独立）——按出身路线区分
+#    （warlord_origin：1 = 佣兵系 / 2 = 代管系）。
+
+# "佣兵军团"：主动外派军团 + 灾变和解自立的佣兵集团（仍臣属时）
+# 排除两类流亡者（annex 救援流亡与 original 夺舍残部——两者都带 exiles_country 标记）；
+# 排除军阀（藩镇化形态有专属命名）；排除已安家转正者（settled——恢复原名）。
+blades_and_thrones_volunteer_company_name = {
+	country_trigger = {
+		OR = {
+			has_variable = blades_and_thrones_volunteer_company
+			has_variable = mercenary_mutiny_exiles_country
+		}
+		NOT = { has_variable = mercenary_mutiny_annex_exiles_marker }
+		NOT = { has_variable = mercenary_mutiny_original_exile_marker }
+		NOT = { is_subject_type = mercenary_company_warlord }
+		NOT = { has_variable = blades_and_thrones_landless_settled }
+		is_subject = yes
+	}
+
+	capital_trigger = {
+	}
+
+	location_trigger = {
+	}
+}
+
+# "自由军团"：佣兵军团撕毁臣属条约独立后（Free Company——不受任何君主束缚）
+# 低阶形态：county/duchy 及无地（大藩由 kingdom/empire 专属块接管，显示"自由军团王国/帝国"）。
+# 排除已安家转正者（settled——按 rank 显示原名）。
+blades_and_thrones_rogue_company_name = {
+	country_trigger = {
+		OR = {
+			has_variable = blades_and_thrones_volunteer_company
+			has_variable = mercenary_mutiny_exiles_country
+		}
+		NOT = { has_variable = mercenary_mutiny_annex_exiles_marker }
+		NOT = { has_variable = mercenary_mutiny_original_exile_marker }
+		NOT = { is_subject = yes }
+		NOT = { has_variable = blades_and_thrones_landless_settled }
+		NOT = {
+			OR = {
+				country_rank = country_rank:rank_kingdom
+				country_rank = country_rank:rank_empire
+			}
+		}
+	}
+
+	capital_trigger = {
+	}
+
+	location_trigger = {
+	}
+}
+
+# "自由军团王国"：独立军团国升为王国（大藩）。
+blades_and_thrones_rogue_kingdom_name = {
+	country_trigger = {
+		OR = {
+			has_variable = blades_and_thrones_volunteer_company
+			has_variable = mercenary_mutiny_exiles_country
+		}
+		NOT = { has_variable = mercenary_mutiny_annex_exiles_marker }
+		NOT = { has_variable = mercenary_mutiny_original_exile_marker }
+		NOT = { is_subject = yes }
+		NOT = { has_variable = blades_and_thrones_landless_settled }
+		country_rank = country_rank:rank_kingdom
+	}
+
+	capital_trigger = {
+	}
+
+	location_trigger = {
+	}
+}
+
+# "自由军团帝国"：独立军团国升为帝国（大藩）。
+blades_and_thrones_rogue_empire_name = {
+	country_trigger = {
+		OR = {
+			has_variable = blades_and_thrones_volunteer_company
+			has_variable = mercenary_mutiny_exiles_country
+		}
+		NOT = { has_variable = mercenary_mutiny_annex_exiles_marker }
+		NOT = { has_variable = mercenary_mutiny_original_exile_marker }
+		NOT = { is_subject = yes }
+		NOT = { has_variable = blades_and_thrones_landless_settled }
+		country_rank = country_rank:rank_empire
+	}
+
+	capital_trigger = {
+	}
+
+	location_trigger = {
+	}
+}
+
+# "佣兵军阀"：佣兵系军团获得地盘后的藩镇化形态（warlord_origin = 1）。
+blades_and_thrones_warlord_mercenary_name = {
+	country_trigger = {
+		is_subject_type = mercenary_company_warlord
+		var:blades_and_thrones_warlord_origin = 1
+	}
+
+	capital_trigger = {
+	}
+
+	location_trigger = {
+	}
+}
+
+# "代管军阀"：代管系军团获得地盘后的藩镇化形态（warlord_origin = 2）。
+blades_and_thrones_warlord_trusted_name = {
+	country_trigger = {
+		is_subject_type = mercenary_company_warlord
+		var:blades_and_thrones_warlord_origin = 2
+	}
+
+	capital_trigger = {
+	}
+
+	location_trigger = {
+	}
+}

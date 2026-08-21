@@ -1,0 +1,41 @@
+# 军事转化面板：入口按钮（挂载在 topbar 图层的浮动按钮）
+# 机制参考：GetVariableSystem 控制窗口显隐；点击切换 blades_and_thrones_main_visible
+window = {
+	name = "blades_and_thrones_entry_window"
+	layer = topbar
+	parentanchor = hcenter|bottom
+	widgetanchor = hcenter|bottom
+	position = { -380 -20 }
+	size = { 69 69 }
+	allow_outside = yes
+	movable = yes
+	datacontext = "[GetPlayer]"
+	visible = "[GetPlayer.IsValid]"
+
+	button = {
+		name = "blades_and_thrones_open_button"
+		parentanchor = center
+		size = { 69 69 }
+		tooltip = "BLADES_CONVERSION_OPEN_TT"
+		down = "[GetVariableSystem.Exists('blades_and_thrones_main_visible')]"
+
+		action_tooltip = {
+			click_type = left
+			click_mode = single
+			title = "BLADES_CONVERSION_OPEN_TT"
+			on_action = "[GetVariableSystem.Toggle('blades_and_thrones_main_visible')]"
+		}
+		tooltipwidget = { BasicFunctionalTooltip = {} }
+
+		block "button_texture" {
+			texture = "gfx/interface/buttons/round_button_texture_alt.dds"
+			texture_density = 2
+		}
+
+		icon = {
+			size = { 70% 70% }
+			parentanchor = center
+			texture = "gfx/interface/icons/unit_actions/regulars.dds"
+		}
+	}
+}

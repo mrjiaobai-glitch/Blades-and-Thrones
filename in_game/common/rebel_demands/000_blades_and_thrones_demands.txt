@@ -1,0 +1,60 @@
+mercenary_mutiny_demand = {
+	trigger = {
+		rebel_category = pretender
+		rebel_name_key = mercenary_mutiny
+	}
+
+	# concession_effect 作用域是叛军(rebel)，国家级效果必须包在 owner = { ... } 里。
+	# victory_effect 的作用域直接就是国家（原版 default_pretender_demand 同款），不能再包 owner。
+	concession_effect = {
+		pacify_rebel_pops = yes
+		owner = {
+			set_variable = {
+				name = mercenary_mutiny_recreate_disaster_army
+				value = yes
+			}
+			mercenary_mutiny_create_army_country_effect = yes
+			set_variable = {
+				name = mercenary_mutiny_disaster_resolved
+				value = yes
+				months = 120
+			}
+			trigger_event_non_silently = {
+				id = mercenary_mutiny_test.5
+			}
+		}
+	}
+
+	victory_effect = {
+		set_variable = {
+			name = mercenary_mutiny_rebel_victory
+			value = yes
+		}
+		mercenary_mutiny_resolve_disaster_effect = yes
+	}
+}
+
+# 士兵阶层叛军的专属需求：原版 999_default_rebel_demands.txt 只覆盖 7 个原版阶层
+# （nobles/clergy/burghers/peasants/dhimmi/tribes/cossacks），士兵阶层不在其中——
+# 没有本条目时会落到 default_rebel_demand 通用让步（只加正统惩罚，无主题效果）。
+# 对齐 cossacks（同为军事自治社群）的模式：让步 = 军队得势（进攻姿态 + 好战轴左移）。
+default_zzz_rebalanced_nepal_mercenary_soldiers_estate_demand = {
+	trigger = {
+		rebel_category = estate
+		rebel_estate_type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	concession_effect = {
+		pacify_rebel_pops = yes
+		grant_benefits_to_estate = yes
+		owner = {
+			change_societal_value = {
+				type = offensive_vs_defensive
+				value = societal_value_minor_move_to_left
+			}
+			change_societal_value = {
+				type = belligerent_vs_conciliatory
+				value = societal_value_minor_move_to_left
+			}
+		}
+	}
+}

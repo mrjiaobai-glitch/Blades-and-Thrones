@@ -1,0 +1,67 @@
+namespace = blades_and_thrones_militia
+
+# 团练所调试事件：event blades_and_thrones_militia.99
+# 一键测试 团练自治特权 / 士兵阶层注资 / 首都强制建团练所 / 撤销特权
+
+blades_and_thrones_militia.99 = { #调试：团练所一键流程（授权/注资/强建/撤销）
+	type = country_event
+	title = blades_and_thrones_militia.99.title
+	desc = blades_and_thrones_militia.99.desc
+	outcome = neutral
+	orphan = yes
+	trigger = {
+		is_human = yes
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+
+	option = {
+		name = blades_and_thrones_militia.99.a
+		if = {
+			limit = { NOT = { has_estate_privilege = estate_privilege:blades_and_thrones_militia_autonomy } }
+			grant_estate_privilege = estate_privilege:blades_and_thrones_militia_autonomy
+		}
+		"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+			estate_add_gold = {
+				value = 500
+			}
+		}
+		capital = {
+			change_building_level_in_location = {
+				building = building_type:blades_and_thrones_militia_training_ground
+				value = 1
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_militia.99.b
+		if = {
+			limit = { NOT = { has_estate_privilege = estate_privilege:blades_and_thrones_militia_autonomy } }
+			grant_estate_privilege = estate_privilege:blades_and_thrones_militia_autonomy
+		}
+		"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+			estate_add_gold = {
+				value = 500
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_militia.99.c
+		capital = {
+			change_building_level_in_location = {
+				building = building_type:blades_and_thrones_militia_training_ground
+				value = 1
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_militia.99.d
+		revoke_estate_privilege = estate_privilege:blades_and_thrones_militia_autonomy
+	}
+
+	option = {
+		name = blades_and_thrones_militia.99.e
+	}
+}

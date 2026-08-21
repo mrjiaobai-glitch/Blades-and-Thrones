@@ -1,0 +1,284 @@
+================================================================================
+刀锋与王座 · 平衡性数据表（Balance Sheet）
+Blades and Thrones · Balance Sheet
+================================================================================
+最后更新 Last updated: 2026-08-15
+（所有数值以 in_game/common/script_values/blades_and_thrones_values.txt、
+  estate_privileges、government_reforms、auto_modifiers 为准。
+  All values follow the files listed above.)
+
+--------------------------------------------------------------------------------
+一、军饷体系 Pay System
+--------------------------------------------------------------------------------
+中文：
+- 军饷公式：常备军每千人每月 5 金（regular_army_size × 0.005）+ 每座堡垒每月 1 金。
+  与维护费完全脱钩（维护费只影响补给/满意度）。
+- 欠饷：国库不足时欠饷月数 +1（上限 24 月）；每欠 1 月军队忠诚 -0.2%（满 24 月 = -4.8%）；
+  补饷后每月 -1 回落。欠饷期间士兵阶层满意度弱惩罚。
+- 额外军饷事件（忠诚低时）：支付 12 个月军饷 ×（威胁比率 1-3，封顶 3 倍）。
+
+English:
+- Pay formula: 5 gold per 1,000 regulars per month (regular_army_size × 0.005) +
+  1 gold per fort per month. Fully decoupled from maintenance (maintenance only
+  affects supply/satisfaction).
+- Arrears: when the treasury is short, arrears +1/month (cap 24); each arrears
+  month reduces army loyalty by 0.2% (24 months = -4.8%); repaying reduces 1/month.
+  Soldier estate satisfaction takes a weak penalty while in arrears.
+- Extra pay event (low loyalty): pay 12 months of pay × (threat ratio 1-3, cap 3x).
+
+--------------------------------------------------------------------------------
+二、军队忠诚 Army Loyalty
+--------------------------------------------------------------------------------
+中文：基础 0.5，各项加减：
+- 士兵满意度：(满意度 - 0.5) × 0.3
+- 士兵阶层力量：× 0.1
+- 王室力量：× 0.2
+- 陆军维护滑条：× 0.2；堡垒维护滑条：× 0.05
+- 王室之手：满意度 ≥ 0.5 时 +0.1；< 0.5 时 -0.15（失控）
+- 佣兵威胁（压力刻度 0-1）：× -0.25
+- 战争荣耀（胜利事件变量）：× 0.1；战争耻辱（战败）：× -0.15
+- 稳定度 < 0：- |稳定度| × 0.05
+- 战争疲劳：- 疲劳 × 0.02
+- 战时：+0.05
+- 军制政策：常备军 +0.05；佣兵联盟 -0.05；混合 +0.02；征召 -0.05
+- 欠饷：每欠 1 月 -0.002（见上）
+- 范围 0-1
+
+English: Base 0.5, then:
+- Soldier satisfaction: (satisfaction - 0.5) × 0.3
+- Soldier estate power: × 0.1
+- Crown power: × 0.2
+- Army maintenance slider: × 0.2; fort maintenance slider: × 0.05
+- Royal Hand: +0.1 if satisfaction ≥ 0.5; -0.15 if < 0.5 (out of control)
+- Mercenary pressure scale (0-1): × -0.25
+- War glory (victory variable): × 0.1; war shame (defeat): × -0.15
+- Stability < 0: - |stability| × 0.05
+- War exhaustion: - exhaustion × 0.02
+- At war: +0.05
+- Military doctrine: standing +0.05; mercenary league -0.05; mixed +0.02; levy -0.05
+- Arrears: -0.002 per arrears month (see above)
+- Clamped 0-1
+
+--------------------------------------------------------------------------------
+三、军事危机 Military Crisis (0-100)
+--------------------------------------------------------------------------------
+中文：月度变化 = 威胁比率档位 + 各项加成 + 消退：
+- 威胁比率（佣兵总兵力 ÷ 有效可控军力）：
+  ≥4 → +4.0 /  ≥3 → +3.0 /  ≥2 → +2.0 /  ≥1.5 → +1.5 /  ≥1 → +1.0
+- 忠诚 < 0.35 → +0.5；忠诚 < 0.2 → 再 +0.5
+- 士兵满意度 < 0.5 → +0.25
+- 战时 → +0.25
+- 消退：威胁 < 0.75 → -1.5/月；< 1 → -0.75/月
+- 满 100 → 夺舍灾变必定触发（spawn +1.0）；另有小概率随机爆发。
+- 危机化装叙述行：<30 / 30-60 / 60-90 / ≥90 四档（转化面板与情报汇总显示）。
+
+English: Monthly change = threat tier + bonuses + decay:
+- Threat ratio (mercenary strength ÷ effective loyal military):
+  ≥4 → +4.0 / ≥3 → +3.0 / ≥2 → +2.0 / ≥1.5 → +1.5 / ≥1 → +1.0
+- Loyalty < 0.35 → +0.5; loyalty < 0.2 → another +0.5
+- Soldier satisfaction < 0.5 → +0.25
+- At war → +0.25
+- Decay: threat < 0.75 → -1.5/month; < 1 → -0.75/month
+- At 100 → mutiny disaster guaranteed (spawn +1.0); small random chance otherwise.
+- Flavor line: four tiers <30 / 30-60 / 60-90 / ≥90 (shown in conversion panel & intel).
+
+--------------------------------------------------------------------------------
+四、夺舍灾变 Mutiny Disaster
+--------------------------------------------------------------------------------
+中文：
+- 开始条件：佣兵兵力 > 可控军力；无其他灾难；不在内战中；10 年冷却外。
+- 月度触发概率：基础 0.1%；危机 100 → +100%（必触发）；
+  威胁 >1.5 → +0.2%；>2 → +0.4%；>3 → +0.8%；
+  满意度 <0.5 → +0.1%；<0.25 → +0.2%；≥0.75 → -0.1%。
+- 灾变开始：危机清零；记录初始可控军力快照；生成叛军（初始进度 20%）。
+- 叛军进度：每月按力量对比：
+  佣兵 > 可控×1.25 → +0.15；> 可控 → +0.1；> 0.75× → 0；≤ 0.75× → -0.2
+  满意度 <0.5 → +0.05；≥0.75 → -0.05
+- 进度满 100 → 内战爆发（佣兵转叛军部队，叛军国家成立）。
+- 进度归零 → 早期压制收场（无稳定奖励、危机残留 50）。
+- 结算（按灾变开始时兵力 vs 可控军力快照）：
+  > 125% → 夺舍（原国变流亡者）；75-125% → 无地军团国（不忠附庸）；
+  < 75% 或叛军被镇压 → 剿灭（+稳定奖励，危机归零）。
+- 结算后 10 年冷却。
+
+English:
+- Start: mercenary strength > loyal military; no other disaster; not in civil war;
+  outside 10-year cooldown.
+- Monthly spawn: base 0.1%; crisis 100 → +100% (guaranteed);
+  threat >1.5 → +0.2%; >2 → +0.4%; >3 → +0.8%;
+  satisfaction <0.5 → +0.1%; <0.25 → +0.2%; ≥0.75 → -0.1%.
+- On start: crisis reset to 0; loyal military snapshot recorded; rebels spawn
+  (initial progress 20%).
+- Rebel progress per month by force comparison:
+  mercs > loyal×1.25 → +0.15; > loyal → +0.1; > 0.75× → 0; ≤ 0.75× → -0.2
+  satisfaction <0.5 → +0.05; ≥0.75 → -0.05
+- Progress 100 → civil war (mercs become rebel units, rebel country formed).
+- Progress 0 → early suppression ending (no stability reward, crisis left at 50).
+- Settlement (by snapshot at start):
+  > 125% → takeover (old country becomes exiles); 75-125% → territory-free
+  company (disloyal subject); < 75% or rebels crushed → destroyed
+  (+stability reward, crisis reset).
+- 10-year cooldown after settlement.
+
+--------------------------------------------------------------------------------
+五、士兵阶层特权 Soldier Estate Privileges
+--------------------------------------------------------------------------------
+中文（power = 士兵阶层力量加成；所有特权含 medium 满意度目标代价）：
+- 军籍登记：征召 +10%（阶层）/ 全国征召 +5% / power +0.25 / 士兵叛乱 -0.02；
+  农民满意度小惩罚；价值观→数量
+- 职业军官团：纪律 +2.5% / 士气 +5% / 陆军传统 +0.05 / power +0.25；
+  内阁效率 -3%；价值观→质量；时代门槛：1600 年后（age_4+）
+- 国家佣兵合同：雇佣溢价 -15% / 佣兵维护 +10% / 佣兵规模 +10% / power +0.20
+- 军事法庭：全国叛乱 -0.001 / power +0.30；内阁效率 -5%
+- 常备军：人力 +5% / 士兵期望 POP +10% / power +0.20；
+  维护效率 -10%（维护费上升）；价值观→集权；时代门槛：1500 年后（age_3+）
+- 老兵议会：入阁 / 内阁力量 +0.10 / 内阁效率 +5% / power +0.25；
+  正统 -0.02/月；价值观→进攻；时代门槛：1800 年后消失（age_5+）
+- 闲置生产：power +1.00；纪律 -2.5%；允许建原产；大满意度代价
+- 农民补给队：后勤距离修正 +10%（正面）/ 农民满意度惩罚；无阶层收益
+- 王室之手：王室 +0.25 / 士兵 +0.50 / 贵族 -0.25 / 教士市民农民 -0.20；
+  其他阶层满意度小惩罚；价值观→集权；撤销门槛：士兵力量 > 0.5
+- 团练自治：允许建团练所 / power +0.25；价值观→分权
+
+English (power = soldier estate power bonus; all include medium target-satisfaction):
+- Military Register: estate levy +10% / national levy +5% / power +0.25 /
+  soldier rebel growth -0.02; peasant satisfaction small penalty; value→Quantity
+- Professional Officer Corps: discipline +2.5% / morale +5% / army tradition +0.05 /
+  power +0.25; cabinet efficiency -3%; value→Quality;
+  era gate: after 1600 (age_4+)
+- State Mercenary Contracts: hire premium -15% / merc maintenance +10% /
+  merc size +10% / power +0.20
+- Military Courts: national rebel growth -0.001 / power +0.30;
+  cabinet efficiency -5%
+- Standing Army: manpower +5% / desired soldier pop +10% / power +0.20;
+  maintenance efficiency -10% (costlier upkeep); value→Centralization;
+  era gate: after 1500 (age_3+)
+- Old Soldiers' Council: cabinet access / cabinet power +0.10 / cabinet
+  efficiency +5% / power +0.25; legitimacy -0.02/month; value→Offensive;
+  era gate: gone after 1800 (age_5+)
+- Idle Production: power +1.00; discipline -2.5%; allowed to build RGO;
+  large satisfaction cost
+- Farmer Supply Train: logistics distance +10% (positive) / peasant satisfaction
+  penalty; no estate benefit
+- Royal Hand: crown +0.25 / soldier +0.50 / nobles -0.25 / clergy,burghers,
+  peasants -0.20; other estates small satisfaction penalty; value→Centralization;
+  revoke gate: soldier power > 0.5
+- Militia Autonomy: allows training grounds / power +0.25; value→Decentralization
+
+--------------------------------------------------------------------------------
+六、士兵 POP 政治影响力 Soldier Pop Political Power
+--------------------------------------------------------------------------------
+中文：power_per_pop = 0.5（劳工/农民 0.025 的 20 倍；贵族 25 / 教士 10 / 市民 4）。
+English: power_per_pop = 0.5 (20x laborers/peasants 0.025; nobles 25 / clergy 10 /
+burghers 4).
+
+--------------------------------------------------------------------------------
+七、军制时代联动 Era Doctrine Scaling
+--------------------------------------------------------------------------------
+中文（按 current_age 缩放）：
+- 早期（传统/文艺复兴/地理大发现，约 200 年）= 1：
+  征召：全国征召 +10%、人力 +5%、维护效率 +10%
+  佣兵联盟：雇佣溢价 -10%、佣兵维护 +10%
+  常备军：维护效率 -10%（昂贵低效）
+- 宗教改革（16 世纪）= 0.5 过渡（双方效果减半）
+- 晚期（专制/革命）= 1：
+  常备军：纪律 +5%、士气 +5%、维护效率 +10%
+  混合：纪律 +2.5%、士气 +2.5%
+  征召：纪律 -2.5%、士气 -5%
+  佣兵联盟：雇佣溢价 +10%、佣兵规模 -5%（深度过时）
+
+English (scaled by current_age):
+- Early (Traditions/Renaissance/Discovery, ~200 years) = 1:
+  Levy: national levy +10%, manpower +5%, maintenance efficiency +10%
+  Mercenary League: hire premium -10%, merc maintenance +10%
+  Standing Army: maintenance efficiency -10% (costly & inefficient)
+- Reformation (16th c.) = 0.5 transition (both sides halved)
+- Late (Absolutism/Revolutions) = 1:
+  Standing: discipline +5%, morale +5%, maintenance efficiency +10%
+  Mixed: discipline +2.5%, morale +2.5%
+  Levy: discipline -2.5%, morale -5%
+  Mercenary League: hire premium +10%, merc size -5% (deeply obsolete)
+
+--------------------------------------------------------------------------------
+八、军政府 Junta
+--------------------------------------------------------------------------------
+中文：
+- 军政府改革修正：王室 -0.25 / 士兵 +0.50 / 贵族 -0.20 / 教士市民农民 -0.10；
+  全球最高税 +0.5；士兵最高税 -1.0；维护效率 -20%；叛乱 -0.0005；
+  士兵叛乱 -0.02；正统 -0.05/月；外交声誉轻微惩罚；集权/质量大月移。
+- AI 好战倾向（军政府期间）：aggressiveness +0.15、谨慎 -0.10、战争间隔 -6 月、
+  厌战容忍 +0.1、期望战果 +0.15、稳定度权重 -0.1、军事化政策偏好 +0.2、
+  佣兵偏好 +0.1、武力吞并 +0.25、外交好感 -0.05、王朝联姻 -0.5。
+- 掌控力：支持事件花金币/稳定/正统换掌控力；站稳脚跟制度化（+5 威望）或维持现状；
+  分裂时清洗/崩溃/二次夺权（+5 威望）；高稳定主动还政（正统大额恢复+稳定弱奖励）、
+  军政共治、或继续统治（36 月冷却）；低稳定被迫还政（阵痛修正 10 年，36 月政变冷却）。
+
+English:
+- Junta reform modifiers: crown -0.25 / soldier +0.50 / nobles -0.20 /
+  clergy,burghers,peasants -0.10; global max tax +0.5; soldier max tax -1.0;
+  maintenance efficiency -20%; rebel growth -0.0005; soldier rebel growth -0.02;
+  legitimacy -0.05/month; mild diplomatic reputation penalty;
+  large monthly move toward centralization & quality.
+- AI belligerence (while junta): aggressiveness +0.15, carefulness -0.10,
+  months between wars -6, war exhaustion tolerance +0.1, expected warscore +0.15,
+  stability importance -0.1, militarist policy bias +0.2, merc preference +0.1,
+  force annexation +0.25, opinion bias -0.05, dynastic preference -0.5.
+- Stability: support events trade gold/stability/legitimacy for junta stability;
+  consolidate (institutionalize, +5 prestige) or maintain; split: purge / collapse /
+  second coup (+5 prestige); high stability: voluntary restoration (severe
+  legitimacy + weak stability bonus), co-governance, or keep ruling (36-month
+  cooldown); low stability: forced restoration (10-year pain modifier, 36-month
+  coup cooldown).
+
+--------------------------------------------------------------------------------
+九、事件选项小甜头 Event Option Rewards
+--------------------------------------------------------------------------------
+中文：
+- 政变·接受军人接管：+2.5 正统
+- 政变·血腥镇压：+5 威望
+- 政变·政治妥协：+5 稳定
+- 军政府·制度化 / 二次夺权：+5 威望
+- 无地国·在此扎根：+5 威望；约束军纪：+2.5 正统
+- 还政·主动还政：正统大额恢复 + 稳定弱奖励（原有）
+English:
+- Coup·Accept military rule: +2.5 legitimacy
+- Coup·Crush the mutiny: +5 prestige
+- Coup·Political compromise: +5 stability
+- Junta·Institutionalize / second coup: +5 prestige
+- Landless·Settle: +5 prestige; Keep discipline: +2.5 legitimacy
+- Restoration·Voluntary: severe legitimacy + weak stability (existing)
+
+--------------------------------------------------------------------------------
+十、出租军团 Army Leasing
+--------------------------------------------------------------------------------
+中文：租期 24 个月；市场价雇佣（cost_multiplier 1.0）；到期自动归还；
+租给并肩作战者 → 共同战争好感；租给正在打我方敌人的国家 → 资助敌人恶名；
+厌恶我方者买不到；AI 只租给非邻国、好感 ≥ 0。
+English: 24-month lease; market price (cost_multiplier 1.0); auto-return on expiry;
+leasing to co-belligerents → shared-war opinion; leasing to countries fighting our
+enemies → "funding our enemies" infamy; countries disliking us cannot buy;
+AI only leases to non-neighbours with opinion ≥ 0.
+
+--------------------------------------------------------------------------------
+十一、团练 Militia
+--------------------------------------------------------------------------------
+中文：团练所是地方军事据点（本地士兵阶层力量 +5%、人力 +5%、征召规模 +10%），
+代价是本地士兵食物消费 +10%；建造费 50 金（阶层承担）；
+玩家：每月 20% 概率自建；AI：每月 5%（要求满意度 ≥ 0.5）；
+撤销特权后不再新建，既有留存。
+设计要点：刻意不提供 employment_size 岗位——岗位会以最高晋升权重
+（SOLDIERS=40）吸引农民晋升填岗，形成"士兵阶层永动机"，永久抵消退伍安置/
+老兵返乡的阶层回落环节，与 mod 核心循环冲突；故团练所只强化兵源，
+不直接制造士兵 POP。
+English: training ground is a local military post (local soldier estate power
++5%, manpower +5%, levy size +10%) at the cost of local soldier food
+consumption +10%; build cost 50 gold (estate-funded); player: 20%/month
+self-build; AI: 5%/month (needs satisfaction ≥ 0.5); revoking the privilege
+stops new construction, existing grounds remain.
+Design note: intentionally NO employment_size jobs - jobs attract farmers to
+promote into soldiers at the highest weight (SOLDIERS=40), creating a
+"soldier estate perpetual engine" that permanently cancels the demobilization
+step of the core loop (resettlement / veterans return). So the training ground
+only strengthens the source of troops, it does not manufacture soldier pops.
+
+================================================================================

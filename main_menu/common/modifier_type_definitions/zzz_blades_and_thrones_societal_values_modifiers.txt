@@ -1,0 +1,19 @@
+# 军国主义 vs 文官主义轴的月度推动修正。
+# 格式对齐原版 monthly_towards_centralization（modifier_type_definitions/00_modifier_types.txt）。
+monthly_towards_militarism = {
+	color = neutral
+	game_data = {
+		category = country
+		min = 0
+		is_societal_value_change = yes
+	}
+}
+
+monthly_towards_civilianism = {
+	color = neutral
+	game_data = {
+		category = country
+		min = 0
+		is_societal_value_change = yes
+	}
+}

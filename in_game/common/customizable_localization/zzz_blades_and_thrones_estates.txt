@@ -1,0 +1,9 @@
+zzz_rebalanced_nepal_mercenary_soldiers_estate = {
+	type = country
+
+	text = {
+		localization_key = zzz_rebalanced_nepal_mercenary_soldiers_estate
+		fallback = yes
+	}
+}
+

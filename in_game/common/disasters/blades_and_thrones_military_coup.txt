@@ -1,0 +1,42 @@
+blades_and_thrones_military_coup = {
+	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
+	monthly_spawn_chance = blades_and_thrones_military_coup_spawn_chance
+
+	can_start = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		OR = {
+			blades_and_thrones_army_loyalty < 0.15
+			# 因果链衔接：哗变被强硬镇压后军人记恨（blades_and_thrones_army_grudge，
+			# 24 个月）——镇压只会让政变来得更快，忠诚阈值从 0.15 放宽到 0.25
+			AND = {
+				has_variable = blades_and_thrones_army_grudge
+				blades_and_thrones_army_loyalty < 0.25
+			}
+			blades_and_thrones_force_coup_flag = yes
+		}
+		has_any_active_disaster = no
+		in_civil_war = no
+		NOT = { blades_and_thrones_coup_cooldown_active = yes }
+		NOT = { blades_and_thrones_coup_resolved = yes }
+	}
+
+	can_end = {
+		blades_and_thrones_coup_resolved = yes
+	}
+
+	on_start = {
+		remove_variable = blades_and_thrones_force_coup
+		set_variable = {
+			name = blades_and_thrones_coup_start_loyalty
+			value = blades_and_thrones_army_loyalty
+		}
+		set_variable = {
+			name = blades_and_thrones_coup_cooldown
+			value = yes
+			months = 120
+		}
+		trigger_event_non_silently = {
+			id = blades_and_thrones_loyalty.3
+		}
+	}
+}

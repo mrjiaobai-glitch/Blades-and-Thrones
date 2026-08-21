@@ -1,0 +1,51 @@
+# 军人摄政：士兵阶层摄政（数字前缀 6：平民摄政/内阁首脑摄政之后、宗主摄政之前）。
+# 结构照抄原版 1_nobles_regency.txt：士兵权力 > 0.33 时可选的摄政类型，
+# 摄政王必须是士兵阶层角色（选不到则创建）。
+# 主题：军人掌权 → 军队养尊、国家好战化、传统精英受压、政局不稳。
+zzz_rebalanced_nepal_mercenary_soldiers_estate_regency = {
+	allow = {
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0.33
+	}
+
+	modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_permanent_target_satisfaction
+		monthly_towards_belligerent = societal_value_monthly_move
+		global_nobles_estate_power = -0.10
+		global_clergy_estate_power = -0.10
+		global_burghers_estate_power = -0.10
+		stability_investment = stability_investment_penalty
+		monthly_army_tradition = 0.02
+	}
+
+	start_effect = {
+		if = {
+			limit = {
+				any_character = {
+					can_become_a_regent = yes
+					has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				}
+			}
+			random_character = {
+				limit = {
+					can_become_a_regent = yes
+					has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				}
+				save_scope_as = new_leader
+			}
+			set_regent = scope:new_leader
+		}
+		else = {
+			hidden_effect = {
+				create_character = {
+					culture = root.culture
+					religion = root.religion
+					estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+					age = 35
+					female = no
+					save_scope_as = new_leader
+				}
+				set_regent = scope:new_leader
+			}
+		}
+	}
+}

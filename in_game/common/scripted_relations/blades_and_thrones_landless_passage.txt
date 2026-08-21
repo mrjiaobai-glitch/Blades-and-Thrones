@@ -1,0 +1,43 @@
+# 无地国流浪通行：所有国家自动向无地国（流亡者/佣兵军团国）开放边境。
+# 仅由 mod 效果创建（on_action 月度维护），不占外交槽、不显示在可提供列表。
+# 叙事：无地军团在国境间游走，各国默许其过境（他们毕竟只是路过），
+# 但允许驻在国通过“驱逐无地国”CB 将其赶走。
+blades_and_thrones_landless_passage = {
+	type = diplomacy
+	relation_type = oneway
+	break_on_war = yes
+	annulled_by_peace_treaty = yes
+	military_access = yes
+	food_access = yes
+	receiving_color = define:NMapColors|DIPLOMACY_MIL_ACCESS_COLOR
+
+	category = {
+		offer = CATEGORY_ACCESS_ACTIONS
+		request = CATEGORY_ACCESS_ACTIONS
+		cancellation = CATEGORY_ACCESS_ACTIONS
+		break = CATEGORY_ACCESS_ACTIONS
+	}
+
+	# 只由 mod 自动创建，不提供外交动作
+	offer_visible = { always = no }
+	request_visible = { always = no }
+	break_visible = { always = no }
+	cancel_visible = { always = no }
+
+	wants_to_keep = {
+		if = {
+			limit = {
+				scope:actor = {
+					giving_scripted_relation = {
+						type = relation_type:blades_and_thrones_landless_passage
+						target = scope:recipient
+					}
+				}
+			}
+			add = 100
+		}
+		else = {
+			add = -100
+		}
+	}
+}

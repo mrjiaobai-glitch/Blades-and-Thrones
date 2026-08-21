@@ -1,0 +1,362 @@
+# 雇佣津贴：低级佣兵军团（合同工）的宗主津贴——半额（佣兵自食其力为主）
+mercenary_mutiny_army_country_subsidy = {
+	game_data = {
+		category = country
+	}
+	monthly_gold_income = 25
+}
+
+# 军费拨款：低级代管军团（国家代管军队）的全额军费
+mercenary_mutiny_trusted_subsidy = {
+	game_data = {
+		category = country
+	}
+	monthly_gold_income = 50
+}
+
+# 老兵雇佣津贴：高级佣兵（强力佣兵国）的合同金（升级后由 +25 切换到此档）
+mercenary_mutiny_veteran_stipend = {
+	game_data = {
+		category = country
+	}
+	monthly_gold_income = 50
+}
+
+# 大军团军费拨款：高级代管（大型代管军团）的全额军费（升级后由 +50 切换到此档）
+mercenary_mutiny_grand_subsidy = {
+	game_data = {
+		category = country
+	}
+	monthly_gold_income = 75
+}
+
+# 削藩记恨：宗主收回藩地后军阀的忠诚惩罚（10 年）
+blades_and_thrones_revoked_land_modifier = {
+	game_data = {
+		category = country
+	}
+	loyalty_to_overlord = -30
+}
+
+# 换地余波：以远换近后军阀的轻微不满（3 年）
+blades_and_thrones_exchanged_land_modifier = {
+	game_data = {
+		category = country
+	}
+	loyalty_to_overlord = -5
+}
+
+mercenary_mutiny_takeover_aftermath = {
+	game_data = {
+		category = country
+	}
+	monthly_legitimacy = -0.1
+	monthly_republican_tradition = -0.1
+	monthly_devotion = -0.1
+	monthly_horde_unity = -0.1
+	monthly_tribal_cohesion = -0.1
+	monthly_army_tradition = 0.15
+}
+
+mercenary_mutiny_split_aftermath = {
+	game_data = {
+		category = country
+	}
+	stability_cost_efficiency = 0.2
+	hire_mercenary_premium_cost_modifier = 0.15
+	mercenary_maintenance_efficiency = -0.1
+}
+
+mercenary_mutiny_crushed_aftermath = {
+	game_data = {
+		category = country
+	}
+	stability_cost_efficiency = 0.2
+	hire_mercenary_premium_cost_modifier = 0.1
+}
+
+# 佣兵军团国"不忠诚附属国"状态：忠诚暴跌，拒绝一切宗主行动，宗主获得讨伐CB
+mercenary_mutiny_disloyal_subject = {
+	game_data = {
+		category = country
+	}
+	loyalty_to_overlord = -30
+}
+
+# 巨额军饷安抚：忠诚暂时回升，五年后失效，佣兵本性难移
+mercenary_mutiny_placated = {
+	game_data = {
+		category = country
+	}
+	loyalty_to_overlord = 35
+}
+
+# 忠诚远征军团：高忠诚，可进贡，不会索饷闹独立
+blades_and_thrones_loyal_company = {
+	game_data = {
+		category = country
+	}
+	loyalty_to_overlord = 25
+}
+
+blades_and_thrones_military_junta_modifier = {
+	game_data = {
+		category = country
+		decaying = yes
+	}
+	global_crown_estate_power = -0.25
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.50
+	army_maintenance_efficiency = 0.15
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.02
+	monthly_towards_centralization = societal_value_monthly_move
+	monthly_towards_quality = societal_value_minor_monthly_move
+}
+
+blades_and_thrones_army_purged_modifier = {
+	game_data = {
+		category = country
+		decaying = yes
+	}
+	global_crown_estate_power = 0.10
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.25
+	army_maintenance_efficiency = -0.1
+	army_tradition_decay = 0.005
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.01
+}
+
+blades_and_thrones_military_compromise_modifier = {
+	game_data = {
+		category = country
+		decaying = yes
+	}
+	global_crown_estate_power = -0.10
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.25
+	army_maintenance_efficiency = 0.10
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.02
+}
+
+blades_and_thrones_junta_established_modifier = {
+	game_data = {
+		category = country
+	}
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.15
+	monthly_army_tradition = 0.10
+	global_manpower_modifier = 0.10
+	army_maintenance_efficiency = -0.20
+	diplomatic_reputation = diplomatic_reputation_weak_penalty
+	government_reform_slots = 1
+}
+
+blades_and_thrones_junta_purge_aftermath_modifier = {
+	game_data = {
+		category = country
+		decaying = yes
+	}
+	global_crown_estate_power = 0.10
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.20
+	army_tradition_decay = 0.005
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.01
+}
+
+blades_and_thrones_junta_purge_legacy_modifier = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = 0.10
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.15
+	country_cabinet_efficiency = 0.10
+	stability_cost_efficiency = 0.10
+	monthly_rebel_growth = -0.001
+}
+
+blades_and_thrones_junta_collapse_modifier = {
+	game_data = {
+		category = country
+		decaying = yes
+	}
+	global_crown_estate_power = 0.20
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.30
+	stability_cost_efficiency = -0.5
+	monthly_legitimacy = -0.05
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = 0.02
+}
+
+blades_and_thrones_junta_collapse_legacy_modifier = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = 0.15
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.20
+	monthly_legitimacy = 0.05
+	stability_cost_efficiency = 0.20
+	global_monthly_development = 0.002
+	diplomatic_reputation = diplomatic_reputation_weak_bonus
+}
+
+blades_and_thrones_junta_restored_modifier = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = 0.20
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.25
+	monthly_legitimacy = 0.02
+	diplomatic_reputation = diplomatic_reputation_mild_bonus
+	country_cabinet_efficiency = 0.10
+	stability_cost_efficiency = 0.20
+	government_reform_slots = 1
+}
+
+blades_and_thrones_junta_cogovernance_modifier = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = 0.05
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.20
+	global_nobles_estate_power = 0.10
+	global_burghers_estate_power = 0.10
+	country_cabinet_efficiency = 0.10
+	army_maintenance_efficiency = -0.15
+	monthly_legitimacy = 0.05
+	diplomatic_reputation = diplomatic_reputation_weak_penalty
+	government_reform_slots = 1
+}
+
+blades_and_thrones_junta_restoration_pain_modifier = {
+	game_data = {
+		category = country
+		decaying = yes
+	}
+	stability_cost_efficiency = -0.20
+	monthly_rebel_growth = 0.001
+	monthly_legitimacy = -0.05
+}
+
+blades_and_thrones_junta_forced_cogovernance_modifier = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = 0.10
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.10
+	global_nobles_estate_power = 0.05
+	global_burghers_estate_power = 0.05
+	country_cabinet_efficiency = 0.05
+	army_maintenance_efficiency = -0.05
+	monthly_legitimacy = 0.02
+	diplomatic_reputation = diplomatic_reputation_mild_penalty
+	government_reform_slots = 1
+}
+
+blades_and_thrones_junta_hardened_modifier = {
+	game_data = {
+		category = country
+	}
+	global_crown_estate_power = -0.10
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.35
+	global_nobles_estate_power = -0.25
+	global_clergy_estate_power = -0.25
+	global_burghers_estate_power = -0.25
+	global_peasants_estate_power = -0.25
+	monthly_army_tradition = 0.20
+	army_maintenance_efficiency = 0.15
+	monthly_legitimacy = -0.10
+	stability_cost_efficiency = -0.20
+	monthly_rebel_growth = -0.001
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.03
+	government_reform_slots = 1
+}
+
+# 安家立业：无地军团获得土地后的军事传统（老兵治国）
+blades_and_thrones_settled_military_modifier = {
+	game_data = {
+		category = country
+	}
+	monthly_army_tradition = 0.10
+	global_manpower_modifier = 0.05
+	army_maintenance_efficiency = 0.05
+	global_soldiers_desired_pop_scaled = 0.05
+}
+
+# 复国者：夺回故都的流亡者（光复正统 + 军事传统）
+blades_and_thrones_restored_country_modifier = {
+	game_data = {
+		category = country
+	}
+	monthly_legitimacy = 0.05
+	monthly_army_tradition = 0.10
+	diplomatic_reputation = diplomatic_reputation_weak_bonus
+	global_manpower_modifier = 0.10
+}
+
+# 老兵不满：和平后欠饷遣散的老兵心怀怨愤（解甲不归心）
+blades_and_thrones_veteran_unrest_modifier = {
+	game_data = {
+		category = country
+	}
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = 0.02
+	monthly_rebel_growth = 0.0005
+	global_manpower_modifier = -0.05
+	global_soldiers_desired_pop_scaled = -0.05
+}
+
+# 精锐老兵：保留的百战之师（国之干城，代价是更高的军饷与维护）
+blades_and_thrones_veteran_core_modifier = {
+	game_data = {
+		category = country
+	}
+	monthly_army_tradition = 0.05
+	discipline = 0.025
+	land_morale_modifier = 0.05
+	army_maintenance_efficiency = -0.05
+}
+
+# 退伍过渡期：就地解散后，士兵期望下降——剩余的超编士兵在数月内陆续失业、
+# 迁走或归田（自然回流），而不是永久滞留军营。
+blades_and_thrones_demobilization_transition_modifier = {
+	game_data = {
+		category = country
+	}
+	global_soldiers_desired_pop_scaled = -0.10
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = 0.01
+}
+
+# 老兵镇压余波：镇压老兵骚动后的短期代价（人力受损、怨气残留）
+blades_and_thrones_veteran_suppressed_modifier = {
+	game_data = {
+		category = country
+	}
+	global_manpower_modifier = -0.05
+	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = 0.015
+	monthly_legitimacy = -0.01
+}
+
+# 精锐制度化：精锐老兵并入常备军后的长期军事传统
+blades_and_thrones_veteran_institutionalized_modifier = {
+	game_data = {
+		category = country
+	}
+	monthly_army_tradition = 0.03
+	discipline = 0.015
+	army_maintenance_efficiency = -0.03
+}
+
+# 特别税·士兵分支：向士兵阶层摊派特别捐（12 个月），max_tax +5pp。
+# 原版 extraordinary_taxes 的 else_if 只覆盖 7 个原版阶层，士兵阶层走不到任何分支、
+# 白白承受满意度惩罚——这里补齐原版缺失的 modifier，
+# 对应 in_game/common/generic_actions/zzz_blades_and_thrones_estate_actions.txt 的 REPLACE_OR_CREATE 覆盖。
+estate_emergency_taxes_soldiers = {
+	game_data = {
+		category = country
+	}
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_max_tax = 0.05
+}
+
+# 士兵平叛：请求士兵阶层镇压内乱（24 个月）。
+# 数值对齐原版平叛尺度（suppress_free_thinkers 用 pop_join_rebel_threshold -0.05；
+# monthly_rebel_growth 的最强档约 -0.05）。
+blades_and_thrones_soldier_suppression_modifier = {
+	game_data = {
+		category = country
+	}
+	monthly_rebel_growth = -0.05
+	pop_join_rebel_threshold = -0.05
+}

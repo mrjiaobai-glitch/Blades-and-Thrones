@@ -1,0 +1,291 @@
+# ============================================================================
+# 刀锋与王座 — 阶层互动补齐
+# ----------------------------------------------------------------------------
+# 原版 extraordinary_taxes 的效果里，else_if 链只覆盖 7 个原版阶层
+# （nobles/burghers/clergy/peasants/tribes/dhimmi/cossacks）。
+# 士兵阶层（zzz_rebalanced_nepal_mercenary_soldiers_estate）会被选中、承受
+# 满意度惩罚，却拿不到 12 个月的 max_tax +0.05 modifier——与"满意度目标"同源的
+# 硬编码列表缺口。此处用 REPLACE_OR_CREATE 整条替换该 action，补上士兵分支。
+# 其余内容逐行忠实复制原版（1.3.11），未做任何其他改动。
+# ============================================================================
+REPLACE_OR_CREATE:extraordinary_taxes = {
+	type = owncountry
+
+	ai_tick = daily
+	ai_tick_frequency = 180
+	automation_tick = never
+
+	potential = {
+		scope:actor = {
+			any_estate = {
+				estate_tax_base > 0.01
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	cooldown = {
+		type = extraordinary_taxes_cooldown
+		years = 5
+	}
+
+	select_trigger = {
+		looking_for_a = estate
+		source = actor
+		target_flag = target
+		name = "mission_select_estate"
+		column = {
+			data = name
+		}
+		enabled = {
+			estate_tax_base > 0.01
+			NOR = {
+				AND = {
+					estate_type = estate_type:clergy_estate
+					scope:actor = { religion = religion:catholic }
+				}
+			}
+		}
+	}
+
+	effect = {
+		scope:actor = {
+			if = {
+				limit = { scope:target = { estate_type = estate_type:nobles_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_nobles
+					months = 12
+					mode = add_and_extend
+				}
+			}
+			else_if = {
+				limit = { scope:target = { estate_type = estate_type:burghers_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_burghers
+					months = 12
+					mode = add_and_extend
+				}
+			}
+			else_if = {
+				limit = { scope:target = { estate_type = estate_type:clergy_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_clergy
+					months = 12
+					mode = add_and_extend
+				}
+			}
+			else_if = {
+				limit = { scope:target = { estate_type = estate_type:peasants_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_peasants
+					months = 12
+					mode = add_and_extend
+				}
+			}
+			else_if = {
+				limit = { scope:target = { estate_type = estate_type:tribes_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_tribes
+					months = 12
+					mode = add_and_extend
+				}
+			}
+			else_if = {
+				limit = { scope:target = { estate_type = estate_type:dhimmi_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_dhimmi
+					months = 12
+					mode = add_and_extend
+				}
+			}
+			else_if = {
+				limit = { scope:target = { estate_type = estate_type:cossacks_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_cossacks
+					months = 12
+					mode = add_and_extend
+				}
+			}
+			# 刀锋与王座：士兵阶层分支（原版缺失）。
+			else_if = {
+				limit = { scope:target = { estate_type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate } }
+				add_country_modifier = {
+					modifier = estate_emergency_taxes_soldiers
+					months = 12
+					mode = add_and_extend
+				}
+			}
+
+			if = {
+				limit = {
+					any_current_war = { is_a_defender = scope:actor }
+				}
+				add_estate_satisfaction = {
+					type = scope:target.estate_type
+					value = -0.125
+				}
+			}
+			else = {
+				add_estate_satisfaction = {
+					type = scope:target.estate_type
+					value = -0.25
+				}
+			}
+		}
+	}
+
+	ai_prerequisite = {
+		OR = {
+			AND = {
+				monthly_balance < -2
+				gold < 100
+			}
+			AND = {
+				at_war = yes
+				gold < 10
+			}
+		}
+		any_estate = { satisfaction > 0.55 }
+	}
+
+	ai_will_do = {
+		if = {
+			limit = {
+				exists = scope:target
+				scope:target = { satisfaction > 0.55 }
+				scope:actor = {
+					OR = {
+						AND = { monthly_balance < -2 gold < 100 }
+						AND = { at_war = yes gold < 10 }
+					}
+				}
+			}
+
+			if = {
+				limit = { scope:actor = { monthly_balance < 0 } }
+				subtract = {
+					desc = "Monthly deficit"
+					value = scope:actor.monthly_balance
+				}
+			}
+
+			if = {
+				limit = { scope:actor = { at_war = yes lowest_war_score < 0 } }
+				add = { desc = "At war and losing" value = 15 }
+			}
+
+			add = {
+				desc = "Estate satisfaction buffer"
+				value = scope:target.satisfaction
+				multiply = 20
+			}
+
+			if = {
+				limit = { scope:target = { satisfaction < 0.55 } }
+				multiply = 0
+			}
+		}
+	}
+}
+
+# ============================================================================
+# 请求士兵平叛（士兵阶层专属互动）
+# ----------------------------------------------------------------------------
+# 主题：向士兵阶层求助镇压内乱——士兵以刀剑维持秩序，但由此获得政治筹码。
+# 结构对齐原版专属互动（ask_clergy_for_legitimacy 等）：专属阶层 + 5 年冷却 +
+# 满意度代价；另加"国内有叛军"才可用的门槛，避免空点。
+# 效果：24 个月平叛 modifier（全国叛乱增长下降、POP 加入叛军倾向下降）。
+# ============================================================================
+ask_soldiers_for_suppression = {
+	type = owncountry
+
+	ai_tick = daily
+	ai_tick_frequency = 180
+	automation_tick = never
+
+	potential = {
+		scope:actor = {
+			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		}
+		scope:target ?= {
+			estate_type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		}
+	}
+
+	allow = {
+	}
+
+	cooldown = {
+		type = ask_soldiers_for_suppression_cooldown
+		years = 5
+	}
+
+	select_trigger = {
+		looking_for_a = estate
+		source = actor
+		target_flag = target
+		name = "mission_select_estate"
+		column = {
+			data = name
+		}
+		enabled = {
+			estate_type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			scope:actor = {
+				any_rebel = {
+					always = yes
+				}
+			}
+		}
+	}
+
+	effect = {
+		scope:actor = {
+			add_country_modifier = {
+				modifier = blades_and_thrones_soldier_suppression_modifier
+				months = 24
+				mode = add_and_extend
+			}
+			add_estate_satisfaction = {
+				type = scope:target.estate_type
+				value = -0.15
+			}
+		}
+	}
+
+	ai_prerequisite = {
+		any_rebel = {
+			always = yes
+		}
+		"estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" > 0.55
+	}
+
+	ai_will_do = {
+		if = {
+			limit = {
+				exists = scope:target
+				scope:target = { satisfaction > 0.55 }
+				scope:actor = {
+					any_rebel = {
+						always = yes
+					}
+				}
+			}
+
+			add = {
+				desc = "Estate satisfaction buffer"
+				value = scope:target.satisfaction
+				multiply = 20
+			}
+
+			if = {
+				limit = { scope:actor = { any_rebel = { rebel_progress > 0.5 } } }
+				add = {
+					desc = "Serious rebellion"
+					value = 15
+				}
+			}
+		}
+	}
+}

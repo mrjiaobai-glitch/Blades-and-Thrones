@@ -1,0 +1,101 @@
+on_annex = {
+	on_actions = {
+		mercenary_mutiny_on_annex
+	}
+}
+
+on_annexed = {
+	on_actions = {
+		mercenary_mutiny_annexed_rescue_characters
+	}
+}
+
+mercenary_mutiny_on_annex = {
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+				scope:target = {
+					# 玩家被吞并：任何残军都转流亡者（原设计）；
+					# AI 被吞并：军队规模 ≥ 5 且 15% 概率（防刷屏——AI 互吞频繁，
+					# 无门槛会满世界流亡者；有门槛则观察者模式也能看到流亡军团）
+					OR = {
+						is_human = yes
+						AND = {
+							regular_army_size >= 5
+							random = 0.15
+						}
+					}
+					OR = {
+						regular_army_size > 0
+						any_hired_mercenary = { count > 0 }
+					}
+				}
+			}
+			scope:target = {
+				mercenary_mutiny_convert_annexed_to_army_country_effect = yes
+				if = {
+					limit = {
+						is_human = yes
+						has_variable = mercenary_mutiny_army_country_ref
+					}
+					var:mercenary_mutiny_army_country_ref = {
+						save_scope_as = mercenary_mutiny_army_country
+					}
+					trigger_event_non_silently = {
+						id = mercenary_mutiny_test.2
+					}
+				}
+			}
+			# 把军团国引用存到吞并国(本作用域 root)身上：
+			# 被吞并国即将灭亡，引用存它身上 on_annexed 时读不到。
+			if = {
+				limit = {
+					scope:target = { has_variable = mercenary_mutiny_army_country_ref }
+				}
+				scope:target = {
+					var:mercenary_mutiny_army_country_ref = {
+						save_scope_as = mercenary_mutiny_army_country
+					}
+				}
+				set_variable = {
+					name = mercenary_mutiny_annex_army_country
+					value = scope:mercenary_mutiny_army_country
+				}
+			}
+		}
+	}
+}
+
+mercenary_mutiny_annexed_rescue_characters = {
+	effect = {
+		if = {
+			limit = {
+				has_variable = mercenary_mutiny_annex_army_country
+			}
+			var:mercenary_mutiny_annex_army_country = {
+				save_scope_as = mercenary_mutiny_army_country
+			}
+			# 吞并完成后，被吞并国的角色已经并入吞并国宫廷。
+			# 依据转换时打的 mercenary_mutiny_exiled_candidate 标记，
+			# 只转移原本属于被吞并国、且未随玩家接管而转移走的角色。
+			every_character = {
+				limit = {
+					is_alive = yes
+					has_variable = mercenary_mutiny_exiled_candidate
+					NOT = { owner ?= scope:mercenary_mutiny_army_country }
+					NOT = {
+						OR = {
+							is_ruler = yes
+							is_regent = yes
+							is_heir = yes
+						}
+					}
+				}
+				remove_variable = mercenary_mutiny_exiled_candidate
+				move_country = scope:mercenary_mutiny_army_country
+			}
+			remove_variable = mercenary_mutiny_annex_army_country
+		}
+	}
+}

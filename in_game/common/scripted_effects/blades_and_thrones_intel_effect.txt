@@ -1,0 +1,44 @@
+blades_and_thrones_prepare_intel_report_effect = {
+	set_variable = {
+		name = blades_and_thrones_army_loyalty_display
+		value = blades_and_thrones_army_loyalty
+	}
+	set_variable = {
+		name = blades_and_thrones_soldier_satisfaction_display
+		value = blades_and_thrones_soldier_satisfaction
+	}
+	set_variable = {
+		name = blades_and_thrones_mercenary_pressure_display
+		value = mercenary_mutiny_soldiers_pressure_scale
+	}
+	if = {
+		limit = {
+			has_variable = blades_and_thrones_junta_stability
+		}
+		set_variable = {
+			name = blades_and_thrones_junta_stability_display
+			value = var:blades_and_thrones_junta_stability
+		}
+	}
+	else = {
+		set_variable = {
+			name = blades_and_thrones_junta_stability_display
+			value = 0
+		}
+	}
+	if = {
+		limit = {
+			has_variable = blades_and_thrones_war_months
+		}
+		set_variable = {
+			name = blades_and_thrones_war_months_display
+			value = var:blades_and_thrones_war_months
+		}
+	}
+	else = {
+		set_variable = {
+			name = blades_and_thrones_war_months_display
+			value = 0
+		}
+	}
+}

@@ -1,0 +1,701 @@
+# ============ 婵炴垶鎸搁ˇ浼村焵椤戞寧绁版繛鏉戞瀹曠娀寮介锕€鍘欑紓鍌欒兌閸ｏ妇妲愭导鏉戞瀬闁割偆鍠撴禍顖炴⒒?============
+# 闁汇埄鍨抽…鍫ニ囬鍕?闂?闂傚倸妫楀ú锝夊礈閹达箑绀?闂?闂佸搫鍟版慨鏉戯耿閹绢喖绀冩繛鎴炆戠粈瀣煕?闂?婵犮垼顕栭崑鍕矗缁℃伐P闂佹寧绋戦惉濂稿极闁秵鐒绘慨妯块哺閺嗗繘鎮跺☉妯垮濠殿喒鏅犻弫宥夊锤閹荤皠eric_actions闂佹寧绋戦ˇ鎶芥儍閻斿吋鍋ㄩ柕濠忕岛閸?
+
+# --- 闂備緡鍋呭銊╁极閵堝鏅慨姗嗗幖閻﹀鏌涘Ο鐓庢瀻闁告瑨娅ｇ划鏂款吋閸涱喛鍚柣蹇撶箰缁绘ê危閿曞倸绠ラ柍褜鍓熷畷鐑藉Ω閵堝洨孝缂傚倸鍠氶崰鏍储閻樼粯鈷曢柛鈩冩礉缁€瀣偨椤栨粠鐒炬い锔诲墴瀹曟ê鈽夊畷鍥╊槱婵炴挻纰嶇粙鎺楀极閸︻厾纾介柡宥忕畱婢с倝鏌涜箛鎾虫倎濠电偛娲幃浠嬧€﹂幒鏃傤槴---
+# 闂?闁诲繐绻愮换妯何?婵炶揪绲剧划搴ㄥ极閵堝鏄ラ柣鏃囧吹缁犮儵鎮跺☉妯肩効缂侀亶浜跺畷妤冣偓锝庡枟閻ｅ嘲霉閿濆懐肖闁?= scope:blades_and_thrones_clone_location闂佹寧绋戦懟顖滅礊婵犲嫪娌?= scope:blades_and_thrones_clone_owner
+blades_and_thrones_clone_sub_unit_as_regular_effect = {
+	if = {
+		limit = { sub_unit_type = unit_type:a_akinji }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_akinji owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_almogavars }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_almogavars owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_archers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_archers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_armored_horsemen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_armored_horsemen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_arquebusiers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_arquebusiers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_baggage_train }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_baggage_train owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_bedouin_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_bedouin_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_bengali_elephant_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_bengali_elephant_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_camp_followers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_camp_followers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_catalan_crossbowmen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_catalan_crossbowmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_caterans }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_caterans owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_cavalrymen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_cavalrymen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_chambered_cannon }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_chambered_cannon owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_champions }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_champions owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_crossbowmen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_crossbowmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_crusader_knights }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_crusader_knights owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_early_arquebusiers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_early_arquebusiers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_early_longbowmen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_early_longbowmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_early_paik_infantry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_early_paik_infantry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_falconet }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_falconet owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_flying_battery }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_flying_battery owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_footmen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_footmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_fusiliers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_fusiliers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_gallop_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_gallop_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_gallowglass }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_gallowglass owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_genoese_crossbowmen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_genoese_crossbowmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_halberdiers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_halberdiers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_handgonners }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_handgonners owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_heavy_cavalrymen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_heavy_cavalrymen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_heavy_lancers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_heavy_lancers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hobelars }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_hobelars owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_horsemen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_horsemen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_houfnice }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_houfnice owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hungarian_hussars }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_hungarian_hussars owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hunters }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_hunters owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hussars }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_hussars owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hwacha }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_hwacha owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_indian_elephant_auxiliary }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_indian_elephant_auxiliary owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_indian_elephant_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_indian_elephant_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_iron_helmet_musketeers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_iron_helmet_musketeers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_kerns }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_kerns owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_khmer_ballista_elephant_infantry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_khmer_ballista_elephant_infantry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_lancers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_lancers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_almogavars }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_late_almogavars owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_gallowglass }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_late_gallowglass owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_longbowmen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_late_longbowmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_paik_infantry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_late_paik_infantry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_1 }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_legionaries_1 owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_2 }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_legionaries_2 owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_3 }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_legionaries_3 owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_4 }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_legionaries_4 owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_5 }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_legionaries_5 owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_6 }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_legionaries_6 owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_light_lancers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_light_lancers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_logistics_corps }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_logistics_corps owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_longbowmen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_longbowmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_lour_lances }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_lour_lances owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_mamluk_horsemen_renaissance }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_mamluk_horsemen_renaissance owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_mamluk_unit_renaissance }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_mamluk_unit_renaissance owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_men_at_arms }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_men_at_arms owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_musketeers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_musketeers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_order_knights }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_order_knights owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_order_knights_2 }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_order_knights_2 owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_orissan_elephant_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_orissan_elephant_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_paik_infantry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_paik_infantry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_pikemen }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_pikemen owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_pistoleers }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_pistoleers owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_pontifical_swiss_guard }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_pontifical_swiss_guard owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_reformed_gallowglass }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_reformed_gallowglass owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_reislaufer }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_reislaufer owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_royal_mortar }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_royal_mortar owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_schiltron }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_schiltron owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_sharpshooters }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_sharpshooters owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_siamese_advanced_elephant_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_siamese_advanced_elephant_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_sowar_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_sowar_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_supply_carts }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_supply_carts owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_supply_convoy }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_supply_convoy owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_thai_elephant_cavalry }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_thai_elephant_cavalry owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_wagon_train }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_wagon_train owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_warriors }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_warriors owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_barque }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_barque owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_brig }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_brig owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_caravel }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_caravel owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_cog }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_cog owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_flute }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_flute owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_frigate }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_frigate owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_genoese_galley }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_genoese_galley owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_hanseatic_cog }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_hanseatic_cog owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_heavy_frigate }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_heavy_frigate owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_hulk }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_hulk owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_italian_galleass }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_italian_galleass owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_pinnace }
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = n_pinnace owner = scope:blades_and_thrones_clone_owner } }
+	}
+	else = {
+		scope:blades_and_thrones_clone_location ?= { create_sub_unit_with_owner = { type = a_footmen owner = scope:blades_and_thrones_clone_owner } }
+	}
+}
+
+# --- 闂佽　鍋撻柛鎾茶兌濡炶棄霉閿濆繒鍒伴柛娆愭そ瀵晫绮欑捄銊ヮ洭闂佹寧绋戦悧鍡涘储閻樼粯鈷?闂備礁绨遍崑鎾存叏閿濆嫮绛忕紒杈ㄧ箖缁嬪顓奸崨顔煎壍闂佸湱顣紞鈧柛銊ュ€圭粙澶嬫償閳ュ磭銈梺鍝勭墣濞咃絿鍒掗妸褏涓嶆俊銈咁儑楠炪垽鎮跺☉妯垮濠殿喒鏅滅粙澶嬫償濠靛牏娈ゆ繛瀵稿У閸庤壈銇愬澶婄闁哄洨鍋涜ぐ娆撴煟閵忊晝鍘滅紒?--
+# 闂?婵炶揪缍囩徊浠嬪矗濞差亜绀傛い鎺嗗亾鐎?婵炶揪绲剧划搴ㄥ极閵堝鏄ラ柣鏃囧吹缁犮儵鎮?
+blades_and_thrones_integrate_mercenary_core_effect = {
+	# 闂佺绻愰澶娾枔閺囩喐濯寸€广儱娲ㄩ弸鍌炴煥濞戞瑧鐓柛鎾村灴瀹曟妫冨☉姘毙梺鍛婃尭缁夊灚鏅跺澶婃嵍闁靛鍊楃粔瀵哥磽閸愭儳娅欑紒杈ㄧ箘缁辨捇宕崟鈺€鏉梺鍛婂笚閻熴儱煤閺嶎厽鐒婚柍褜鍓氶敍鍐冀椤撶偛骞?
+	# 防御：具名 scope 在嵌套 effect 调用（scope:target = { effect = yes }）内
+	# 不可见（实测收编报 "Scoped object is not valid. Type: 雇佣兵"）——
+	# 在 effect 开头重新从 scope:actor 保存
+	scope:actor = {
+		save_scope_as = blades_and_thrones_company_actor
+	}
+	# mercenary scope 不能直接用 unit_location（报 "Wrong scope for effect:
+	# mercenary, expected unit"）——从第一个子单位取位置（vanilla mercs.4
+	# ordered_mercenary_sub_unit 同款）
+	ordered_mercenary_sub_unit = {
+		order_by = {
+			value = subunit_strength
+			multiply = -1
+		}
+		max = 1
+		check_range_bounds = no
+		unit_location ?= {
+			save_scope_as = blades_and_thrones_clone_location
+		}
+	}
+	if = {
+		limit = { NOT = { exists = scope:blades_and_thrones_clone_location } }
+		scope:actor = {
+			capital ?= {
+				save_scope_as = blades_and_thrones_clone_location
+			}
+		}
+	}
+	scope:actor = {
+		save_scope_as = blades_and_thrones_clone_owner
+	}
+	# 濠殿噯绲界换瀣煂濠婂嫭濯撮柨婵嗘噹瀵板秹鎮樿箛鎾剁婵¤绠撻獮鎰緞婵犲倹鏋鹃梺绋跨箳閺佹悂锝為幒妤€绀傞悗锝庡枟閻ｅ嘲鈽夐幘铏儓闁绘牞鍩栧鍕炊瑜嶉弲?
+	every_mercenary_sub_unit = {
+		blades_and_thrones_clone_sub_unit_as_regular_effect = yes
+	}
+	# 闁荤喐鐟辩徊楣冨汲鎼淬垺濯撮柨婵嗘噹瀵板秹鏌涜箛锝呭鐎?
+	save_scope_as = blades_and_thrones_integrated_company
+	destroy_mercenary = scope:blades_and_thrones_integrated_company
+}
+
+# --- 闂佽　鍋撻柛鎾茶兌濡炶棄霉閿濆繒鍒伴柛娆愭そ閺佸秹宕煎鍐ㄢ叧闂佺绻樺褔宕ｉ弴銏犵煑?闂?闁汇埄鍨抽…鍫ニ囬鍕婵炴垵纾粈澶婎熆閼哥數澧ф慨姗堝閹壆浠﹂挊澹鏌ｅΔ鈧悧濠傦耿娴煎瓨鏅悘鐐跺Г閸庢捇鏌熺喊澶岀К闁搞劌鍊块弫?--
+# 闂?婵炶揪缍囩徊浠嬪矗濞差亜绀傛い鎺嗗亾鐎?婵炶揪绲剧划搴ㄥ极閵堝鏄ラ柣鏃囧吹缁犮儵鎮跺☉妯肩効缂佽鲸鐟╅弻鍛潩鏉堛劍娈㈤柣鐐寸☉閼活垱鎱ㄩ埡鍛剭?scope:target闂?
+blades_and_thrones_integrate_mercenary_effect = {
+	# 缂備線纭搁崹鐗堟叏閻愬灚瀚氶柕澶堝劚瑜板棝鏌涘▎蹇斿暈闁逞屽墲椤曆囧矗濞差亜绀夋繛鎴濈－缁€鍕倵濞戞顏堝春?actor 闂佸憡鐟﹂敃銏ゅ闯濞差亝鏅?
+	# 防御：具名 scope 在嵌套 effect 调用（scope:target = { effect = yes }）内
+	# 不可见（实测报 "Scoped object is not valid"）——开头重新从 scope:actor 保存
+	scope:actor = {
+		save_scope_as = blades_and_thrones_company_actor
+	}
+	scope:blades_and_thrones_company_actor = {
+		set_variable = {
+			name = blades_and_thrones_integrate_strength_var
+			value = 0
+		}
+	}
+	every_mercenary_sub_unit = {
+		scope:blades_and_thrones_company_actor = {
+			change_variable = {
+				name = blades_and_thrones_integrate_strength_var
+				add = prev.subunit_strength
+			}
+		}
+	}
+	# 闁荤姵鍔曞﹢閬嶅极閵堝鏅柛顐ゅ枎閻﹀鏌涜箛娑欐锭濠殿喖绻橀弫宥嗗緞濞戞氨顦梺鍝勭墐閸嬫挸顭块懜鐢殿暡濠⒀勬倐瀹曟岸寮剁捄銊梺鍛婃尭缁夊綊宕抽崜褎鏆滃ù锝囨焿缁€瀣叏?
+	scope:blades_and_thrones_company_actor = {
+		set_variable = {
+			name = blades_and_thrones_integrate_cost_var
+			value = {
+				value = scope:blades_and_thrones_company_actor.var:blades_and_thrones_integrate_strength_var
+				multiply = 1
+				min = 100
+			}
+		}
+		if = {
+			limit = { scope:blades_and_thrones_company_actor.var:blades_and_thrones_integrate_cost_var > scope:blades_and_thrones_company_actor.gold }
+			set_variable = {
+				name = blades_and_thrones_integrate_cost_var
+				value = scope:blades_and_thrones_company_actor.gold
+			}
+		}
+		add_gold = {
+			value = scope:blades_and_thrones_company_actor.var:blades_and_thrones_integrate_cost_var
+			multiply = -1
+		}
+	}
+	blades_and_thrones_integrate_mercenary_core_effect = yes
+	# 闂佽　鍋撻柛鎾茶兌濡?= 濠电偞鍨甸悧鎾斥枍鎼淬垻绠惧ù锝堟閸撱劑鏌ㄥ☉娆掑闁哥喐顨嗙粋宥団偓锝庝簻缁侇偊鏌￠崼婵囨儓闁靛洤娲悰顕€宕ㄩ鍌滄啴闂?
+	scope:blades_and_thrones_company_actor = {
+		if = {
+			limit = { NOT = { has_variable = blades_and_thrones_military_crisis } }
+			set_variable = {
+				name = blades_and_thrones_military_crisis
+				value = 0
+			}
+		}
+		change_variable = {
+			name = blades_and_thrones_military_crisis
+			add = -20
+			min = 0
+			max = 100
+		}
+		set_variable = {
+			name = blades_and_thrones_military_crisis_display
+			value = scope:blades_and_thrones_company_actor.var:blades_and_thrones_military_crisis
+		}
+	}
+}
+
+# --- 缂傚倷绀佺€氼剛绱撻幘璇茬婵炴垶蓱缁€瀣煥濞戞澧曢柣鏍煐瀵板嫰宕惰閺?闂?闂佸搫鍟版慨鏉戯耿閹绢喖绀冩繛鎴炆戠粈瀣煕閵夛附鐏紒?--
+# 闂?闂備緡鍠撻崝鎴澪?婵炶揪绲剧划搴ㄥ极閵堝鏄ラ柣鏃囧吹缁犮儵鎮?
+blades_and_thrones_found_company_effect = {
+	# 缂備線纭搁崹鐗堟叏閻愮儤鐒鹃柕濞炬櫆琚濋梺璇″墲椤曆囧矗濞差亜绀夋繛鎴濈－缁€鍕倵濞戞顏堝春?actor 闂佸憡鐟﹂敃銏ゅ闯濞差亝鏅悘鐐跺亹鏉╂梻绱撴担绋款仼缂傚倹鎸鹃幏褰掓焻濞戞氨鎲块梺鍛婂姈缁嬫垵煤閻旂厧绠ｆ俊顖氭惈椤柨霉閿濆牊纭堕柡浣靛€濋弫?
+	# 防御：具名 scope 在嵌套 effect 调用内不可见——开头重新保存（同收编）
+	scope:actor = {
+		save_scope_as = blades_and_thrones_company_actor
+	}
+	scope:blades_and_thrones_company_actor = {
+		set_variable = {
+			name = blades_and_thrones_unit_strength_var
+			value = 0
+		}
+	}
+	every_sub_unit = {
+		scope:blades_and_thrones_company_actor = {
+			change_variable = {
+				name = blades_and_thrones_unit_strength_var
+				add = prev.subunit_strength
+			}
+		}
+	}
+	# 缂傚倷绀佺€氼剛绱撻幘鑸靛闁谎冩憸缁€澶愭煛閸艾浜炬繝銏ｅ煐绾板秵鏅堕幖浣哥闁哄娉曠粔濂告煕閹惧磭效闁革絽澧介弫顔芥媴閻ゎ垳顦板┑顔界箥濠胶妲愬▎鎴炲闁革富鍘奸懞?闂佸搫鐗冮崑鎾趁归敐鍛嚬闁绘粠鍨抽幉瀛樻媴妞嬪骸绠氶梺鍝勭Ч濡潡鎳欓幋锕€鍑犳い顐枤缁€?
+	# 濠电偛顦崝宥夊礈娴煎瓨鏅慨姗嗗幗閹?effect 婵炲濮伴崕鐢稿磿閹绢喗鈷撻柣鏃€鍎肩粈?root 闁哄鏅滈崝姗€銆侀幋锔芥櫖鐎光偓閸愯法鍠?var: 闂佸湱顭堝ú銈夊箖濠婂牊鐒鹃柕濞炬櫆琚濋梺鍛婄懄閿曘垽宕冲ú顏呮櫖?
+	# 闂佸憡鍔栫粙鎴澝洪悢鍏煎剮缂佸鐏濊ぐ鐘绘煕濞嗘劧鑰块柛锝嗘そ閺屽牓宕愰悤浣告櫗闂?scope:blades_and_thrones_company_actor闂佹寧绋戦悧鍡椕瑰Δ鍐ｅ亾绾拋鍟囩紒杈ㄧ缁嬪绻濊箛鏇狀槷闂婎偄娲ら幊姗€濡磋箛娑欏仺?scope:blades_and_thrones_company_actor.var: 闂佸憡鎸哥粔鍓佹閹达箑违?
+	scope:blades_and_thrones_company_actor = {
+		set_variable = {
+			name = blades_and_thrones_found_cost_var
+			value = {
+				value = scope:blades_and_thrones_company_actor.var:blades_and_thrones_unit_strength_var
+				multiply = blades_and_thrones_found_company_cost
+				min = blades_and_thrones_found_company_min_cost
+			}
+		}
+		if = {
+			limit = { scope:blades_and_thrones_company_actor.var:blades_and_thrones_found_cost_var > scope:blades_and_thrones_company_actor.gold }
+			set_variable = {
+				name = blades_and_thrones_found_cost_var
+				value = scope:blades_and_thrones_company_actor.gold
+			}
+		}
+		add_gold = {
+			value = scope:blades_and_thrones_company_actor.var:blades_and_thrones_found_cost_var
+			multiply = -1
+		}
+	}
+	# 闂佸憡鍔栫粙鎴澝洪悢鐓庣闁搞儯鍔岄惃鈺呮倵?
+	scope:blades_and_thrones_company_actor = {
+		create_character = {
+			age = { 30 60 }
+			adm = { 40 80 }
+			dip = { 40 80 }
+			mil = { 70 100 }
+			culture = scope:blades_and_thrones_company_actor.culture
+			religion = scope:blades_and_thrones_company_actor.religion
+			estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			create_in_limbo = yes
+			save_scope_as = blades_and_thrones_company_commander
+		}
+	}
+	# 闂侀潻璐熼崝鎴﹀磿閹绢喗鈷撻柣鏃傤焾椤ｆ煡鏌涢敂鍝勫婵犫偓閹绢喖绀嗘繛鎴烆焽缁憋箓鏌涢幇顓犫槈婵炶尙鍠栧畷?
+	unit_location ?= {
+		create_army_country_in_location = {
+			overlord = scope:blades_and_thrones_company_actor
+			culture = scope:blades_and_thrones_company_actor.culture
+			religion = scope:blades_and_thrones_company_actor.religion
+			subject_type = subject_type:mercenary_company
+			ruler = scope:blades_and_thrones_company_commander
+			save_scope_as = blades_and_thrones_founded_company
+		}
+	}
+	if = {
+		limit = { exists = scope:blades_and_thrones_founded_company }
+		# 闂備緡鍠撻崝鎴澪ｉ敂鍓х煋閻犱浇娅曢崬澶愭煕閹邦厾鈽夋繛?
+		change_unit_owner = scope:blades_and_thrones_founded_company
+		scope:blades_and_thrones_founded_company = {
+			copy_country_name_and_adjective = scope:blades_and_thrones_company_actor
+			copy_country_flag = scope:blades_and_thrones_company_actor
+			set_variable = {
+				name = blades_and_thrones_volunteer_company
+				value = yes
+			}
+			add_reform = government_reform:mercenary_mutiny_exiles_reform
+			# 闂佽鍎搁崟顓烆棔闂佹剚鍋呯敮鐔兼儗閹屽殫闁告洖澧庣粣妤€顭块懜鐢靛婵烇絾濞婂畷妯衡槈濡崵顦伴梺鍛婂灱濞咃綁寮幘璇茬闁稿繐鎳庢晶銈夋煕韫囨挸鎮佹慨鐟邦樀瀵晫娑垫搴ｎ槱闂備緡鍋呴崝鏇㈠春閸曨垰违濞达綀顫夌花姘归崗鑲╃叝閻庨潧鏈粙濠冨緞濞戞氨顦梺?
+			# 闂佸憡鑹惧ù鐑芥偨閼姐倖灏庨柡澶庢硶缁♀偓闁?闂佺厧顨庢禍鐐烘偟?闂佸憡鍔栭惄顖氼潡妤ｅ啫浼犳い蹇撴噺閽傚鎮规笟顖氱仯闁轰線浜堕獮鈧憸搴ㄦ偋閸涘﹦鈻旈幖绮规濡插崬顭胯閸燁偊宕ｉ敓鐘茶Е閻忕偠妫勯弸鈧柣搴ゎ潐閻旑剛妲愬▎鎴炲枂?company.1 婵?AI 闂佸憡甯囬崐鏍蓟閸ヮ剚鏅?
+			set_personality = ai_personality:ai_mercenary_company
+			# 闂傚倸妫楀ú锝夊礈閹存緷娲Ψ閵娿儱鐏￠梺鎸庣☉閻楀棝宕熼悙顒佸劅闁挎棁妫勯銈嗙箾閸℃ɑ瀚曠紒杈ㄥ哺閺佸秴顫濋銈囆ｇ紓浣哄珡閸屾艾鈪抽梺绋跨箰閻忔岸濡?
+			set_variable = {
+				name = blades_and_thrones_subsidy_level
+				value = 1
+			}
+			force_recalc_country_active_status = scope:blades_and_thrones_founded_company
+		}
+		# 闁瑰吋娼欑换鎴﹀汲閻斿吋鏅慨妯夸含閻鈧偣鍊曢幖顐⒚瑰Δ鍐當?N 婵炴垶鎼╂禍婊埶囩拠瑁佹椽骞嗚閺呬粙鏌涢妷顔界窙缂佽鲸鐟╁畷锝呪枎鎼达絿娈ら梺绋跨箞閸斿氦鈪?濠电偛顦板ú鏍矗閻愬灚鍟块悹渚厛閸庢厸闂佸憡鍔栫粙鎴澝?闂佹眹鍩勯悡澶屾?
+		scope:blades_and_thrones_company_actor = {
+			if = {
+				limit = { NOT = { has_variable = blades_and_thrones_company_counter } }
+				set_variable = {
+					name = blades_and_thrones_company_counter
+					value = 0
+				}
+			}
+			change_variable = {
+				name = blades_and_thrones_company_counter
+				add = 1
+			}
+		}
+		scope:blades_and_thrones_founded_company = {
+			set_variable = {
+				name = blades_and_thrones_company_number
+				value = scope:blades_and_thrones_company_actor.var:blades_and_thrones_company_counter
+			}
+		}
+		# 闁荤姳鐒﹀妯肩礊瀹ュ拋鍤曢柡鍥╁У閺嗗繐鈽夐幘鍐差劉闁割煈鍓熷畷婵嗏槈瀹曞洨顦╂繛鎾寸缁嬫捇宕掗妸锔绘?闂佽顔栭崰妤冩閵婏妇顩查悗锝傛櫆椤愯棄霉閿濆牊纭堕柡浣靛€濋弫?
+		scope:blades_and_thrones_company_actor = {
+			set_variable = {
+				name = mercenary_mutiny_company_ref
+				value = scope:blades_and_thrones_founded_company
+			}
+			set_variable = {
+				name = mercenary_mutiny_company_strength
+				value = scope:blades_and_thrones_company_actor.var:blades_and_thrones_unit_strength_var
+			}
+		}
+		# 闂婎偄娲ㄦ慨楣冩儊?婵炴垶鎸哥粔瀵告崲濠靛鐒诲璺侯儏椤忋儱霉濠婂喚鍎庢繛?
+		scope:blades_and_thrones_company_actor = {
+			trigger_event_non_silently = {
+				id = blades_and_thrones_company.1
+			}
+		}
+	}
+}
+
+# --- 闂佽　鍋撻柛鎾茶兌濡炰粙鏌涢幇顓犫槈婵炶尙鍠栭弫宥夊醇閻旈潻楠忛梺闈╅檮濠㈡﹢宕Δ鍛倞闁靛繒濮电粋?闂?闁汇埄鍨抽…鍫ニ囬鍕婵炴垵纾粈?--
+# 闂?闂佸憡鍔栫粙鎴澝洪悢鐓庣倞?婵炶揪绲剧划搴ㄥ极閵堝鏄ラ柣鏃囧吹缁犮儵鎮跺☉妯款潶闁?
+# 婵犮垼鍩栭悧妤€菐閹惰棄绀冩繛鎴炆戠粈瀣煥濞戞ɑ绶lunteer闂佹寧绋戦ˇ顖炲储閵堝洦瀚婚柣鐔稿缁夋椽姊婚崘顏勬珢缂侀亶浜堕幃姗€骞嗚缂嶄線鏌涘鍐劮鐞氭瑩鏌ゆ總澶夌敖闁绘繃鐩幊鎾诲椽閸愵亞顦〆xiles_country闂佹寧绋戦ˇ顔炬嫻閻旂儤灏庨幖瀛樼箖鐎氭娊鏌嶉妷锔界厸闁逞屽墯濮婂湱鈧灚绮撳畷妤呮濞戞﹩娼濇繛瀵稿У椤牓宕归崒鐐存櫖闁割偆鍠撳Σ銊╂煕濡も偓閸熲晛效?100 闂備礁寮堕崺濠勬濮樿泛违?
+blades_and_thrones_reinstate_company_effect = {
+	if = {
+		limit = {
+			has_variable = mercenary_mutiny_exiles_country
+		}
+		scope:actor = {
+			# 闁荤姍鍐嚬闁圭柉椴哥粋?= 闂佺绻樺褎鎱?闁?闂佸憡顨嗗ú鎴︽偝椤栫偞鏅柛顐ゅ枔濡层劑鏌涘Δ鈧崯鈺佇?100 闂備礁寮堕崺濠勬濠靛牊鍠嗗ù锝夘棑楠炲棝鏌″澶嬶紵闁煎灚鍨垮?blades_and_thrones_reinstate_buyout_rate闂?
+			add_gold = {
+				value = army_size
+				multiply = blades_and_thrones_reinstate_buyout_rate
+				multiply = -1
+			}
+		}
+	}
+	every_unit = {
+		change_unit_owner = scope:actor
+	}
+	remove_country_modifier = mercenary_mutiny_disloyal_subject
+	remove_country_modifier = mercenary_mutiny_placated
+	remove_variable = mercenary_mutiny_disloyal_subject
+	remove_variable = blades_and_thrones_subsidy_level
+	scope:actor = {
+		remove_variable = mercenary_mutiny_company_ref
+	}
+}
+
+# --- 闂備緡鍓ㄧ徊楣冨汲鎼淬劌绀冩繛鎴欏灪琚濋梺鎸庣☉閻楀棝鎮ラ懜闈涚窞闁搞儜鍐╂ 闂?婵犮垼顕栭崑鍕矗缁℃伐P闂?--
+# 闂?闂備緡鍠撻崝鎴澪?婵炶揪绲剧划搴ㄥ极閵堝鏄ラ柣鏃囧吹缁犮儵鎮?
+# 濠电偛顦崝宥夊礈娴煎瓨鏅慨婵囩煙d_pop 闂?size 婵炴垶鎸哥粔鐑藉礂濡崵鐟规繝闈涳功椤?actor 婵炴垶鎸搁敃顏堛€傞埡鍐＞妞ゆ梻鍋撻悾閬嶆煕濞嗘劧鑰块柛锝嗘そ閸ㄩ箖寮悰鈥充壕闁硅法顣?婵☆偅婢樼€氼垶锝?tooltip 濠殿喚鎳撻崐鎼佸焵?
+# 婵炴垶鎸哥粔鍨櫠閻ｅ本鍋?set_variable闂佹寧绋戞總鏃傛娴煎瓨鐒婚柣妯哄暱閻?闂佸搫瀚晶浠嬪Φ?1 婵炲瓨绮嶆禍浠嬪焵椤戣法顦﹂柣銈呭濮?500 婵?闂佹眹鍔岀€氼剚绂嶇粙娆惧晠妞ゆ洖妫涚粈澶愭煕閵壯冃ｆい鎺撶箞瀵劑鏌呭☉婊咁槹
+# 闂佺儵鏅涢悺銊ф暜鐎电硶鍋撴担鍐炬綈闁伙腹鍓濈粙?sub_unit 闂佸憡顨嗗ú婊呪偓?add_pop闂佹寧绋戦悧鍡涘箖閹捐妫橀柛銉戝喚鍤欓梺鍛婅壘閼活垶鎮炬繝姘瀬婵炲棗绻戦崐杈╃磼椤愩儺鍤欓柣搴ㄦ敱鐎电厧顫濋崘鍙夘唶闂佸憡鏌ｉ崝宀勫箖鎼淬劎宓侀柡鍫滅祷缁€瀣槈閹绢垰浜炬繛?POP闂佹寧绋戦ˇ顓㈠焵?
+blades_and_thrones_demobilize_army_effect = {
+	unit_location ?= {
+		save_scope_as = blades_and_thrones_demob_location
+	}
+	if = {
+		limit = { exists = scope:blades_and_thrones_demob_location }
+		every_sub_unit = {
+			save_scope_as = blades_and_thrones_current_subunit
+			scope:blades_and_thrones_demob_location = {
+				add_pop = {
+					culture = scope:target.owner.culture
+					religion = scope:target.owner.religion
+					type = pop_type:soldiers
+					size = {
+						value = scope:blades_and_thrones_current_subunit.subunit_strength
+						multiply = mercenary_mutiny_pop_conversion_ratio
+						min = 0.001
+					}
+				}
+			}
+		}
+	}
+	destroy_unit = yes
+}
+
+# --- 闂備緡鍋€閸嬫挸霉閻撳海孝闁伙絻鍔庣槐鏃堫敋閸℃瑧顦╂繝銏ｎ嚃閸嬪嫰宕ｇ弧娣 闂?闂佸憡鍔栫划宥夋儍閻も垼P闂?--
+# 闂?闂侀潻闄勬竟鍡涘磻?婵炶揪绲剧划搴ㄥ极閵堝鏄ラ柣鏃囧吹缁犮儵鎮?
+blades_and_thrones_resettle_soldiers_effect = {
+	every_pop = {
+		limit = { pop_type = pop_type:soldiers }
+		change_pop_type = pop_type:peasants
+	}
+	scope:actor = {
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_penalty
+		}
+		add_estate_satisfaction = {
+			type = estate_type:peasants_estate
+			value = estate_satisfaction_weak_bonus
+		}
+	}
+}

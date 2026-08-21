@@ -1,0 +1,151 @@
+mercenary_mutiny = {
+	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
+
+	monthly_spawn_chance = mercenary_mutiny_monthly_spawn_chance
+
+	can_start = {
+		NOT = { blades_and_thrones_mutiny_disaster_resolved = yes }
+		NOT = { blades_and_thrones_mutiny_taken_over = yes }
+		NOT = { blades_and_thrones_mutiny_rebels_active = yes }
+		any_hired_mercenary ?= {
+			count > 0
+		}
+		mercenary_mutiny_total_strength > {
+			value = mercenary_mutiny_effective_loyal_military
+		}
+		has_any_active_disaster = no
+		in_civil_war = no
+	}
+
+	can_end = {
+		OR = {
+			blades_and_thrones_mutiny_disaster_resolved = yes
+			AND = {
+				NOT = { blades_and_thrones_mutiny_rebels_active = yes }
+				NOT = { has_variable = mercenary_mutiny_civil_war_started }
+			}
+			AND = {
+				has_variable = mercenary_mutiny_civil_war_started
+				NOT = { in_civil_war = yes }
+			}
+		}
+	}
+
+	on_start = {
+		# 灾变爆发，军事危机泄压
+		set_variable = {
+			name = blades_and_thrones_military_crisis
+			value = 0
+		}
+		set_variable = {
+			name = blades_and_thrones_military_crisis_display
+			value = 0
+		}
+		set_variable = {
+			name = mercenary_mutiny_loyal_military_at_start
+			value = mercenary_mutiny_effective_loyal_military
+		}
+		mercenary_mutiny_create_rebel_effect = yes
+		trigger_event_non_silently = {
+			id = mercenary_mutiny_test.7
+		}
+	}
+
+	on_monthly = {
+		hidden_effect = {
+			# 叛军进度驱动已迁移到 auto_modifier（blades_and_thrones_mutiny_progress）：
+			# 由 mercenary_mutiny_rebel_progress_drive 脚本值按威胁比率/满意度动态计算
+			# monthly_pretender_rebel_growth。modifier 会进入叛军界面的 GetMonthlyChange
+			# 显示（"由 xxx 产生：+15%"），玩家所见即所得——不再用手动
+			# add_rebel_progress（它不显示，导致"实际在涨、界面显示减少"的错位）。
+			# 此处只保留进度满/清零的结算检查（见下）。
+			if = {
+				limit = {
+					country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+					has_estate_privilege = estate_privilege:zzz_rebalanced_nepal_mercenary_soldiers_royal_hand
+					estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.5
+					NOT = { has_variable = mercenary_mutiny_soldier_mutiny_cooldown }
+					NOT = { has_variable = mercenary_mutiny_civil_war_started }
+				}
+				random_list = {
+					10 = {
+						set_variable = {
+							name = mercenary_mutiny_soldier_mutiny_cooldown
+							value = yes
+							months = 12
+						}
+						trigger_event_non_silently = {
+							id = mercenary_mutiny_test.9
+						}
+					}
+					90 = { }
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_variable = mercenary_mutiny_mid_event_cooldown }
+					NOT = { has_variable = mercenary_mutiny_civil_war_started }
+				}
+				random_list = {
+					15 = {
+						set_variable = {
+							name = mercenary_mutiny_mid_event_cooldown
+							value = yes
+							months = 12
+						}
+						trigger_event_non_silently = {
+							id = mercenary_mutiny_test.8
+						}
+					}
+					85 = { }
+				}
+			}
+			# 进度满 100 → 哗变彻底爆发：内战开始，佣兵转为叛军部队
+			if = {
+				limit = {
+					NOT = { has_variable = mercenary_mutiny_civil_war_started }
+					any_rebel = {
+						rebel_name_key = mercenary_mutiny
+						rebel_progress >= 1
+					}
+				}
+				mercenary_mutiny_activate_civil_war_effect = yes
+			}
+			# 进度归零 → 哗变被彻底压制（如裁撤全部佣兵），以"佣兵团被剿灭"收场，
+			# 但士兵阶层不满、危机残留 50、且没有稳定度奖励
+			else_if = {
+				limit = {
+					NOT = { has_variable = mercenary_mutiny_civil_war_started }
+					any_rebel = {
+						rebel_name_key = mercenary_mutiny
+						rebel_progress <= 0
+					}
+				}
+				mercenary_mutiny_early_suppressed_effect = yes
+				random_rebel = {
+					limit = { rebel_name_key = mercenary_mutiny }
+					destroy_rebel = this
+				}
+			}
+		}
+	}
+
+	on_end = {
+		if = {
+			limit = {
+				has_variable = mercenary_mutiny_rebel_victory
+			}
+			mercenary_mutiny_resolve_disaster_effect = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { has_variable = mercenary_mutiny_disaster_resolved }
+			}
+			mercenary_mutiny_mercenaries_destroyed_effect = yes
+		}
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			destroy_rebel = this
+		}
+	}
+}

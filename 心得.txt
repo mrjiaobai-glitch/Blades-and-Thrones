@@ -1,0 +1,437 @@
+《刀锋与王座》开发心得
+
+本文是《刀锋与王座》开发过程中长期对话沉淀下来的独立心得，适合在动手改模组之前先读一遍。
+（原 README 中的【设计心得】【开发心得】章节已并入本文，README 只留指引。）
+
+【强烈建议】多参考创意工坊模组 3659311464「1644」（明末清初历史模组）：
+它的写法是社区公认的优良范本——事件结构（ID 行中文注释、fire_only_once、
+major、image、historical_info、hidden_effect、链式触发）、本地化组织
+（按功能分文件、00_ 前缀排序）、历史考据与叙事文案都值得对照学习。
+本模组的事件写法规范（第八章）即由其提炼而来；写事件、写 loc、设计
+剧情前都先翻一翻它的文件。
+
+一、模组的定位
+
+这个模组把“军队”做成第四种政治力量，围绕“军队-王室-阶层”的三角博弈展开：
+军饷决定军队由谁供养，忠诚决定军队向谁效忠，危机决定军队会不会反噬国家。
+
+核心循环是：征兵打仗 -> 战后遣散 -> 士兵阶层崛起 -> 退伍安置 -> 阶层回落。
+雇佣兵和军团国是“外包/外派”形态，过度依赖它们会积累军事危机。
+
+二、开发历程回顾
+
+模组最早从“尼泊尔王公自用平衡”起步，先做了大宅建筑、政府改革和地方行政节点，
+后来才转向更完整的军事政治体系，并独立成《刀锋与王座》。
+
+早期的建筑与改革开发给了两条重要经验：
+一是 AI 只会选择“看起来纯收益”的路线，纯收益路线会变成无脑最优解；
+二是 AI 不会主动建造自定义建筑，必须给出明确建造信号。
+
+进入《刀锋与王座》后，内容沿着这条线逐步成型：
+雇佣兵夺舍灾难 -> 吞并转无地军团国 -> 士兵阶层 -> 军队忠诚与政变 ->
+军人集团灾难 -> 军内派系与战争反馈 -> 军事转化面板与出租军团 -> 时代联动
+-> 军团国分级（5 形态）与军阀 -> 社会价值轴（军国主义/文官主义）-> 彩蛋国（自由军团 BLT）。
+
+三、核心设计心得
+
+1. 军队忠诚不能只是一条数值，它需要能看见、能解释、能回应。
+玩家必须知道忠诚为什么变化，否则政变和哗变只会被当成随机惩罚。
+最终把忠诚放进了情报汇总、转化面板和阶层特权界面，才真正可玩。
+
+2. 士兵阶层不是纯收益。
+阶层力量上升意味着政治风险上升，会喂给政变和危机系统。
+给军队更多权力的修正，必须同时带来军费、正统性或叛乱方面的代价。
+
+3. 佣兵依赖必须可见且有代价。
+军事危机值是最好的“提前警告”：危机积累、展示、回应三者缺一不可。
+把危机显示在情报汇总和转化面板后，玩家才能提前裁撤佣兵或扩编常备军。
+
+4. 灾难必须有清晰路线，且每条终局都值得走。
+军人集团早期版本里，和平还政几乎等于白受折磨，玩家没有动力走完。
+后来让所有能终结灾难的路线都留下永久遗产，再用制度主题区分：
+军事国家、高压军事化、镇压型王权、文官复位、军政共治，各有各的代价和奖励。
+
+5. 战争反馈让和平与战争都有意义。
+进攻与防守分开结算：防守胜利更稳，进攻胜利声望更高。
+战败耻辱、长期战争、多场战争压力，让军队忠诚和军政府稳定度随战争真正波动。
+
+6. 机制要随时代缩放，不能一套数值打满五百年。
+1337-1836 覆盖佣兵时代、常备军时代和民族军队时代：
+早期佣兵压力高、士兵阶层弱，夺舍是主要威胁；
+中期常备军成型，忠诚与政变成主旋律；
+后期民族军队与军官团野心兴起。
+已有 era_doctrine 时代联动（含军制法律与雇佣溢价/危机阈值的时代缩放）。
+
+7. 玩家只玩到 age_3/age_4（地理大发现/宗教改革）为止，不要做太深的后世机制。
+
+四、平衡与 AI 适配心得
+
+1. AI 更看重修正净收益。
+集权治理早期几乎全是纯收益，AI 就无脑选它；地方自治带明显代价，AI 就避而不选。
+给 AI 做选择时，要么让各路线都有清晰的代价，要么用 ai_chance 主动约束。
+（AI 保守数值一律低于原版"高侵略"规则 aggressiveness 1.0，避免失控。）
+
+2. AI 建造自定义建筑需要明确信号。
+大宅建筑加了 important_for_AI 和 AI_ignore_available_worker_flag 后才被 AI 正常考虑。
+原生阶层 AI 不会建造自定义建筑（硬编码启发式只覆盖原生建筑）——
+团练所用月度脉冲模拟阶层自建（玩家 20%/月、AI 5%/月 + 满意度门槛）。
+
+3. “蚊子腿”修正不如删掉。
+1%、0.001 这类数值玩家感知不到，却会让说明和判断变复杂。
+但要注意游戏单位：local_manpower 的 1 是 1000 人力，0.001 才是 1 人力，
+不能想当然按百分比理解。
+
+4. AI 也要能享受新系统。
+夺舍、转化、出租军团、军政府都对 AI 开放（AI 会按状态抉择、不会卡死），
+但军事政变、军人集团统治灾难、指派军团统治者保留玩家门槛，
+避免 AI 在错误时机自我毁灭。
+
+五、历史契合
+
+游戏时间线是 1337-1836，正好覆盖佣兵时代、常备军时代和民族军队时代。
+早期应该佣兵压力高、士兵阶层弱，夺舍是主要威胁；
+中期常备军成型，忠诚与政变成主旋律；
+后期民族军队与军官团野心兴起。
+机制应该随时代缩放，不能一套数值打满五百年。
+当前已有 era_doctrine 时代联动，方向是对的。
+
+六、彩蛋国与国家创建（setup）经验
+
+彩蛋国 BLT“自由军团”是 setup/start 直接创建的无地军队国家，踩过的坑：
+
+1. EU5 开局是 1337.1.1，不是 1444！
+   - character 的 birth_date 必须早于 1337（曾写 1400 → 开局 -63 岁）。
+   - ruler_term 的 start_date 不能晚于开局（曾写 1444 → 统治期不生效）。
+   - 1337.1.1 出生 → 开局 37 岁。
+
+2. 角色命名规则（参考原版 character_names_dynamic + 05_characters.txt）：
+   - first_name = { name = name_<拼音> }。
+   - 原版用数字序号区分同音字：name_jiang = "江"、name_jiang3 = "蒋"！
+   - 原版 loc 优先于 mod loc（后加载的 key 不覆盖）——绝不复用原版已占用的 key。
+   - 直接引用原版 key（如 name_jiang3）即可，loc 由原版提供（含方言变体）。
+   - qayfengi（开封犹太）语言 = southern_mandarin_dialect，无专属变体时回落基础值。
+   - setup 角色文件用 05_ 前缀保证先于 countries 加载，ruler 引用必然有效。
+
+3. setup 授予政府改革会检查 potential！
+   - 彩蛋国没有事件流变量（如 mercenary_mutiny_exiles_country），
+     引用事件流的改革（无地军团）会被静默丢弃。
+   - 修复：potential 的 OR 加 has_or_had_tag = BLT（仿原版威尼斯 council_of_forty
+     的 has_or_had_tag = VEN 先例）。
+   - 教训：setup 国家引用事件流改革的 potential 时，必须显式放行 setup tag。
+
+4. 政府改革槽机制（government_reform_slots）：
+   - 基础槽 = 1（auto_modifiers/country.txt 的 country_base_values）。
+   - 槽位由 government_reform_slots modifier 累加（改革/法律/革新都能 +1）。
+   - 原版改革自带 +1 槽很常见（council_of_ten、peasant_republic_reform 等）。
+   - 威尼斯 setup 给 3 个改革（槽 2）也正常——setup 不受槽硬限制，potential 才是过滤器；
+     但为稳妥，给关键改革自带 +1 槽做双保险。
+
+5. 初始革新：starting_technology_level = N 会研究所有
+   starting_technology_level <= N 的 advance（仅传统时代革新有此字段）。
+   原版欧洲主流 = 3；原版没有任何国家用 4（4 = 宗教组织等顶级）。
+
+6. 军队构成：运输/辎重用 auxiliary 单位（category = army_auxiliary，
+   运粮队 = 存粮 3000/单位）。传统时代 = a_camp_followers，后续升级链：
+   a_supply_carts（文艺复兴）-> a_supply_convoy（大发现）-> a_baggage_train（宗教改革）
+   -> a_wagon_train（专制）-> a_logistics_corps（革命）。
+
+7. 无地国生存：军队驻留他国需要 food_access + military_access——
+   原版没有国家级食物权 modifier，用「改革标记 + on_action 月度脉冲动态维护
+   create_relation」实现（见“四海为家”改革：自动通行 + 驻留地购粮）。
+
+8. 人口方案：无地国没有平民 POP（只有王室）——用外国建筑（is_foreign）的
+   就业岗位自动填充士兵 POP，POP 归属建筑所有者（BLT）。
+
+七、踩坑记录
+
+1. 本地化文件必须 UTF-8 BOM，键必须缩进在语言头下方。
+顶格键会让整个 yml 解析失败，事件选项全部显示原始键名。
+2. 事件 outcome 只写 neutral；good/bad 在本版本枚举无效，会报解析错误。
+3. change_variable 前必须先 set_variable 初始化，否则每月刷脚本错误。
+4. 脚本值 vs 变量（本 mod 已验证）：脚本值（script_value）用 root.脚本值名
+   （如 root.army_size），正常工作；变量（set_variable 创建的）用 var:变量名；
+   跨作用域读变量用 scope:X.var:变量名。Badly read script value 只发生在
+   root. 后跟的是触发器/不存在的名字时（如 root.total_sub_unit_strength）。
+5. 多场战争时，不要在 on_ending_war 里无条件清零战争月数；
+只有 at_war = no 时才由月度脉冲清理，否则结束一场战争会重置总战争月数。
+6. GUI 读变量和数值比较要用引擎支持的写法：
+GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
+7. 事件选项一律用 loc 键，不写裸中文；中英文键必须同步。
+8. 静态校验不能只查括号，还要查 BOM、顶格键、中英文键数、事件 outcome 和变量初始化。
+9. yml 条目必须单行（多行 desc 未闭合引号会毁掉后面所有键）；编辑工具会剥 BOM，
+   写完必须用 PowerShell WriteAllText + UTF8Encoding($true) 恢复。
+10. create_relation 的 first/second 必须用 scope 引用（c:CHI / scope:X），
+    裸 tag 会静默失败。
+11. error.log 已知噪音（可无视）：阶层面板打开时刷 TARGET_BUILDING nullptr /
+    DESTROY_BUILDING_EFFECT（原版 perform_reduction 预览缺陷）；查日志用
+    script/trigger/effect/unknown/localiz 关键词过滤。
+12. named_colors 不支持 REPLACE/INJECT——用 zzz_ 前缀文件同 key 覆盖。
+13. on_action 只能向同名块追加 on_actions/events/random_events，
+    不能替换原版块的 trigger/effect。
+14. 改革槽不够的“表象”可能是 potential 过滤——先查 potential 再怀疑槽位。
+15. 事件写法对齐优质工坊模组（参考创意工坊 3659311464「1644」）——
+    完整事件结构/字段/优良写法见下一章「事件写法规范」。
+16. INJECT 追加到条目末尾——顺序敏感的块不能 INJECT（国名模板教训）：
+    wiki 原文 "INJECT: Appends the injected script at the end of an existing entry"。
+    country_name_construction（国名模板）按 text 顺序第一个 trigger 通过的生效，
+    INJECT 追加的条目在原文件所有条目之后；原文件末尾的 fallback 条目无 trigger
+    永远匹配，追加内容永远轮不到（实测"流亡××"动态国名失效）。
+    修复：整体覆盖 country_name_construction.txt（复制原版/1644 全部内容 +
+    新条目插在 fallback 之前，1644 同款做法）。同理，任何"第一个匹配生效"
+    的块（国名/称号等）扩展都不要用 INJECT。
+17. unit-target generic action 的 effect 内 scope:actor 不可靠（组建/收编军团教训）：
+    looking_for_a = unit 的 action，effect 里 scope:target（部队）内访问 scope:actor
+    会报 "Event target link 'var' returned an unset scope" / "not being set"。
+    修复：effect 顶层（国家作用域）先 save_scope_as = 具名 scope，
+    再进 scope:target，effect 内部全部用具名 scope（如 scope:blades_and_thrones_company_actor），
+    裸 var: 与 gold 也要加具名 scope 前缀（root 是部队时裸 var: 读部队变量）。
+    原版无 var:xxx > gold 写法——比较金币用 scope:actor.gold。
+18. common txt 也建议 UTF-8 BOM（原版惯例）：无 BOM 会刷
+    "should be in utf8-bom encoding (will try to use it anyways)"，大多侥幸解析成功，
+    但含中文注释的文件有失败风险；新建/编辑 txt 后同样用 WriteAllText 恢复 BOM。
+19. 【一键修 BOM】编辑工具（edit）每次写文件都会抹掉 BOM——改完代码后跑一次
+    mod 根目录的 修复BOM.ps1（扫描全部 yml/txt，幂等补回 BOM）：
+    powershell -ExecutionPolicy Bypass -File 修复BOM.ps1
+    实测全 mod 84 个 yml/txt 一次补回 66 个缺 BOM 文件（含 events/scripted_effects/
+    generic_actions/setup）——无 BOM 是"侥幸解析"，补齐后脚本错误显著减少。
+    注意：脚本自身也要带 BOM——无 BOM 时 Windows PowerShell 按 GBK 解析中文
+    注释会直接报解析错误（2024-08 已修复脚本本体）。
+
+20. random_subject + has_variable 组合不可靠（索饷/独立事件教训）：
+    vanilla 44 处 random_subject 用例无一配 has_variable；实测 limit 永不满足
+    （或行为未定义），症状 = 索饷事件弹出但付钱/拒绝全部无效、test.11 独立事件
+    弹出却不独立（cancel_subject 从未执行，"假独立"）。
+    修复：宗主侧 set_variable 保存国家引用（var:mercenary_mutiny_company_ref，
+    外派/夺舍两条路径都设），事件 immediate 用 var:xxx ?= { save_scope_as = ... }
+    定位（company.1/test.12 已验证同款写法），random_subject 降级为兜底。
+
+21. change_variable 只认操作符（add/subtract/multiply/divide/modulo），
+    value = 是 set_variable 的键——误用报 "change_variable effect
+    [ Invalid operation type in execution ]" 且目标变量永不变化
+    （年度军费账单 9 处全挂，账单统计永远为 0，company.9 事件金额显示 0）。
+
+22. 计数变量初始化位置必须与使用侧同 scope（拒绝计数教训）：索饷事件选项 b 的
+    change_variable 以宗主为 root 执行，初始化必须放宗主侧（自立效果的
+    root = { set_variable = 0 } 块）——放军团国侧或选项内临时初始化都会刷
+    "Failed to fetch variable ... due to not being set"（实测 2070 条刷屏），
+    且旧写法计数从未成功（refusals 永远 not set，test.11 从未被 refusals 触发）。
+    配套：选项 tooltip 用 [Root.GetVariable('xxx').GetValue|V0] 显示
+    "已拒绝 X/2 次"——计数进度玩家可见，也是排查变量是否初始化的好手段。
+
+23. 自定义外交关系的 loc 键 = <关系名>_relation + <关系名>_relation_desc
+    （vanilla 模板：food_access_relation / fondaco_rights_relation）——
+    流浪通行关系 blades_and_thrones_landless_passage 忘了写 loc →
+    外交关系列表显示 raw key（2024-08 补）。
+
+24. CB 的 loc 键带 cb_ 前缀：cb_<名> + cb_<名>_desc（如 cb_blades_and_thrones_
+    claim_foothold）——generic action 的无前缀键不能顶替（claim_foothold 教训：
+    只写了 action 名导致宣战界面 raw key）。
+
+25. loc 键前缀速查（漏一个就 raw）：auto_modifier = AUTO_MODIFIER_NAME_<名>
+    （vanilla auto_modifiers_l_english.yml 同款）；static_modifier =
+    STATIC_MODIFIER_NAME_<名> + STATIC_MODIFIER_DESC_<名>；wargoal 的
+    war_name = 独立 loc 键（EXPEL_LANDLESS_WAR_NAME / RESTORATION_WAR_NAME）。
+    不需要 loc（别浪费时间）：modifier 类型名（modifier_type_definitions，
+    引擎处理）、rebel demand 名（vanilla 全无，叛军面板显示效果文本）。
+
+26. 自检方法论（2024-08 全量自检）：
+    - 写对照脚本提取"名即 loc 键"的引用（事件 title/desc/选项名/tt、
+      modifier 引用、CB/reform/subject/estate/law/societal_value/AI 人格/
+      disaster/关系名、AUTO/STATIC_MODIFIER_NAME_、war_name），逐个核对
+      4 个 loc 文件（main_menu 与 in_game 镜像两侧键数必须一致，816/816）。
+    - REPLACE_OR_CREATE 覆写原版条目（如 soldiers pop_type）要逐字段对比
+      原版（has_cap / estate 关联 / literacy_impact 全保留，只替换需要改的
+      字段，如 estate 关联换成自定义阶层）——覆盖不全会悄悄改变原版行为。
+    - on_action 同名块整块定义是合并语义（1644 同款验证），不会顶掉原版
+      on_actions 列表。
+
+27. EU5 文件夹式 mod 注册不用 .mod 文件（EU4 时代的 descriptor.mod 认知已过时）：
+    注册靠 mod 目录内 .metadata/metadata.json（name/id/version/tags/
+    supported_game_version，建议写 "1.*" 防版本警告）+ playsets.json 的
+    path 引用。重装游戏只丢 playset 注册，不丢 mod 本体。
+
+28. error.log 归属甄别：TARGET_COUNTRY.GetName（约 288 条）是 1644 的 bug
+    （约 70 个事件文件在错误上下文引用该 scope），GREAT_POWER_HIGHEST_RANK_
+    COUNTRY_INFO_AND_THRESHOLD / NOT_GIVING_SCRIPTED_RELATION_TRIGGER 是
+    原版层——查错先看 "Script location:" 行的文件归属（mod/1644/原版）
+    再动手，别把别人的 bug 算到自己头上（2024-08 实测甄别）。
+
+29. AI 全面放开（2024-08 决策，观察者模式验证）：观察者 160 年实测 0 无地军团
+    ——根因是全部生成路径有玩家门槛（on_annex 的 is_human、组建 ai_will_do
+    -100、索饷脉冲 is_human）。放开方式与防刷屏：
+    · AI 吞并转流亡：残军 ≥ 5 单位 + 15% 概率（random trigger）——AI 互吞
+      频繁，无门槛会满世界流亡者；
+    · AI 索饷：删脉冲 is_human + 给 test.10 选项补 ai_chance（财政宽裕付钱、
+      危机深重拒绝）——AI 宗主拒绝两次 → 独立自由军团；
+    · AI 组建：ai_will_do 加"和平 + 闲置兵力 ≥ 8 + 金币 ≥ 400"（+120），
+      保留"已有军团附庸 -1000"防膨胀；
+    · 收编佣兵/收编军团原有权重保持；流浪通行/升级/扩军脉冲本就对 AI 生效。
+    教训：AI 对局"生态类"机制必须先盘点 is_human / ai_will_do 门槛——
+    观察者模式是验证 AI 生态的天然测试场（本次 3 小时 = 160 年）。
+
+30. pop 作用域陷阱：every_owned_location 的 every_pop limit 里不能再写
+    owner = root（"Event target link 'owner' returned an invalid object"，
+    观察者 3 小时刷 1221 条）——every_owned_location 已保证归属，pop 层
+    判断冗余且引擎对 pop 的 owner 链接处理不可靠（vanilla revolution_disaster
+    在 location 层判 owner，不在 pop 层判）。
+
+31. 具名 scope（save_scope_as）在嵌套 effect 调用（scope:target = { effect
+    = yes }）内不可见——实测收编佣兵报 "Scoped object is not valid. Type:
+    雇佣兵"（6 条）——修复：effect 开头重新 scope:actor = { save_scope_as
+    = ... } 防御性保存（收编/组建/核心三个 effect 都加）。教训：具名 scope
+    的生命周期不跨 effect 调用链，被 effect 内部复用时必须自带保存。
+    另外 mercenary scope 不能直接用 unit_location（Wrong scope），要经
+    ordered_mercenary_sub_unit（vanilla mercs.4 同款）取子单位位置。
+
+32. 灾难 on_end 清理变量时误删防重复标记（军政府灾难教训）：can_start 的
+    NOT { blades_and_thrones_junta_resolved = yes } 依赖 resolved 变量，但
+    on_end 的通用清理把它 remove 了 → 灾难可无限重复触发 → 每次解决路径
+    （制度化/清洗/还政/共治/铁腕巩固 7 个永久修正）重复领取——观察者 160 年
+    实测 established 139 次 / restored 106 次 / cogovernance 100 次，
+    那不勒斯单国拿了 3 个永久修正。修复：on_end 保留 resolved（强制还政的
+    重开设计走 coup 链——loyalty.6.a 删 coup_resolved + 36 个月政变冷却，
+    不依赖删除 junta_resolved）。教训：on_end 清理变量前先核对 can_start/
+    can_end 依赖哪些标记；"一次性灾难"的防重复变量绝不能在 on_end 删。
+    （对比：coup 灾难没有 on_end，coup_resolved 一直保留，无此问题。）
+
+八、事件写法规范（参考创意工坊 3659311464「1644」+ 原版，长期适用）
+
+【事件骨架模板】写新事件照此抄：
+    namespace = 模块名          # 命名空间（建议与文件名一致，如 blades_and_thrones_loyalty）
+
+    模块名.1 = { #中文注释：一句话说明事件内容（1644 风格：ID 行直接跟注释）
+        type = country_event    # 事件类型：country_event / character_event 等
+        title = 模块名.1.title  # loc 键（下同）
+        desc = 模块名.1.desc    # 条件文本用 desc = { first_valid = { triggered_desc = {...} } }
+        historical_info = 模块名.1.historical_info   # 可选：史实/背景注脚（独立显示区）
+        image = "gfx/interface/illustrations/disaster/coup_attempt.dds"  # 可选：事件插图（复用原版）
+        major = yes             # 可选：重大事件（弹窗更醒目）
+        fire_only_once = yes    # 可选：仅触发一次（自动设 <事件ID>_fire_only_once 变量）
+        hide_portraits = yes    # 可选：无角色肖像/不想显示时用
+        outcome = neutral       # 必须：只写 neutral（good/bad 本版本无效）
+        orphan = yes            # 仅控制台可触发的事件（调试事件专用）
+        trigger = { }           # 触发条件（可空）
+        immediate = {           # 触发时立即执行（不弹窗）
+            hidden_effect = { } # 复杂效果包 hidden_effect（避免闪现给玩家）
+        }
+        option = {
+            name = 模块名.1.a   # loc 键：事件ID.a/b/c...
+            trigger = { }       # 选项可见条件（可选）
+            ai_chance = {       # AI 权重：EU5 语法 factor + modifier（不是 EU4 的 value/if）
+                factor = 30
+                modifier = { factor = 2 gold >= 500 }
+            }
+            historical_option = yes  # 可选：史实/推荐选项标记
+            high_risk_option = yes   # 可选：高风险选项（红色警示样式）
+            custom_tooltip = 模块名.1.a.tt  # 选项 tooltip 用独立 loc 键
+            hidden_effect = { }   # 复杂效果包 hidden_effect
+            # 简单效果（add_stability 等）可直接写在 option 体，不包 hidden_effect
+        }
+    }
+
+【字段速查】
+- type：country_event（国家事件，最常用）；character_event（角色事件）。
+- title/desc：必填 loc 键；desc 支持 first_valid + triggered_desc 分档条件文本
+  （写法同原版 joint_ruling.100：trigger 满足取第一个，最后放无 trigger 的 base）。
+- outcome：必须 neutral。
+- image：复用原版插图最省事（路径 game/main_menu/gfx/interface/illustrations/...
+  下：disaster/ 有 coup_attempt/peasants_war/english_civil_war 等）。
+- major：重要抉择/灾变级事件用，弹窗更醒目、自动暂停提示更强。
+- fire_only_once：一次性事件官方防重复；可重复事件（循环事件）不要用，
+  改用冷却变量（set_variable + months = N）。
+- hide_portraits：无角色肖像或不想显示肖像时用（如纯通报类事件）。
+- historical_info：历史背景/典故/主题注脚，显示在事件内独立区域。
+- orphan：仅控制台触发（调试事件 .99 全用；触发条件里配 is_human = yes）。
+- immediate：事件弹出前执行的效果（玩家不可见），复杂逻辑放 hidden_effect 内。
+- option：
+  * name 用 loc 键（事件ID.a/b/c），绝不写裸中文。
+  * ai_chance 用 factor/modifier（EU5 语法）；AI 无脑选项写 factor = 0。
+  * historical_option 标记"史实正确"选项（玩家可见小标记）。
+  * high_risk_option 标记高风险选项。
+  * custom_tooltip 引用独立 loc 键（事件ID.字母.tt），用于展示费用/后果明细。
+  * 复杂效果必须包 hidden_effect（选项正文只留直观效果），否则玩家看到
+    效果刷屏、动画卡顿。
+
+【优良写法清单】（1644 提炼，已全量应用到本 mod 47 个事件）
+1. 事件 ID 行直接跟 #中文注释（如 event.1 = { #进京赶考），一读即知内容。
+2. 一次性事件用 fire_only_once = yes，不用手写变量冷却。
+3. 重大事件加 major = yes + 原版插图 image。
+4. 史实/背景用 historical_info（loc 键 = 事件ID.historical_info）。
+5. 复杂效果一律包 hidden_effect；选项正文只留直观效果。
+6. 选项 tooltip 用 custom_tooltip + 独立 loc 键（事件ID.字母.tt）。
+7. 跨事件链用 trigger_event_silently = { id = xxx days = N } 延迟触发。
+8. 事件 ID 唯一：namespace.integer（0 < integer < 10000），否则事件互相覆盖。
+9. 调试事件编号用 .99 + orphan = yes + is_human 门槛。
+10. loc 键体系：title/desc(.critical/.low/.mid/.base)/historical_info/
+    a.b.c...（选项）/字母.tt（tooltip）。
+
+【自检清单】（改完事件必跑）
+1. 括号平衡：PowerShell 数每个事件文件的 { }，diff 必须为 0。
+2. yml 检查：BOM、顶格键、重复键、中英文键数一致。
+3. loc 完整性：脚本扫描事件文件引用的所有 loc 键（title/desc/选项/tt/
+   historical_info）必须都在 yml 中。
+4. 事件文件内 scripted effect 若被复制引用，必须一并复制或改名（防止
+   覆盖原版文件内的同名 effect）。
+5. fire_only_once 只用于真正一次性事件；循环事件用冷却变量。
+6. outcome 只写 neutral；事件 ID 不重复。
+
+【1644 二轮自检：组织与完整度规范】（2024 年对照创意工坊 3659311464 逐项检查）
+- 事件选项必须有 custom_tooltip（1644 全覆盖）：核心抉择事件（政变/军政府/
+  哗变/摄政/安家）全部补齐（23 个 tt，loyalty + regency）；选项后果不透明的
+  事件（loyalty.1.c 强硬拒绝、loyalty.8.b 镇压等）尤其必须有——玩家要知道
+  选了会付出什么代价。调试事件（.99）与纯通知事件可不补。
+- 自定义 subject type 的 loc 键集：<type> + <type>_desc + LEAD_<type> +
+  AM_<type>（原版 vassal/eyalet 同款）。5 个军团国类型此前只有 1 个有
+  LEAD/AM——已补齐 4 个 × 2 键 × 2 语言。
+- 原版灾难用灾难 modifier（monthly_pretender_rebel_growth）驱动叛军进度，
+  会进入 GetMonthlyChange 显示；手动 add_rebel_progress 不显示，会造成
+  "实际在涨界面显示减少"的错位——夺舍进度已改为 auto_modifier + 脚本值驱动。
+- effect_localization（已完成）：自定义 scripted effect 需要配中文名——
+  文件 in_game/common/effect_localization/blades_and_thrones_effects.txt，
+  格式 `<effect名> = { global = BT_EFFECT_<大写名> }`，loc 键 BT_EFFECT_*
+  放主 yml。21 个核心 effect 已全配（夺舍/政变/转化/军政府链）。
+- ai_personalities（已完成，3 个人格，性格→路径设计）：ai_warlord（军阀，
+  流亡者扎根转正时蜕变）、ai_mercenary_company（佣兵团，外派/夺舍/吞并转的
+  出生默认）、ai_trusted_company（代管军团，宗主感化/收编时获得）。核心原则：
+  性格是自变量、路径是结果——出生定性格，AI 决策（claim_foothold 加权、
+  company.1 信任度）按性格走，形态切换（军阀化/削藩）不改性格。唯一合理的
+  "路径→性格"是玩家主动选择改变军团本质（忠诚感化/收编转代管/扎根称军阀）。
+  机制要点：人格定义在 in_game/common/ai_personalities/；loc 键 <人格名> +
+  <人格名>_desc；setup 静态分配在 setup/start/26_ai_personalities.txt；事件/
+  situation 可 set_personality 动态切换；AI 决策用 ai_personality =
+  ai_personality:xxx trigger 加权（EU5 有 ai_personality_equal trigger）。
+  踩坑：判断 var 的 if/else 里直接 set_personality，必须先判断再 remove 变量。
+- prices 集中化（已完成，脚本值中枢方案）：原版 price 块（prices/*.txt，
+  price = price:xxx 引用）只支持固定价（gold/scaled_gold/stability 等），
+  本 mod 花费多为动态公式（按兵力/军饷缩放），故在 script_values/
+  blades_and_thrones_values.txt 建"价格中枢"集中管理：组建费率 0.5 +
+  最低价 200、收编赎买单价 0.1/千人、夺舍赎买 500/1000。原则：金币花费
+  全走脚本值；AI 判断门槛（gold >= X，ai_will_do 加权用）与机制换算系数
+  （军政府掌控力等）不属于价格，留在原处。教训：脚本值作为乘数引用时
+  其 min 会钳制每单位费率而非总额——费率与最低价必须拆成两个脚本值。
+- 可选的后续改进（未做）：game_concepts（新机制百科词条）。
+  customizable_localization 动态国名已完成（"流亡××"→复国恢复本名，
+  覆写 country_name_construction.txt 的 exile 条目，见踩坑 16）。
+
+九、测试方法
+
+1. 完全关闭游戏和启动器后再启用模组，新开档测试，不要读旧档。
+2. 先跑调试事件：
+event mercenary_mutiny_test.1
+event blades_and_thrones_junta.99
+event blades_and_thrones_war.99
+event blades_and_thrones_intel.99
+event blades_and_thrones_militia.99
+（彩蛋国 BLT：event mercenary_mutiny_test.13）
+3. 再打真实战争验证攻防差异、长期战争和多场战争。
+4. 最后查 error.log 和 debug.log，先清脚本错误，再调数值。
+5. 本地化问题先查 yml 缩进和 BOM，不要一开始就怀疑“缺键”。
+
+十、下一步方向
+
+1. 继续完善时代阶段化：让早期、中期、后期的机制权重真正随年份变化。
+2. 理顺灾难之间的关系：夺舍、政变、军政府、哗变应该形成因果链，而不是同时堆叠。
+3. 老兵与复员：和平后裁军触发老兵不满、欠饷和保留精锐的选择。
+4. 无地军团国的长期玩法：复国、安家、佣兵王朝和自由军团路线。
+5. 用真实测试数据重跑平衡表，尤其是军费叠加和永久修正的强度。
+6. 彩蛋国 BLT 长期线：军阀化/称王路线、与中原政权的互动、军团国分级升级体验。

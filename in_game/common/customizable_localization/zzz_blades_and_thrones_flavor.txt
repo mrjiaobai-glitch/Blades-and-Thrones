@@ -1,0 +1,28 @@
+# 军事危机化装：按危机值区间返回一段欧式叙事（供转化面板/情报汇总引用）。
+# 写法同原版 GetHeathenInsult（多 text 块 + trigger 分块 + fallback）。
+
+blades_and_thrones_crisis_flavor = {
+	type = country
+	text = {
+		localization_key = blades_and_thrones_crisis_flavor_low
+		trigger = {
+			blades_and_thrones_military_crisis_value < 30
+		}
+	}
+	text = {
+		localization_key = blades_and_thrones_crisis_flavor_mid
+		trigger = {
+			blades_and_thrones_military_crisis_value < 60
+		}
+	}
+	text = {
+		localization_key = blades_and_thrones_crisis_flavor_high
+		trigger = {
+			blades_and_thrones_military_crisis_value < 90
+		}
+	}
+	text = {
+		localization_key = blades_and_thrones_crisis_flavor_critical
+		fallback = yes
+	}
+}

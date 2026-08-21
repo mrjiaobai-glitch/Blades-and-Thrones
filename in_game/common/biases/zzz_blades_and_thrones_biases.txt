@@ -1,0 +1,21 @@
+# 出租军团的外交后果修正（biases/opinion modifiers）
+# 帮助潜在盟友：并肩作战者同仇敌忾
+blades_and_thrones_opinion_shared_war = {
+	value = 15
+	yearly_decay = 2.5
+	min = 0
+}
+
+# 抑制敌国：目标正在打我的敌人（第三方视角：资助敌手）
+blades_and_thrones_opinion_armed_our_enemy = {
+	value = -25
+	yearly_decay = 2.5
+	max = 0
+}
+
+# 背信：佣兵军团国撕毁臣属条约，自立门户去征服自己的土地
+blades_and_thrones_opinion_betrayed = {
+	value = -30
+	yearly_decay = 2.5
+	max = 0
+}

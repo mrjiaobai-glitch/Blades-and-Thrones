@@ -1,0 +1,803 @@
+mercenary_mutiny_create_rebel_effect = {
+	if = {
+		limit = {
+			NOT = { has_variable = mercenary_mutiny_loyal_military_at_start }
+		}
+		set_variable = {
+			name = mercenary_mutiny_loyal_military_at_start
+			value = mercenary_mutiny_effective_loyal_military
+		}
+	}
+	create_rebel = {
+		category = pretender
+		name = mercenary_mutiny
+		save_scope_as = mercenary_mutiny_rebel_scope
+	}
+	create_character = {
+		age = { 30 60 }
+		adm = { 40 80 }
+		dip = { 40 80 }
+		mil = { 70 100 }
+		culture = root.culture
+		religion = root.religion
+		estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		create_in_limbo = yes
+		save_scope_as = mercenary_mutiny_commander
+	}
+	scope:mercenary_mutiny_commander ?= {
+		change_character_allegiance = scope:mercenary_mutiny_rebel_scope
+	}
+	random_army = {
+		limit = {
+			any_sub_unit = {
+				is_mercenary = yes
+			}
+		}
+		unit_location ?= {
+			save_scope_as = mercenary_mutiny_origin_location
+		}
+	}
+	if = {
+		limit = {
+			exists = scope:mercenary_mutiny_origin_location
+			any_owned_location = {
+				area = scope:mercenary_mutiny_origin_location.area
+			}
+		}
+		every_owned_location = {
+			limit = {
+				area = scope:mercenary_mutiny_origin_location.area
+			}
+			every_pop = {
+				limit = {
+					owner = root
+				}
+				add_pop_satisfaction = pop_satisfaction_radical_penalty
+				change_pop_allegiance = scope:mercenary_mutiny_rebel_scope
+			}
+		}
+	}
+	else = {
+		# 起源地在国外（佣兵驻扎或被租出到外国）→ 回退首都执行骚乱转化
+		capital = {
+			every_pop = {
+				limit = {
+					owner = root
+				}
+				add_pop_satisfaction = pop_satisfaction_radical_penalty
+				change_pop_allegiance = scope:mercenary_mutiny_rebel_scope
+			}
+		}
+	}
+	set_variable = {
+		name = mercenary_mutiny_strength_to_convert
+		value = mercenary_mutiny_total_strength
+	}
+	scope:mercenary_mutiny_rebel_scope ?= {
+		add_rebel_progress = 0.2
+	}
+}
+
+# 阶段2：哗变进度满 100 时爆发内战——佣兵脱离国家转为叛军部队，叛军国家成立。
+# 由灾变 on_monthly 在叛军进度 >= 1 时调用（调试菜单"让叛军立即胜利"也调用）。
+mercenary_mutiny_activate_civil_war_effect = {
+	scope:mercenary_mutiny_rebel_scope ?= {
+		start_civil_war = {
+			save_scope_as = mercenary_mutiny_rebel_country
+		}
+	}
+	scope:mercenary_mutiny_rebel_country ?= {
+		save_scope_as = mercenary_mutiny_unit_owner
+	}
+	# 哗变起源地若在国外（佣兵驻扎或被租出到外国），内战新军回退到首都生成
+	if = {
+		limit = {
+			exists = scope:mercenary_mutiny_origin_location
+			any_owned_location = {
+				area = scope:mercenary_mutiny_origin_location.area
+			}
+		}
+		scope:mercenary_mutiny_origin_location = {
+			save_scope_as = mercenary_mutiny_unit_origin
+		}
+	}
+	else_if = {
+		limit = {
+			exists = scope:mercenary_mutiny_origin_location
+		}
+		capital ?= {
+			save_scope_as = mercenary_mutiny_unit_origin
+		}
+	}
+	mercenary_mutiny_create_regular_units_from_stored_strength_effect = yes
+	ordered_hired_mercenary = {
+		save_scope_as = mercenary_mutiny_current_merc
+		destroy_mercenary = scope:mercenary_mutiny_current_merc
+	}
+	set_variable = {
+		name = mercenary_mutiny_civil_war_started
+		value = yes
+	}
+}
+
+mercenary_mutiny_takeover_effect = {
+	if = {
+		limit = { exists = owner }
+		owner = {
+			mercenary_mutiny_country_takeover_effect = yes
+		}
+	}
+	else = {
+		mercenary_mutiny_country_takeover_effect = yes
+	}
+}
+
+mercenary_mutiny_create_army_country_effect = {
+	# 记录佣兵军团战力（此时雇佣兵尚未销毁），供后续索饷事件计算金额
+	root = {
+		set_variable = {
+			name = mercenary_mutiny_company_strength
+			value = mercenary_mutiny_total_strength
+		}
+	}
+	create_character = {
+		age = { 30 60 }
+		adm = { 40 80 }
+		dip = { 40 80 }
+		mil = { 70 100 }
+		culture = root.culture
+		religion = root.religion
+		estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		create_in_limbo = yes
+		save_scope_as = mercenary_mutiny_commander
+	}
+	capital ?= {
+		create_army_country_in_location = {
+			overlord = root
+			culture = root.culture
+			religion = root.religion
+			subject_type = subject_type:mercenary_company
+			ruler = scope:mercenary_mutiny_commander
+			save_scope_as = mercenary_mutiny_army_country
+		}
+	}
+	capital ?= {
+		save_scope_as = mercenary_mutiny_capital
+	}
+	ordered_hired_mercenary = {
+		every_mercenary_sub_unit = {
+			mercenary_mutiny_create_regular_sub_unit_from_original_effect = yes
+		}
+	}
+	ordered_hired_mercenary = {
+		save_scope_as = mercenary_mutiny_current_merc
+		destroy_mercenary = scope:mercenary_mutiny_current_merc
+	}
+	scope:mercenary_mutiny_capital = {
+		create_sub_unit_with_owner = {
+			type = a_supply_carts
+			owner = scope:mercenary_mutiny_army_country
+			origin = this
+			experience = 100
+		}
+	}
+	scope:mercenary_mutiny_army_country = {
+		copy_country_name_and_adjective = root
+		copy_country_flag = root
+		set_variable = {
+			name = mercenary_mutiny_original_country
+			value = root
+		}
+		set_variable = {
+			name = mercenary_mutiny_exiles_country
+			value = yes
+		}
+		add_reform = government_reform:mercenary_mutiny_exiles_reform
+		# 性格→路径：夺舍自立的佣兵集团出生即佣兵人格（逐利、机会主义）
+		set_personality = ai_personality:ai_mercenary_company
+		every_army = {
+			add_food = 100
+		}
+		add_gold = {
+			value = 3000
+		}
+		set_variable = {
+			name = blades_and_thrones_subsidy_level
+			value = 1
+		}
+		force_recalc_country_active_status = scope:mercenary_mutiny_army_country
+	}
+	# 佣兵自立门户：不再释放为完全独立，而是保留臣属关系，成为"不忠诚附属国"。
+	# 不忠修正使其拒绝一切宗主行动（征召/进贡），宗主获得原版"讨伐不忠附属国"CB；
+	# 后续索饷事件链持续考验宗主（付钱安抚五年，拒绝两次后他们撕毁条约宣布独立）。
+	scope:mercenary_mutiny_army_country = {
+		set_variable = {
+			name = mercenary_mutiny_disloyal_subject
+			value = yes
+		}
+		add_country_modifier = {
+			modifier = mercenary_mutiny_disloyal_subject
+			years = -1
+			mode = add_and_extend
+		}
+	}
+	# 索饷拒绝计数初始化 = 0：计数在宗主侧（索饷事件选项 b 的 change_variable
+	# 以宗主为 root 执行），初始化必须同侧——缺失会刷 "Failed to fetch variable"
+	# 且计数失效（旧代码在拒绝选项里才初始化，实测 never set）
+	root = {
+		set_variable = {
+			name = mercenary_mutiny_company_refusals
+			value = 0
+		}
+	}
+	# 记录军团国引用：供玩家选择"扮演出走的佣兵团"（.5/.11/.12 事件与调试选项 k）
+	root = {
+		set_variable = {
+			name = mercenary_mutiny_company_ref
+			value = scope:mercenary_mutiny_army_country
+		}
+	}
+	if = {
+		limit = {
+			has_variable = mercenary_mutiny_recreate_disaster_army
+		}
+		scope:mercenary_mutiny_army_country = {
+			save_scope_as = mercenary_mutiny_unit_owner
+		}
+		scope:mercenary_mutiny_capital ?= {
+			save_scope_as = mercenary_mutiny_unit_origin
+		}
+		mercenary_mutiny_create_regular_units_from_stored_strength_effect = yes
+		remove_variable = mercenary_mutiny_recreate_disaster_army
+	}
+}
+
+mercenary_mutiny_convert_annexed_to_army_country_effect = {
+	save_scope_as = mercenary_mutiny_annexed_country
+	# 本 effect 总是以被吞并国为 root 被调用（on_annex 的 scope:target 或调试事件），
+	# 真正的吞并方是调用点外侧的 prev。
+	prev ?= {
+		save_scope_as = mercenary_mutiny_annexer_country
+	}
+	create_character = {
+		age = { 30 60 }
+		adm = { 40 80 }
+		dip = { 40 80 }
+		mil = { 70 100 }
+		culture = scope:mercenary_mutiny_annexed_country.culture
+		religion = scope:mercenary_mutiny_annexed_country.religion
+		estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		create_in_limbo = yes
+		save_scope_as = mercenary_mutiny_commander
+	}
+	scope:mercenary_mutiny_annexed_country = {
+		capital ?= {
+			save_scope_as = mercenary_mutiny_capital
+		}
+	}
+	scope:mercenary_mutiny_capital ?= {
+		create_army_country_in_location = {
+			overlord = root
+			culture = scope:mercenary_mutiny_annexed_country.culture
+			religion = scope:mercenary_mutiny_annexed_country.religion
+			subject_type = subject_type:mercenary_company
+			ruler = scope:mercenary_mutiny_commander
+			save_scope_as = mercenary_mutiny_army_country
+		}
+	}
+	scope:mercenary_mutiny_army_country ?= {
+		copy_country_name_and_adjective = scope:mercenary_mutiny_annexed_country
+		copy_country_flag = scope:mercenary_mutiny_annexed_country
+		set_variable = {
+			name = mercenary_mutiny_original_country
+			value = scope:mercenary_mutiny_annexed_country
+		}
+		set_variable = {
+			name = mercenary_mutiny_exiles_country
+			value = yes
+		}
+		# 性格→路径：吞并转的流亡军团出生即佣兵人格（亡国残军逐利求生）
+		set_personality = ai_personality:ai_mercenary_company
+		# 吞并救援的流亡军团专属标记：显示名为"流亡者"（区别于佣兵集团身份的"佣兵军团"）
+		set_variable = {
+			name = mercenary_mutiny_annex_exiles_marker
+			value = yes
+		}
+	}
+	# 复国记忆：保存故都（原首都 location），供"复国"CB 与安家叙事使用
+	scope:mercenary_mutiny_capital ?= {
+		scope:mercenary_mutiny_army_country = {
+			set_variable = {
+				name = mercenary_mutiny_homeland
+				value = prev
+			}
+		}
+	}
+	scope:mercenary_mutiny_annexed_country = {
+		if = {
+			limit = {
+				exists = scope:mercenary_mutiny_annexer_country
+			}
+			set_variable = {
+				name = mercenary_mutiny_annexer_country_ref
+				value = scope:mercenary_mutiny_annexer_country
+			}
+		}
+	}
+	scope:mercenary_mutiny_annexed_country = {
+		every_unit = {
+			limit = {
+				NOT = { any_sub_unit = { is_mercenary = yes } }
+			}
+			change_unit_owner = scope:mercenary_mutiny_army_country
+		}
+		ordered_hired_mercenary = {
+			every_mercenary_sub_unit = {
+				mercenary_mutiny_create_regular_sub_unit_from_original_effect = yes
+			}
+		}
+		ordered_hired_mercenary = {
+			save_scope_as = mercenary_mutiny_current_merc
+			destroy_mercenary = scope:mercenary_mutiny_current_merc
+		}
+	}
+	scope:mercenary_mutiny_capital ?= {
+		create_sub_unit_with_owner = {
+			type = a_supply_carts
+			owner = scope:mercenary_mutiny_army_country
+			origin = this
+			experience = 100
+		}
+	}
+	scope:mercenary_mutiny_army_country ?= {
+		force_recalc_country_active_status = scope:mercenary_mutiny_army_country
+		change_country_type = army
+		add_reform = government_reform:mercenary_mutiny_exiles_reform
+	}
+	# 故土视野：流亡者作为附庸会继承宗主（吞并国）视野（引擎标准），
+	# 但不应忘记故国——把故都所在省份与周边区域的位置授予流亡者视野
+	# （discover_location 原版用法见 flavor_ENG.156）。复国 CB 与安家叙事
+	# 依赖 mercenary_mutiny_homeland（故都），视野让玩家看得见故土。
+	scope:mercenary_mutiny_capital ?= {
+		province_definition = {
+			every_location_in_province_definition = {
+				limit = {
+					NOT = {
+						scope:mercenary_mutiny_army_country = {
+							has_discovered = prev
+						}
+					}
+				}
+				discover_location = scope:mercenary_mutiny_army_country
+			}
+		}
+		every_neighbor_location = {
+			limit = {
+				NOT = {
+					scope:mercenary_mutiny_army_country = {
+						has_discovered = prev
+					}
+				}
+			}
+			discover_location = scope:mercenary_mutiny_army_country
+		}
+	}
+	scope:mercenary_mutiny_annexed_country = {
+		every_character = {
+			limit = {
+				is_alive = yes
+				OR = {
+					is_general = yes
+					is_admiral = yes
+					has_unit = yes
+				}
+				NOT = {
+					OR = {
+						is_ruler = yes
+						is_regent = yes
+						is_heir = yes
+					}
+				}
+			}
+			move_country = scope:mercenary_mutiny_army_country
+		}
+	}
+	# 为吞并完成后"兜底转移"打标记：吞并发生时如果玩家没有立即接管军团国
+	# （或事件流程未走完），这些角色会随吞并落入吞并国宫廷，
+	# on_annexed 会依据此标记把他们转移到军团国。
+	scope:mercenary_mutiny_annexed_country = {
+		every_character = {
+			limit = {
+				is_alive = yes
+				NOT = { owner ?= scope:mercenary_mutiny_army_country }
+				NOT = {
+					OR = {
+						is_ruler = yes
+						is_regent = yes
+						is_heir = yes
+					}
+				}
+				OR = {
+					is_general = yes
+					is_admiral = yes
+					has_unit = yes
+					AND = {
+						exists = scope:mercenary_mutiny_annexer_country
+						is_courtier = yes
+						culture ?= {
+							NOR = {
+								is_primary_or_accepted_in = scope:mercenary_mutiny_annexer_country
+								is_tolerated_in = scope:mercenary_mutiny_annexer_country
+							}
+						}
+					}
+				}
+			}
+			set_variable = {
+				name = mercenary_mutiny_exiled_candidate
+				value = yes
+			}
+		}
+	}
+	scope:mercenary_mutiny_army_country ?= {
+		every_army = {
+			add_food = 100
+		}
+		add_gold = {
+			value = 3000
+		}
+		set_variable = {
+			name = blades_and_thrones_subsidy_level
+			value = 1
+		}
+		# mercenary_mutiny_annex_army_country 引用改由 on_annex 存到吞并国身上，
+		# 这里不再存（被吞并国即将灭亡，存了也读不到）。
+		scope:mercenary_mutiny_annexed_country = {
+			set_variable = {
+				name = mercenary_mutiny_army_country_ref
+				value = scope:mercenary_mutiny_army_country
+			}
+		}
+	}
+	root = {
+		cancel_subject = scope:mercenary_mutiny_army_country
+	}
+}
+
+mercenary_mutiny_country_takeover_effect = {
+	if = {
+		limit = {
+			NOT = { exists = var:mercenary_mutiny_strength_to_convert }
+		}
+		set_variable = {
+			name = mercenary_mutiny_strength_to_convert
+			value = mercenary_mutiny_total_strength
+		}
+	}
+	save_temporary_scope_as = mercenary_mutiny_country_scope
+	save_temporary_scope_value_as = {
+		name = mercenary_mutiny_strength_to_convert
+		value = var:mercenary_mutiny_strength_to_convert
+	}
+	set_variable = {
+		name = mercenary_mutiny_taken_over
+		value = yes
+	}
+	change_country_name = mercenary_mutiny_state
+	change_country_adjective = mercenary_mutiny_state_adj
+	change_government_type = government_type:republic
+	create_character = {
+		age = { 30 60 }
+		adm = { 40 80 }
+		dip = { 40 80 }
+		mil = { 70 100 }
+		culture = scope:mercenary_mutiny_country_scope.culture
+		religion = scope:mercenary_mutiny_country_scope.religion
+		estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		save_scope_as = mercenary_mutiny_new_ruler
+	}
+	set_new_ruler = scope:mercenary_mutiny_new_ruler
+	ordered_hired_mercenary = {
+		save_scope_as = mercenary_mutiny_current_merc
+		destroy_mercenary = scope:mercenary_mutiny_current_merc
+	}
+
+	capital = {
+		set_variable = {
+			name = mercenary_mutiny_strength_to_convert
+			value = scope:mercenary_mutiny_strength_to_convert
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = mercenary_mutiny_skip_pop_conversion }
+			}
+			add_pop = {
+				culture = scope:mercenary_mutiny_country_scope.culture
+				religion = scope:mercenary_mutiny_country_scope.religion
+				type = pop_type:soldiers
+				size = {
+					value = var:mercenary_mutiny_strength_to_convert
+					multiply = mercenary_mutiny_pop_conversion_ratio
+					min = 0.001
+				}
+			}
+		}
+	}
+}
+
+mercenary_mutiny_mercenaries_destroyed_effect = {
+	ordered_hired_mercenary = {
+		save_scope_as = mercenary_mutiny_current_merc
+		destroy_mercenary = scope:mercenary_mutiny_current_merc
+	}
+	add_stability = stability_weak_bonus
+	add_country_modifier = {
+		modifier = mercenary_mutiny_crushed_aftermath
+		years = 10
+		mode = add_and_extend
+	}
+	# 因果链衔接：军队打赢了内战，自恃功高（12 个月）——
+	# 士兵阶层短期满意度目标提高（难伺候），是哗变/政变的温床
+	set_variable = {
+		name = blades_and_thrones_soldiers_emboldened
+		value = yes
+		months = 12
+	}
+	set_variable = {
+		name = mercenary_mutiny_disaster_resolved
+		value = yes
+		months = 120
+	}
+	trigger_event_non_silently = {
+		id = mercenary_mutiny_test.6
+	}
+}
+
+# 阶段一内被压制（如裁撤全部佣兵使进度归零）的收场：
+# 与内战打赢不同——没有稳定度奖励，士兵阶层因王室向佣兵低头而不满，
+# 军事危机残留 50（10 年冷却结束后佣兵依赖会更快再次引爆）。
+mercenary_mutiny_early_suppressed_effect = {
+	ordered_hired_mercenary = {
+		save_scope_as = mercenary_mutiny_current_merc
+		destroy_mercenary = scope:mercenary_mutiny_current_merc
+	}
+	add_estate_satisfaction = {
+		type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		value = estate_satisfaction_mild_penalty
+	}
+	set_variable = {
+		name = blades_and_thrones_military_crisis
+		value = 50
+	}
+	set_variable = {
+		name = blades_and_thrones_military_crisis_display
+		value = 50
+	}
+	add_country_modifier = {
+		modifier = mercenary_mutiny_crushed_aftermath
+		years = 10
+		mode = add_and_extend
+	}
+	# 因果链衔接（与内战打赢同款）：军队被王室用完即弃、自恃功高（12 个月）——
+	# 士兵阶层短期满意度目标提高（难伺候），是哗变/政变的温床
+	set_variable = {
+		name = blades_and_thrones_soldiers_emboldened
+		value = yes
+		months = 12
+	}
+	set_variable = {
+		name = mercenary_mutiny_disaster_resolved
+		value = yes
+		months = 120
+	}
+	trigger_event_non_silently = {
+		id = mercenary_mutiny_test.6
+	}
+}
+
+mercenary_mutiny_create_regular_units_from_stored_strength_effect = {
+	set_variable = {
+		name = mercenary_mutiny_recreate_count
+		value = {
+			value = var:mercenary_mutiny_strength_to_convert
+			divide = 1
+			min = 1
+		}
+	}
+	while = {
+		limit = {
+			var:mercenary_mutiny_recreate_count > 0
+		}
+		change_variable = {
+			name = mercenary_mutiny_recreate_count
+			subtract = 1
+		}
+		scope:mercenary_mutiny_unit_origin ?= {
+			create_sub_unit_with_owner = {
+				type = a_footmen
+				owner = scope:mercenary_mutiny_unit_owner
+				origin = this
+				experience = 100
+			}
+		}
+	}
+	remove_variable = mercenary_mutiny_recreate_count
+}
+
+mercenary_mutiny_create_original_exile_country_effect = {
+	ruler_or_regent ?= {
+		save_scope_as = mercenary_mutiny_old_ruler
+	}
+	create_character = {
+		age = { 30 60 }
+		adm = { 40 80 }
+		dip = { 40 80 }
+		mil = { 70 100 }
+		culture = root.culture
+		religion = root.religion
+		estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		create_in_limbo = yes
+		save_scope_as = mercenary_mutiny_exile_fallback_ruler
+	}
+	capital ?= {
+		save_scope_as = mercenary_mutiny_exile_capital
+	}
+	scope:mercenary_mutiny_exile_capital ?= {
+		create_army_country_in_location = {
+			overlord = root
+			culture = root.culture
+			religion = root.religion
+			subject_type = subject_type:mercenary_company
+			ruler = scope:mercenary_mutiny_exile_fallback_ruler
+			save_scope_as = mercenary_mutiny_original_exile_country
+		}
+	}
+	scope:mercenary_mutiny_original_exile_country ?= {
+		copy_country_name_and_adjective = root
+		copy_country_flag = root
+		set_variable = {
+			name = mercenary_mutiny_original_exile_marker
+			value = yes
+		}
+		add_reform = government_reform:mercenary_mutiny_exiles_reform
+	}
+	root = {
+		every_character = {
+			limit = { is_alive = yes }
+			move_country = scope:mercenary_mutiny_original_exile_country
+		}
+		every_unit = {
+			limit = {
+				NOT = { any_sub_unit = { is_mercenary = yes } }
+			}
+			change_unit_owner = scope:mercenary_mutiny_original_exile_country
+		}
+	}
+	scope:mercenary_mutiny_original_exile_country ?= {
+		if = {
+			limit = { exists = scope:mercenary_mutiny_old_ruler }
+			set_new_ruler = scope:mercenary_mutiny_old_ruler
+		}
+		capital ?= {
+			create_sub_unit_with_owner = {
+				type = a_supply_carts
+				owner = scope:mercenary_mutiny_original_exile_country
+				origin = this
+				experience = 100
+			}
+		}
+		force_recalc_country_active_status = scope:mercenary_mutiny_original_exile_country
+		change_country_type = army
+		every_army = {
+			add_food = 100
+		}
+		add_gold = {
+			value = 3000
+		}
+		set_variable = {
+			name = blades_and_thrones_subsidy_level
+			value = 1
+		}
+	}
+	root = {
+		cancel_subject = scope:mercenary_mutiny_original_exile_country
+	}
+	# 记录流亡者引用：供夺舍结局事件 .4 选择"统率流亡者"
+	root = {
+		set_variable = {
+			name = mercenary_mutiny_original_exile_ref
+			value = scope:mercenary_mutiny_original_exile_country
+		}
+	}
+}
+
+mercenary_mutiny_takeover_with_exile_effect = {
+	mercenary_mutiny_create_original_exile_country_effect = yes
+	set_variable = {
+		name = mercenary_mutiny_skip_pop_conversion
+		value = yes
+	}
+	root = {
+		save_scope_as = mercenary_mutiny_unit_owner
+	}
+	capital ?= {
+		save_scope_as = mercenary_mutiny_unit_origin
+	}
+	mercenary_mutiny_create_regular_units_from_stored_strength_effect = yes
+	mercenary_mutiny_country_takeover_effect = yes
+	add_country_modifier = {
+		modifier = mercenary_mutiny_takeover_aftermath
+		years = 10
+		mode = add_and_extend
+	}
+	remove_variable = mercenary_mutiny_skip_pop_conversion
+	trigger_event_non_silently = {
+		id = mercenary_mutiny_test.4
+	}
+}
+
+mercenary_mutiny_resolve_disaster_effect = {
+	if = {
+		limit = {
+			NOT = { has_variable = mercenary_mutiny_disaster_resolved }
+		}
+		set_variable = {
+			name = mercenary_mutiny_disaster_resolved
+			value = yes
+			months = 120
+		}
+		if = {
+			limit = {
+				NOT = { has_variable = mercenary_mutiny_loyal_military_at_start }
+			}
+			set_variable = {
+				name = mercenary_mutiny_loyal_military_at_start
+				value = mercenary_mutiny_effective_loyal_military
+			}
+		}
+		set_variable = {
+			name = mercenary_mutiny_resolution_strong_threshold
+			value = {
+				value = var:mercenary_mutiny_loyal_military_at_start
+				multiply = 1.25
+			}
+		}
+		set_variable = {
+			name = mercenary_mutiny_resolution_even_threshold
+			value = {
+				value = var:mercenary_mutiny_loyal_military_at_start
+				multiply = 0.75
+			}
+		}
+		if = {
+			limit = {
+				var:mercenary_mutiny_strength_to_convert >= var:mercenary_mutiny_resolution_strong_threshold
+			}
+			mercenary_mutiny_takeover_with_exile_effect = yes
+		}
+		else_if = {
+			limit = {
+				var:mercenary_mutiny_strength_to_convert >= var:mercenary_mutiny_resolution_even_threshold
+			}
+			set_variable = {
+				name = mercenary_mutiny_recreate_disaster_army
+				value = yes
+			}
+			mercenary_mutiny_create_army_country_effect = yes
+			add_country_modifier = {
+				modifier = mercenary_mutiny_split_aftermath
+				years = 10
+				mode = add_and_extend
+			}
+			trigger_event_non_silently = {
+				id = mercenary_mutiny_test.5
+			}
+		}
+		else = {
+			mercenary_mutiny_mercenaries_destroyed_effect = yes
+		}
+		remove_variable = mercenary_mutiny_resolution_strong_threshold
+		remove_variable = mercenary_mutiny_resolution_even_threshold
+		remove_variable = mercenary_mutiny_loyal_military_at_start
+	}
+}

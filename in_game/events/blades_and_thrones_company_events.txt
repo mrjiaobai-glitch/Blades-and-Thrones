@@ -1,0 +1,222 @@
+namespace = blades_and_thrones_company
+
+# 外派军团组建完成后的性质选择：忠诚远征军团 / 放任自立（不忠附属国）
+blades_and_thrones_company.1 = { #军团性质抉择：忠诚远征 or 放任自立
+	type = country_event
+	title = blades_and_thrones_company.1.title
+	desc = blades_and_thrones_company.1.desc
+	outcome = neutral
+	major = yes
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = var:mercenary_mutiny_company_ref
+				}
+				var:mercenary_mutiny_company_ref = {
+					save_scope_as = blades_and_thrones_founded_company
+				}
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_company.1.a
+		# 性格→路径：AI 宗主按军团性格决定是否信任——
+		# 代管人格（或被感化的军团）更可能得到忠诚待遇；佣兵人格（本性逐利）宗主更谨慎
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				scope:blades_and_thrones_founded_company = {
+					ai_personality = ai_personality:ai_trusted_company
+				}
+			}
+			modifier = {
+				factor = 0.5
+				scope:blades_and_thrones_founded_company = {
+					ai_personality = ai_personality:ai_mercenary_company
+				}
+			}
+		}
+		custom_tooltip = blades_and_thrones_company.1.a.tt
+		hidden_effect = {
+			scope:blades_and_thrones_founded_company ?= {
+				set_variable = {
+					name = blades_and_thrones_loyal_company
+					value = yes
+				}
+				add_country_modifier = {
+					modifier = blades_and_thrones_loyal_company
+					years = -1
+					mode = add_and_extend
+				}
+				# 宗主选择信任并授予忠诚待遇 → 感化军团（性格转向代管）：
+				# 玩家用诚意改变军团的本质（路径→性格的合理场景）
+				set_personality = ai_personality:ai_trusted_company
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_company.1.b
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				scope:blades_and_thrones_founded_company = {
+					ai_personality = ai_personality:ai_mercenary_company
+				}
+			}
+			modifier = {
+				factor = 0.5
+				scope:blades_and_thrones_founded_company = {
+					ai_personality = ai_personality:ai_trusted_company
+				}
+			}
+		}
+		custom_tooltip = blades_and_thrones_company.1.b.tt
+		hidden_effect = {
+			scope:blades_and_thrones_founded_company ?= {
+				set_variable = {
+					name = mercenary_mutiny_disloyal_subject
+					value = yes
+				}
+				add_country_modifier = {
+					modifier = mercenary_mutiny_disloyal_subject
+					years = -1
+					mode = add_and_extend
+				}
+				# 放任自立：顺其本性（佣兵人格保留——逐利是它的天性）
+			}
+			# 索饷拒绝计数初始化 = 0：计数在宗主侧（索饷事件选项 b 的
+			# change_variable 以宗主为 root 执行），初始化必须同侧
+			root = {
+				set_variable = {
+					name = mercenary_mutiny_company_refusals
+					value = 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_company.1.c
+		high_risk_option = yes
+		trigger = {
+			is_human = yes
+			exists = scope:blades_and_thrones_founded_company
+		}
+		custom_tooltip = blades_and_thrones_company.1.c.tt
+		change_player = scope:blades_and_thrones_founded_company
+	}
+
+	option = {
+		name = blades_and_thrones_company.1.d
+		ai_chance = {
+			factor = 15
+		}
+		custom_tooltip = blades_and_thrones_company.1.d.tt
+		hidden_effect = {
+			scope:blades_and_thrones_founded_company ?= {
+				# 转为代管军团（低级代管形态）：听令、防御必参、进攻可召，军费拨款供养
+				make_subject_of = {
+					target = root
+					type = subject_type:mercenary_company_trusted
+				}
+				# 拨款档位：雇佣津贴（1 档）→ 军费拨款（2 档）
+				set_variable = {
+					name = blades_and_thrones_subsidy_level
+					value = 2
+				}
+				remove_country_modifier = mercenary_mutiny_disloyal_subject
+				remove_variable = mercenary_mutiny_disloyal_subject
+				# 转为代管军团（收编为国家军队）→ 性格转向代管（身份改变本质）
+				set_personality = ai_personality:ai_trusted_company
+			}
+		}
+	}
+}
+
+# ============================================================================
+# 军团形态变迁通知（升级/降级由宗主脉冲触发；藩镇化由赐地/拓荒触发）
+# ============================================================================
+
+blades_and_thrones_company.4 = { #军团升级通知：低级佣兵团升为高级形态
+	type = country_event
+	title = blades_and_thrones_company.4.title
+	desc = blades_and_thrones_company.4.desc
+	outcome = neutral
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_company.4.a
+	}
+}
+
+blades_and_thrones_company.5 = { #军团降级通知：高级形态跌回低级
+	type = country_event
+	title = blades_and_thrones_company.5.title
+	desc = blades_and_thrones_company.5.desc
+	outcome = neutral
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_company.5.a
+	}
+}
+
+blades_and_thrones_company.6 = { #藩镇化：军团获得土地成为军阀
+	type = country_event
+	title = blades_and_thrones_company.6.title
+	desc = blades_and_thrones_company.6.desc
+	outcome = neutral
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_company.6.a
+	}
+}
+
+blades_and_thrones_company.7 = { #收回藩地：宗主收回军阀领地
+	type = country_event
+	title = blades_and_thrones_company.7.title
+	desc = blades_and_thrones_company.7.desc
+	outcome = neutral
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_company.7.a
+	}
+}
+
+blades_and_thrones_company.8 = { #藩地易主：军阀失去全部领地降级
+	type = country_event
+	title = blades_and_thrones_company.8.title
+	desc = blades_and_thrones_company.8.desc
+	outcome = neutral
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_company.8.a
+	}
+}
+
+blades_and_thrones_company.9 = { #年度军费账单：拨款结算通知
+	type = country_event
+	title = blades_and_thrones_company.9.title
+	desc = blades_and_thrones_company.9.desc
+	outcome = neutral
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_company.9.a
+	}
+}

@@ -1,0 +1,8 @@
+zzz_rebalanced_nepal_mercenary_soldiers_estate_mercenary_pressure = {
+	potential_trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		any_hired_mercenary ?= { count > 0 }
+	}
+	scales_with = mercenary_mutiny_soldiers_pressure_scale
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = -0.5
+}

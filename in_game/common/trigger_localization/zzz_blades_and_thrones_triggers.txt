@@ -1,0 +1,49 @@
+# ============ 灾难触发条件本地化 ============
+# 值比较触发词（脚本值作触发词时显示中文名）
+mercenary_mutiny_total_strength = {
+	none = BLADES_MERC_TOTAL_STRENGTH_TRIGGER
+	global = BLADES_MERC_TOTAL_STRENGTH_TRIGGER
+}
+
+mercenary_mutiny_effective_loyal_military = {
+	none = BLADES_EFFECTIVE_LOYAL_MILITARY_TRIGGER
+	global = BLADES_EFFECTIVE_LOYAL_MILITARY_TRIGGER
+}
+
+blades_and_thrones_army_loyalty = {
+	none = BLADES_ARMY_LOYALTY_TRIGGER
+	global = BLADES_ARMY_LOYALTY_TRIGGER
+}
+
+# 脚本触发词本地化
+blades_and_thrones_mutiny_disaster_resolved = {
+	global = BLADES_MUTINY_DISASTER_RESOLVED_TRIGGER
+}
+
+blades_and_thrones_mutiny_taken_over = {
+	global = BLADES_MUTINY_TAKEN_OVER_TRIGGER
+}
+
+blades_and_thrones_mutiny_rebels_active = {
+	global = BLADES_MUTINY_REBELS_ACTIVE_TRIGGER
+}
+
+blades_and_thrones_coup_cooldown_active = {
+	global = BLADES_COUP_COOLDOWN_TRIGGER
+}
+
+blades_and_thrones_coup_resolved = {
+	global = BLADES_COUP_RESOLVED_TRIGGER
+}
+
+blades_and_thrones_force_coup_flag = {
+	global = BLADES_FORCE_COUP_FLAG_TRIGGER
+}
+
+blades_and_thrones_junta_cooldown_active = {
+	global = BLADES_JUNTA_COOLDOWN_TRIGGER
+}
+
+blades_and_thrones_junta_resolved = {
+	global = BLADES_JUNTA_RESOLVED_TRIGGER
+}

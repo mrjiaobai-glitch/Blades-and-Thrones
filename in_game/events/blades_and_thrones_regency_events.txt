@@ -1,0 +1,98 @@
+namespace = blades_and_thrones_regency
+
+# ============================================================================
+# 军人摄政事件链
+# ----------------------------------------------------------------------------
+# 事件 1「军头摄政的代价」：摄政中且士兵权力 > 0.65 时的抉择（对齐原版
+# regency_estate_events.3 的模式）。
+# 事件 2「拒绝还政」：继承人已成年但摄政王不愿交权——拒绝还政会设置
+# blades_and_thrones_force_coup 变量，直接喂给现有政变灾难（军队忠诚灾难），
+# 完成"军人摄政 → 拒绝还政 → 政变 → 军人登基"的闭环。
+# ============================================================================
+
+blades_and_thrones_regency.1 = { #军头摄政的代价：强权摄政下的抉择
+	type = country_event
+	title = blades_and_thrones_regency.1.title
+	desc = blades_and_thrones_regency.1.desc
+	outcome = neutral
+	major = yes
+	trigger = {
+		has_regent = yes
+		regency_type = regency_type:zzz_rebalanced_nepal_mercenary_soldiers_estate_regency
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0.65
+	}
+
+	immediate = {
+		regent = { save_scope_as = target_regent }
+	}
+
+	option = {
+		name = blades_and_thrones_regency.1.a
+		custom_tooltip = blades_and_thrones_regency.1.a.tt
+		add_estate_satisfaction = {
+			type = estate_type:nobles_estate
+			value = estate_satisfaction_severe_penalty
+		}
+		add_estate_satisfaction = {
+			type = estate_type:clergy_estate
+			value = estate_satisfaction_severe_penalty
+		}
+		add_estate_satisfaction = {
+			type = estate_type:burghers_estate
+			value = estate_satisfaction_severe_penalty
+		}
+		add_army_tradition = army_tradition_mild_bonus
+	}
+
+	option = {
+		name = blades_and_thrones_regency.1.b
+		custom_tooltip = blades_and_thrones_regency.1.b.tt
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_penalty
+		}
+	}
+}
+
+blades_and_thrones_regency.2 = { #拒绝还政：摄政王不愿交权（通向政变）
+	type = country_event
+	title = blades_and_thrones_regency.2.title
+	desc = blades_and_thrones_regency.2.desc
+	outcome = neutral
+	major = yes
+	trigger = {
+		has_regent = yes
+		regency_type = regency_type:zzz_rebalanced_nepal_mercenary_soldiers_estate_regency
+		has_heir = yes
+		heir = {
+			age_in_years >= 13
+		}
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0.45
+		is_regency_extended = no
+	}
+
+	immediate = {
+		regent = { save_scope_as = target_regent }
+	}
+
+	option = {
+		name = blades_and_thrones_regency.2.a
+		custom_tooltip = blades_and_thrones_regency.2.a.tt
+		add_stability = stability_mild_bonus
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_penalty
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_regency.2.b
+		custom_tooltip = blades_and_thrones_regency.2.b.tt
+		extend_regency = 10
+		add_legitimacy = legitimacy_weak_penalty
+		set_variable = {
+			name = blades_and_thrones_force_coup
+			value = yes
+		}
+	}
+}

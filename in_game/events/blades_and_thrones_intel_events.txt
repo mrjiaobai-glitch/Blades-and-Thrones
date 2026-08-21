@@ -1,0 +1,42 @@
+namespace = blades_and_thrones_intel
+
+blades_and_thrones_intel.1 = { #军事情报汇总：月度军情报告
+	type = country_event
+	title = blades_and_thrones_intel.1.title
+	desc = blades_and_thrones_intel.1.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+
+	option = {
+		name = blades_and_thrones_intel.1.a
+	}
+
+	option = {
+		name = blades_and_thrones_intel.1.b
+		trigger_event_non_silently = {
+			id = blades_and_thrones_conversion.1
+		}
+	}
+}
+
+blades_and_thrones_intel.99 = { #调试：手动情报汇总
+	type = country_event
+	title = blades_and_thrones_intel.99.title
+	desc = blades_and_thrones_intel.99.desc
+	outcome = neutral
+	orphan = yes
+	trigger = {
+		is_human = yes
+	}
+
+	option = {
+		name = blades_and_thrones_intel.99.a
+		blades_and_thrones_prepare_intel_report_effect = yes
+		trigger_event_non_silently = {
+			id = blades_and_thrones_intel.1
+		}
+	}
+}

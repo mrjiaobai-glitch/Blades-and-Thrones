@@ -1,0 +1,18 @@
+global_zzz_rebalanced_nepal_mercenary_soldiers_army_loyalty = {
+	color = good
+	percent = yes
+	game_data = {
+		category = country
+		should_show_in_modifiers_tab = yes
+	}
+}
+
+monthly_zzz_rebalanced_nepal_mercenary_soldiers_pay = {
+	color = good
+	game_data = {
+		category = country
+		min = 0
+		format = "FormatGold"
+		should_show_in_modifiers_tab = yes
+	}
+}

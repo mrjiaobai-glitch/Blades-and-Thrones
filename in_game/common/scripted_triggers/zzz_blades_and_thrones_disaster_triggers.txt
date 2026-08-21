@@ -1,0 +1,36 @@
+# ============ 灾难触发条件封装 ============
+# 把 has_variable 等裸变量名条件包成脚本触发词，灾难浮窗条件列表即可显示本地化文本。
+
+blades_and_thrones_mutiny_disaster_resolved = {
+	has_variable = mercenary_mutiny_disaster_resolved
+}
+
+blades_and_thrones_mutiny_taken_over = {
+	has_variable = mercenary_mutiny_taken_over
+}
+
+blades_and_thrones_mutiny_rebels_active = {
+	any_rebel = {
+		rebel_name_key = mercenary_mutiny
+	}
+}
+
+blades_and_thrones_coup_cooldown_active = {
+	has_variable = blades_and_thrones_coup_cooldown
+}
+
+blades_and_thrones_coup_resolved = {
+	has_variable = blades_and_thrones_coup_resolved
+}
+
+blades_and_thrones_force_coup_flag = {
+	has_variable = blades_and_thrones_force_coup
+}
+
+blades_and_thrones_junta_cooldown_active = {
+	has_variable = blades_and_thrones_junta_cooldown
+}
+
+blades_and_thrones_junta_resolved = {
+	has_variable = blades_and_thrones_junta_resolved
+}

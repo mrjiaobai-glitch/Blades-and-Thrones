@@ -1,0 +1,28 @@
+# 驱逐无地国战争目标：摧毁无地国军队（参照 sengoku 的 destroy_army 用法）。
+expel_landless_wargoal = {
+	type = destroy_army
+	war_name = "EXPEL_LANDLESS_WAR_NAME"
+	attacker = {
+		conquer_cost = 0.5
+		subjugate_cost = 0.5
+	}
+	defender = {
+	}
+	ticking_war_score = 0.5
+}
+
+# 复国战争目标：夺取故都（流亡者复国）。
+restoration_wargoal = {
+	type = take_capital
+	war_name = "RESTORATION_WAR_NAME"
+	attacker = {
+		conquer_cost = 0.25
+		subjugate_cost = 0.25
+		allowed_subjugation = {
+			always = no
+		}
+	}
+	defender = {
+	}
+	ticking_war_score = 0.5
+}

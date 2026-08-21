@@ -1,0 +1,84 @@
+zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = {
+	positive = "gfx/interface/icons/modifier_types/estate_target_satisfaction.dds"
+}
+monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = {
+	positive = "gfx/interface/icons/modifier_types/monthly_rebel_growth.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_satisfaction_recovery = {
+	positive = "gfx/interface/icons/modifier_types/estate_target_satisfaction.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_satisfaction_decay = {
+	positive = "gfx/interface/icons/modifier_types/estate_target_satisfaction.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_max_tax = {
+	positive = "gfx/interface/icons/modifier_types/nobles_estate_max_tax.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_min_tax = {
+	positive = "gfx/interface/icons/modifier_types/nobles_estate_max_tax.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_levy_size = {
+	positive = "gfx/interface/icons/modifier_types/nobles_estate_levy_size.dds"
+}
+local_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = {
+	positive = "gfx/interface/icons/modifier_types/global_nobles_estate_power.dds"
+}
+global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = {
+	positive = "gfx/interface/icons/modifier_types/global_nobles_estate_power.dds"
+}
+base_zzz_rebalanced_nepal_mercenary_soldiers_estate_power_modifier = {
+	positive = "gfx/interface/icons/modifier_types/global_nobles_estate_power.dds"
+}
+local_zzz_rebalanced_nepal_mercenary_soldiers_estate_unrest = {
+	positive = "gfx/interface/icons/modifier_types/local_nobles_estate_unrest.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_cannot_marry = {
+	positive = "gfx/interface/icons/modifier_types/blocked_from_cabinet.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_can_participate_in_parliament = {
+	positive = "gfx/interface/icons/modifier_types/allow_estate_parliament.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_blocked_from_parliament = {
+	positive = "gfx/interface/icons/modifier_types/blocked_from_cabinet.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_agenda_impact = {
+	positive = "gfx/interface/icons/modifier_types/parliament_base_support.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_blocked_from_cabinet = {
+	positive = "gfx/interface/icons/modifier_types/blocked_from_cabinet.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_in_cabinet = {
+	positive = "gfx/interface/icons/modifier_types/grant_cabinet_right.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_to_build_roads = {
+	positive = "gfx/interface/icons/modifier_types/overlord_blocked_from_building_roads.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_to_build_rgo = {
+	positive = "gfx/interface/icons/modifier_types/overlord_blocked_from_building_rgos.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_blocked_from_leading_military = {
+	positive = "gfx/interface/icons/modifier_types/blocked_from_cabinet.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_leading_military = {
+	positive = "gfx/interface/icons/modifier_types/grant_cabinet_right.dds"
+}
+zzz_rebalanced_nepal_mercenary_soldiers_estate_power_from_cabinet = {
+	positive = "gfx/interface/icons/modifier_types/is_head_of_cabinet_positive.dds"
+}
+global_zzz_rebalanced_nepal_mercenary_soldiers_satisfaction = {
+	positive = "gfx/interface/icons/modifier_types/estate_target_satisfaction.dds"
+}
+global_zzz_rebalanced_nepal_mercenary_soldiers_pressure = {
+	positive = "gfx/interface/icons/modifier_types/global_nobles_estate_power.dds"
+}
+global_zzz_rebalanced_nepal_mercenary_soldiers_junta_stability = {
+	positive = "gfx/interface/icons/modifier_types/global_peasant_enfranchisment.dds"
+}
+global_zzz_rebalanced_nepal_mercenary_soldiers_war_months = {
+	positive = "gfx/interface/icons/modifier_types/monthly_rebel_growth.dds"
+}
+global_zzz_rebalanced_nepal_mercenary_soldiers_crisis = {
+	positive = "gfx/interface/icons/modifier_types/monthly_gold_income.dds"
+}
+allow_blades_and_thrones_militia_training_ground = {
+	positive = "gfx/interface/icons/modifier_types/_default.dds"
+}

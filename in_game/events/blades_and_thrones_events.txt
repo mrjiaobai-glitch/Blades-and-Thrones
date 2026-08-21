@@ -1,0 +1,954 @@
+namespace = mercenary_mutiny_test
+
+mercenary_mutiny_test.1 = { #主调试菜单：危机/叛军/夺舍/切换/转化
+	type = country_event
+	title = mercenary_mutiny_test.1.title
+	desc = mercenary_mutiny_test.1.desc
+	outcome = neutral
+	orphan = yes
+	trigger = {
+		is_human = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				name = mercenary_mutiny_debug_company_count
+				value = mercenary_mutiny_company_count
+			}
+			set_variable = {
+				name = mercenary_mutiny_debug_subunit_count
+				value = mercenary_mutiny_subunit_count
+			}
+			set_variable = {
+				name = mercenary_mutiny_debug_total_strength
+				value = mercenary_mutiny_total_strength
+			}
+			set_variable = {
+				name = mercenary_mutiny_debug_total_population
+				value = total_population
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.a
+		custom_tooltip = mercenary_mutiny_debug_tt
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.b
+		trigger = {
+			NOT = { any_rebel = { rebel_name_key = mercenary_mutiny } }
+		}
+		custom_tooltip = mercenary_mutiny_test.1.b.tt
+		hidden_effect = {
+			mercenary_mutiny_create_rebel_effect = yes
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.c
+		trigger = {
+			any_rebel = { rebel_name_key = mercenary_mutiny }
+		}
+		custom_tooltip = mercenary_mutiny_test.1.c.tt
+		hidden_effect = {
+			random_rebel = {
+				limit = { rebel_name_key = mercenary_mutiny }
+				add_rebel_progress = 1
+			}
+			mercenary_mutiny_activate_civil_war_effect = yes
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.d
+		custom_tooltip = mercenary_mutiny_test.1.d.tt
+		hidden_effect = {
+			mercenary_mutiny_takeover_effect = yes
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.e
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.f
+		custom_tooltip = mercenary_mutiny_test.1.f.tt
+		hidden_effect = {
+			mercenary_mutiny_create_army_country_effect = yes
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.g
+		custom_tooltip = mercenary_mutiny_test.1.g.tt
+		hidden_effect = {
+			set_variable = {
+				name = blades_and_thrones_military_crisis
+				value = 90
+			}
+			set_variable = {
+				name = blades_and_thrones_military_crisis_display
+				value = 90
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.h
+		custom_tooltip = mercenary_mutiny_test.1.h.tt
+		hidden_effect = {
+			set_variable = {
+				name = blades_and_thrones_military_crisis
+				value = 100
+			}
+			set_variable = {
+				name = blades_and_thrones_military_crisis_display
+				value = 100
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.i
+		custom_tooltip = mercenary_mutiny_test.1.i.tt
+		hidden_effect = {
+			set_variable = {
+				name = blades_and_thrones_military_crisis
+				value = 0
+			}
+			set_variable = {
+				name = blades_and_thrones_military_crisis_display
+				value = 0
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.j
+		custom_tooltip = mercenary_mutiny_test.1.j.tt
+		hidden_effect = {
+			trigger_event_non_silently = {
+				id = mercenary_mutiny_test.10
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.k
+		custom_tooltip = mercenary_mutiny_test.1.k.tt
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = var:mercenary_mutiny_company_ref
+				}
+				var:mercenary_mutiny_company_ref = {
+					save_scope_as = mercenary_mutiny_company_scope
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:mercenary_mutiny_company_scope
+				}
+				change_player = scope:mercenary_mutiny_company_scope
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.l
+		custom_tooltip = mercenary_mutiny_test.1.l.tt
+		hidden_effect = {
+			trigger_event_non_silently = {
+				id = blades_and_thrones_conversion.1
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.1.m
+		custom_tooltip = mercenary_mutiny_test.1.m.tt
+		hidden_effect = {
+			set_variable = {
+				name = blades_and_thrones_force_coup
+				value = yes
+			}
+		}
+	}
+}
+
+mercenary_mutiny_test.2 = { #切换扮演：接管已生成的佣兵军团国
+	type = country_event
+	title = mercenary_mutiny_test.2.title
+	desc = mercenary_mutiny_test.2.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+	}
+
+	immediate = {
+		error_log = "MERC_DEBUG .2 fired"
+		var:mercenary_mutiny_army_country_ref = {
+			save_scope_as = mercenary_mutiny_army_country
+		}
+		if = {
+			limit = {
+				has_variable = mercenary_mutiny_annexer_country_ref
+			}
+			var:mercenary_mutiny_annexer_country_ref = {
+				save_scope_as = mercenary_mutiny_annexer_country
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.2.a
+		high_risk_option = yes
+		trigger = {
+			is_human = yes
+		}
+		error_log = "MERC_DEBUG .2 option A selected"
+		ROOT = {
+			every_character = {
+				limit = {
+					is_alive = yes
+					NOT = { owner ?= scope:mercenary_mutiny_army_country }
+					NOT = {
+						OR = {
+							is_ruler = yes
+							is_regent = yes
+							is_heir = yes
+						}
+					}
+					OR = {
+						is_general = yes
+						is_admiral = yes
+						has_unit = yes
+						AND = {
+							exists = scope:mercenary_mutiny_annexer_country
+							is_courtier = yes
+							culture ?= {
+								NOR = {
+									is_primary_or_accepted_in = scope:mercenary_mutiny_annexer_country
+									is_tolerated_in = scope:mercenary_mutiny_annexer_country
+								}
+							}
+						}
+					}
+				}
+				move_country = scope:mercenary_mutiny_army_country
+				remove_variable = mercenary_mutiny_exiled_candidate
+			}
+		}
+		scope:mercenary_mutiny_army_country = {
+			force_recalc_country_active_status = scope:mercenary_mutiny_army_country
+			change_country_type = army
+		}
+		error_log = "MERC_DEBUG .2 before change_player"
+		change_player = scope:mercenary_mutiny_army_country
+		error_log = "MERC_DEBUG .2 after change_player"
+	}
+
+	option = {
+		name = mercenary_mutiny_test.2.b
+		custom_tooltip = civil_war_game_over
+	}
+}
+
+mercenary_mutiny_test.3 = { #吞并转军团测试：模拟"国家被吞并→残部转流亡者军团国"
+	# 用法（两种，按触发者身份区分）：
+	# · event mercenary_mutiny_test.3 <AI国TAG>：在 AI 吞并国上触发。
+	#   immediate 的 AI 路径随机选一名人类玩家作为被吞并对象，对其执行
+	#   转换并弹出"国家覆灭"（test.2）选择事件；触发者（AI）自己不会被选中。
+	# · event mercenary_mutiny_test.3（玩家在自己身上触发）：
+	#   immediate 不动作，玩家直接看到本事件，选"转换并直接切换玩家"，
+	#   把自己当被吞并对象转换并切换扮演（不走 test.2）。
+	type = country_event
+	title = mercenary_mutiny_test.3.title
+	desc = mercenary_mutiny_test.3.desc
+	outcome = neutral
+	orphan = yes
+	trigger = {
+		always = no
+	}
+
+	immediate = {
+		hidden_effect = {
+			# AI 路径：仅在 AI 触发时执行——随机选一名人类玩家（排除触发者自己），
+			# 对其执行"被吞并→流亡者"转换，然后向该玩家弹出"国家覆灭"选择事件。
+			if = {
+				limit = {
+					is_ai = yes
+				}
+				error_log = "MERC_DEBUG .3 immediate started"
+				random_country = {
+					limit = {
+						is_human = yes
+						NOT = { this = prev }
+					}
+					save_scope_as = mercenary_mutiny_annex_target
+				}
+				scope:mercenary_mutiny_annex_target = {
+					mercenary_mutiny_convert_annexed_to_army_country_effect = yes
+					error_log = "MERC_DEBUG .3 conversion done"
+					if = {
+						limit = {
+							has_variable = mercenary_mutiny_army_country_ref
+						}
+						var:mercenary_mutiny_army_country_ref = {
+							save_scope_as = mercenary_mutiny_army_country
+						}
+						error_log = "MERC_DEBUG .3 triggering .2"
+						trigger_event_non_silently = {
+							id = mercenary_mutiny_test.2
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.3.a
+		trigger = {
+			is_ai = yes
+		}
+		ai_chance = 1
+		custom_tooltip = mercenary_mutiny_test.3.a.tt
+	}
+
+	option = {
+		name = mercenary_mutiny_test.3.b
+		high_risk_option = yes
+		trigger = {
+			is_human = yes
+		}
+		custom_tooltip = mercenary_mutiny_test.3.b.tt
+		error_log = "MERC_DEBUG .3 direct option started"
+		mercenary_mutiny_convert_annexed_to_army_country_effect = yes
+		var:mercenary_mutiny_army_country_ref = {
+			save_scope_as = mercenary_mutiny_army_country
+		}
+		scope:mercenary_mutiny_army_country = {
+			force_recalc_country_active_status = scope:mercenary_mutiny_army_country
+			change_country_type = army
+		}
+		error_log = "MERC_DEBUG .3 before direct change_player"
+		change_player = scope:mercenary_mutiny_army_country
+		error_log = "MERC_DEBUG .3 after direct change_player"
+	}
+}
+
+mercenary_mutiny_test.4 = { #夺舍结算：原国残部成为流亡者，可选择继续扮演
+	type = country_event
+	title = mercenary_mutiny_test.4.title
+	desc = mercenary_mutiny_test.4.desc
+	outcome = neutral
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = var:mercenary_mutiny_original_exile_ref
+				}
+				var:mercenary_mutiny_original_exile_ref = {
+					save_scope_as = mercenary_mutiny_original_exile_scope
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.4.a
+	}
+
+	option = {
+		name = mercenary_mutiny_test.4.b
+		high_risk_option = yes
+		trigger = {
+			exists = scope:mercenary_mutiny_original_exile_scope
+		}
+		custom_tooltip = mercenary_mutiny_test.4.b.tt
+		change_player = scope:mercenary_mutiny_original_exile_scope
+	}
+}
+
+mercenary_mutiny_test.5 = { #夺舍结算：佣兵团成为无地军团国，可选择扮演
+	type = country_event
+	title = mercenary_mutiny_test.5.title
+	desc = mercenary_mutiny_test.5.desc
+	outcome = neutral
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = var:mercenary_mutiny_company_ref
+				}
+				var:mercenary_mutiny_company_ref = {
+					save_scope_as = mercenary_mutiny_company_scope
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.5.a
+	}
+
+	option = {
+		name = mercenary_mutiny_test.5.b
+		high_risk_option = yes
+		trigger = {
+			exists = scope:mercenary_mutiny_company_scope
+		}
+		custom_tooltip = mercenary_mutiny_test.5.b.tt
+		change_player = scope:mercenary_mutiny_company_scope
+	}
+}
+
+mercenary_mutiny_test.6 = { #夺舍灾变结算通知（结局通报）
+	type = country_event
+	title = mercenary_mutiny_test.6.title
+	desc = mercenary_mutiny_test.6.desc
+	outcome = neutral
+
+	option = {
+		name = mercenary_mutiny_test.6.a
+	}
+}
+
+mercenary_mutiny_test.7 = { #夺舍灾变爆发：镇压 / 赎买 / 放任（灾变开始处理）
+	type = country_event
+	title = mercenary_mutiny_test.7.title
+	desc = mercenary_mutiny_test.7.desc
+	historical_info = mercenary_mutiny_test.7.historical_info
+	outcome = neutral
+	major = yes
+	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
+
+	option = {
+		name = mercenary_mutiny_test.7.a
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 2.33
+				mercenary_mutiny_total_strength < {
+					value = mercenary_mutiny_effective_loyal_military
+					multiply = 1.25
+				}
+			}
+		}
+		add_stability = stability_severe_penalty
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = -0.1
+		}
+	}
+	option = {
+		name = mercenary_mutiny_test.7.b
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				gold >= 1500
+			}
+			modifier = {
+				factor = 0
+				gold < 1000
+			}
+		}
+		add_gold = {
+			value = blades_and_thrones_mutiny_buyout_cost_early
+			multiply = -1
+		}
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = -0.2
+		}
+	}
+	option = {
+		name = mercenary_mutiny_test.7.c
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+mercenary_mutiny_test.8 = { #夺舍灾变中期：形势恶化的抉择
+	type = country_event
+	title = mercenary_mutiny_test.8.title
+	desc = mercenary_mutiny_test.8.desc
+	outcome = neutral
+	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
+
+	option = {
+		name = mercenary_mutiny_test.8.a
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 5
+				gold >= 2000
+			}
+			modifier = {
+				factor = 0
+				gold < 1200
+			}
+		}
+		add_gold = {
+			value = blades_and_thrones_mutiny_buyout_cost_mid
+			multiply = -1
+		}
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = -0.2
+		}
+	}
+	option = {
+		name = mercenary_mutiny_test.8.b
+		ai_chance = {
+			factor = 30
+			modifier = {
+				factor = 2
+				stability >= 10
+			}
+		}
+		add_stability = stability_mild_penalty
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = -0.1
+		}
+	}
+	option = {
+		name = mercenary_mutiny_test.8.c
+		ai_chance = {
+			factor = 0
+		}
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = 0.1
+		}
+		random_owned_location = {
+			change_prosperity = prosperity_mild_penalty
+		}
+	}
+}
+
+mercenary_mutiny_test.9 = { #士兵哗变：王室之手失控时的军队反噬
+	type = country_event
+	title = mercenary_mutiny_test.9.title
+	desc = mercenary_mutiny_test.9.desc
+	outcome = neutral
+
+	immediate = {
+		hidden_effect = {
+			# 存入本次"加饷安抚"的金额（12倍军饷×威胁倍率），供选项 tooltip 动态显示
+			set_variable = {
+				name = blades_and_thrones_extra_pay_display
+				value = mercenary_mutiny_extra_pay_cost
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.9.a
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 2
+				gold >= {
+					value = mercenary_mutiny_extra_pay_cost
+				}
+			}
+		}
+		add_stability = stability_mild_penalty
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = -0.05
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_penalty
+		}
+	}
+	option = {
+		name = mercenary_mutiny_test.9.b
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				gold < {
+					value = mercenary_mutiny_extra_pay_cost
+				}
+			}
+		}
+		custom_tooltip = mercenary_mutiny_test.9.b.tt
+		add_gold = {
+			value = mercenary_mutiny_extra_pay_cost
+			multiply = -1
+		}
+		"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+			estate_add_gold = {
+				value = mercenary_mutiny_extra_pay_cost
+			}
+		}
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = -0.1
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_bonus
+		}
+	}
+	option = {
+		name = mercenary_mutiny_test.9.c
+		ai_chance = {
+			factor = 0
+		}
+		high_risk_option = yes
+		random_rebel = {
+			limit = { rebel_name_key = mercenary_mutiny }
+			add_rebel_progress = 0.15
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_extreme_bonus
+		}
+	}
+}
+
+# 佣兵军团国（不忠诚附属国）索饷事件——由月度脉冲触发，也可用调试菜单选项 j 触发
+mercenary_mutiny_test.10 = { #军团索饷：不忠附属国的巨额军饷要求
+	type = country_event
+	title = mercenary_mutiny_test.10.title
+	desc = mercenary_mutiny_test.10.desc
+	outcome = negative
+
+	immediate = {
+		hidden_effect = {
+			# 定位索饷的军团国：优先用宗主保存的军团引用（外派/夺舍两条路径都设置
+			# mercenary_mutiny_company_ref），失败时兜底按不忠标记随机找。
+			# 教训：random_subject + has_variable 组合实测不可靠（vanilla 无此先例），
+			# 症状是索饷事件弹出但付钱/拒绝全部无效、独立事件弹出却不独立。
+			if = {
+				limit = {
+					exists = var:mercenary_mutiny_company_ref
+				}
+				var:mercenary_mutiny_company_ref = {
+					save_scope_as = mercenary_mutiny_company_scope
+				}
+			}
+			if = {
+				limit = {
+					NOT = { exists = scope:mercenary_mutiny_company_scope }
+				}
+				random_subject = {
+					limit = {
+						has_variable = mercenary_mutiny_disloyal_subject
+						NOT = { has_country_modifier = mercenary_mutiny_placated }
+					}
+					save_scope_as = mercenary_mutiny_company_scope
+				}
+			}
+			# 存入本次索饷金额，供选项 tooltip 动态显示
+			set_variable = {
+				name = blades_and_thrones_company_demand_display
+				value = mercenary_mutiny_company_demand_cost
+			}
+			if = {
+				limit = {
+					NOT = { has_variable = blades_and_thrones_military_crisis }
+				}
+				set_variable = {
+					name = blades_and_thrones_military_crisis
+					value = 0
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.10.a
+		trigger = {
+			gold >= {
+				value = root.mercenary_mutiny_company_demand_cost
+			}
+		}
+		# AI 宗主决策（2024-08 放开 AI 后）：财政宽裕就付钱安抚，拮据/危机深重就拒绝
+		ai_chance = {
+			factor = 60
+			modifier = {
+				factor = 1.5
+				gold >= {
+					value = root.mercenary_mutiny_company_demand_cost
+					multiply = 3
+				}
+			}
+			modifier = {
+				factor = 0.5
+				has_variable = blades_and_thrones_military_crisis
+				var:blades_and_thrones_military_crisis >= 60
+			}
+		}
+		custom_tooltip = mercenary_mutiny_test.10.a.tt
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = scope:mercenary_mutiny_company_scope
+				}
+				add_gold = {
+					value = root.mercenary_mutiny_company_demand_cost
+					multiply = -1
+				}
+				scope:mercenary_mutiny_company_scope = {
+					add_country_modifier = {
+						modifier = mercenary_mutiny_placated
+						years = 5
+						mode = add_and_extend
+					}
+				}
+				change_variable = {
+					name = blades_and_thrones_military_crisis
+					add = -10
+					min = 0
+					max = 100
+				}
+				set_variable = {
+					name = blades_and_thrones_military_crisis_display
+					value = var:blades_and_thrones_military_crisis
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.10.b
+		# AI 拒绝（危机深重时更倾向拒绝）
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 1.5
+				OR = {
+					NOT = { has_variable = blades_and_thrones_military_crisis }
+					var:blades_and_thrones_military_crisis >= 60
+				}
+			}
+		}
+		custom_tooltip = mercenary_mutiny_test.10.b.tt
+		hidden_effect = {
+			# refusals 变量在"佣兵自立门户"效果与"放任自立"选项处初始化 = 0，
+			# 这里只递增（变量必须已存在，否则引擎报 fetch 错误且计数失效）
+			change_variable = {
+				name = mercenary_mutiny_company_refusals
+				add = 1
+			}
+			change_variable = {
+				name = blades_and_thrones_military_crisis
+				add = 5
+				min = 0
+				max = 100
+			}
+			set_variable = {
+				name = blades_and_thrones_military_crisis_display
+				value = var:blades_and_thrones_military_crisis
+			}
+			if = {
+				limit = {
+					var:mercenary_mutiny_company_refusals >= 2
+				}
+				trigger_event_non_silently = {
+					id = mercenary_mutiny_test.11
+				}
+			}
+		}
+	}
+}
+
+# 佣兵军团国撕毁臣属条约，宣布完全独立
+mercenary_mutiny_test.11 = { #军团独立：撕毁臣属条约，宣布自立
+	type = country_event
+	title = mercenary_mutiny_test.11.title
+	desc = mercenary_mutiny_test.11.desc
+	outcome = negative
+
+	immediate = {
+		hidden_effect = {
+			# 定位宣布独立的军团国：优先用宗主保存的军团引用（与 test.10 同款，
+			# random_subject + has_variable 组合实测不可靠——旧写法导致
+			# "独立事件弹出但 cancel_subject 从未执行"的假独立）
+			if = {
+				limit = {
+					exists = var:mercenary_mutiny_company_ref
+				}
+				var:mercenary_mutiny_company_ref = {
+					save_scope_as = mercenary_mutiny_company_scope
+				}
+			}
+			if = {
+				limit = {
+					NOT = { exists = scope:mercenary_mutiny_company_scope }
+				}
+				random_subject = {
+					limit = {
+						has_variable = mercenary_mutiny_disloyal_subject
+					}
+					save_scope_as = mercenary_mutiny_company_scope
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:mercenary_mutiny_company_scope
+				}
+				# 宗主解除与军团国的臣属关系（原版语义：宗主作用域执行，附庸作参数）
+				scope:mercenary_mutiny_company_scope = {
+					overlord ?= {
+						cancel_subject = prev
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_variable = blades_and_thrones_military_crisis }
+				}
+				set_variable = {
+					name = blades_and_thrones_military_crisis
+					value = 0
+				}
+			}
+			change_variable = {
+				name = blades_and_thrones_military_crisis
+				add = 20
+				min = 0
+				max = 100
+			}
+			set_variable = {
+				name = blades_and_thrones_military_crisis_display
+				value = var:blades_and_thrones_military_crisis
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.11.a
+	}
+
+	option = {
+		name = mercenary_mutiny_test.11.b
+		high_risk_option = yes
+		trigger = {
+			exists = scope:mercenary_mutiny_company_scope
+		}
+		custom_tooltip = mercenary_mutiny_test.11.a.tt
+		change_player = scope:mercenary_mutiny_company_scope
+	}
+}
+
+# 佣兵军团以其他方式（AI 自行解除臣属关系/玩家主动释放）自立门户后，提供一次扮演机会
+mercenary_mutiny_test.12 = { #扮演机会：军团自立门户后，是否统率这支自由军团
+	type = country_event
+	title = mercenary_mutiny_test.12.title
+	desc = mercenary_mutiny_test.12.desc
+	outcome = neutral
+	fire_only_once = yes
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = var:mercenary_mutiny_company_ref
+				}
+				var:mercenary_mutiny_company_ref = {
+					save_scope_as = mercenary_mutiny_company_scope
+				}
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.12.a
+		high_risk_option = yes
+		trigger = {
+			exists = scope:mercenary_mutiny_company_scope
+		}
+		custom_tooltip = mercenary_mutiny_test.12.a.tt
+		change_player = scope:mercenary_mutiny_company_scope
+	}
+
+	option = {
+		name = mercenary_mutiny_test.12.b
+		hidden_effect = {
+			set_variable = {
+				name = mercenary_mutiny_company_play_offered
+				value = yes
+			}
+		}
+	}
+}
+
+# 调试：创建无主（独立）无地军团国——不臣属任何宗主、无拨款、无领土，
+# 以"自由军团"之名游走天下。用于测试无地国家玩法与军团体系。
+mercenary_mutiny_test.13 = { #调试：创建独立自由军团（彩蛋国 BLT 同款）
+	type = country_event
+	title = mercenary_mutiny_test.13.title
+	desc = mercenary_mutiny_test.13.desc
+	outcome = neutral
+	orphan = yes
+	trigger = {
+		is_human = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			create_character = {
+				age = { 30 60 }
+				adm = { 30 60 }
+				dip = { 30 60 }
+				mil = { 70 100 }
+				culture = root.culture
+				religion = root.religion
+				estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				create_in_limbo = yes
+				save_scope_as = blades_and_thrones_test_commander
+			}
+			capital ?= {
+				save_scope_as = blades_and_thrones_test_capital
+			}
+			scope:blades_and_thrones_test_capital ?= {
+				create_army_country_in_location = {
+					overlord = root
+					culture = root.culture
+					religion = root.religion
+					subject_type = subject_type:mercenary_company
+					ruler = scope:blades_and_thrones_test_commander
+					save_scope_as = blades_and_thrones_test_company
+				}
+			}
+			scope:blades_and_thrones_test_company ?= {
+				# 自由军团身份（独立无地佣兵）——命名与机制标记
+				set_variable = {
+					name = blades_and_thrones_volunteer_company
+					value = yes
+				}
+				# 解除宗主 → 无主独立
+				overlord ?= {
+					cancel_subject = prev
+				}
+				# 无拨款（无主，无年拨）
+				remove_variable = blades_and_thrones_subsidy_level
+			}
+		}
+	}
+
+	option = {
+		name = mercenary_mutiny_test.13.a
+		change_player = scope:blades_and_thrones_test_company
+	}
+
+	option = {
+		name = mercenary_mutiny_test.13.b
+	}
+}

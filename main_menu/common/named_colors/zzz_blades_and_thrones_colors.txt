@@ -1,0 +1,9 @@
+# 士兵阶层底色：红色 → 金属银白（与军团图标的外层金属三角一致）。
+# 原版 named_colors/02_map.txt: pop_soldiers = hsv360 { 0 74 88 }（纯红）
+# 覆盖为冷调金属银白：H=210（冷蓝）、S=12（低饱和）、V=90（亮）。
+# 注意：named_colors 不支持 REPLACE/INJECT 数据库函数（wiki：Injectable/Replaceable
+# 均为空），只能靠 zzz 前缀文件后加载 + 同名 key 覆盖（字典式）。
+# 所有颜色必须包在 colors = { } 内。编码要求：UTF-8 BOM（与原版一致）。
+colors = {
+	pop_soldiers = hsv360 { 210 12 90 }
+}

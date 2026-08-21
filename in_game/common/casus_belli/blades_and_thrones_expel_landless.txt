@@ -1,0 +1,88 @@
+# 驱逐无地国 CB：驻扎在己方领土上的无地军团（流亡者/佣兵军团国）可以被驱逐。
+# 战争目标 = 摧毁其军队（destroy_army）：无地国无军则亡。
+# root = 驻在国，scope:target = 无地国
+cb_blades_and_thrones_expel_landless = {
+	create_visible = {
+		always = yes
+	}
+	create_enabled = {
+		scope:target = {
+			country_type = army
+			OR = {
+				has_variable = mercenary_mutiny_exiles_country
+				has_variable = mercenary_mutiny_original_exile_marker
+				has_variable = blades_and_thrones_volunteer_company
+				is_subject_type = mercenary_company
+			}
+			any_unit = {
+				unit_location = {
+					owner = scope:actor
+				}
+			}
+		}
+	}
+	declare_enabled = {
+		scope:target = {
+			country_type = army
+			OR = {
+				has_variable = mercenary_mutiny_exiles_country
+				has_variable = mercenary_mutiny_original_exile_marker
+				has_variable = blades_and_thrones_volunteer_company
+				is_subject_type = mercenary_company
+			}
+			any_unit = {
+				unit_location = {
+					owner = scope:actor
+				}
+			}
+		}
+	}
+	speed = 10
+	war_goal_type = expel_landless_wargoal
+}
+
+# 复国 CB：流亡者夺回故都（原首都）。
+# root = 流亡者，scope:target = 故都当前拥有者。
+cb_blades_and_thrones_restoration = {
+	create_visible = {
+		has_variable = mercenary_mutiny_homeland
+	}
+	create_enabled = {
+		has_variable = mercenary_mutiny_homeland
+		var:mercenary_mutiny_homeland ?= {
+			owner = scope:target
+		}
+	}
+	declare_enabled = {
+		has_variable = mercenary_mutiny_homeland
+		var:mercenary_mutiny_homeland ?= {
+			owner = scope:target
+		}
+	}
+	speed = 10
+	war_goal_type = restoration_wargoal
+}
+
+# 夺取立足地 CB：无地军团对异教/异文化土地宣战。
+# 不能复用原版 cb_conquer_province（其 create_enabled 要求目标地是己方核心，无核心会静默失败）。
+cb_blades_and_thrones_claim_foothold = {
+	create_visible = {
+		always = yes
+	}
+	create_enabled = {
+		scope:target = {
+			NOT = { is_subject_or_below_of = scope:actor }
+		}
+	}
+	declare_enabled = {
+		scope:target = {
+			NOT = { is_subject_or_below_of = scope:actor }
+		}
+	}
+	# take_province 类型 CB 必须带省份过滤器（省份由宣战逻辑从 scope:target 领土中选取）
+	province = {
+		always = yes
+	}
+	speed = 10
+	war_goal_type = conquer_province
+}

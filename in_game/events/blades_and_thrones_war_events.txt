@@ -1,0 +1,270 @@
+namespace = blades_and_thrones_war
+
+blades_and_thrones_war.1 = { #战争胜利：攻防分开结算的凯旋反馈
+	type = country_event
+	title = blades_and_thrones_war.1.title
+	desc = blades_and_thrones_war.1.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			# 存入本次犒赏金额（3个月军饷），供选项 tooltip 动态显示
+			set_variable = {
+				name = blades_and_thrones_triple_pay_display
+				value = blades_and_thrones_triple_monthly_pay_cost
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_war.1.a
+		trigger = {
+			gold >= {
+				value = root.blades_and_thrones_triple_monthly_pay_cost
+			}
+		}
+		add_gold = {
+			value = root.blades_and_thrones_triple_monthly_pay_cost
+			multiply = -1
+		}
+		"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+			estate_add_gold = {
+				value = root.blades_and_thrones_triple_monthly_pay_cost
+			}
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_bonus
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = 4
+				min = 0
+				max = 100
+			}
+		}
+		custom_tooltip = blades_and_thrones_war.1.a.tt
+	}
+
+	option = {
+		name = blades_and_thrones_war.1.b
+		add_legitimacy = legitimacy_weak_penalty
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_bonus
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = 6
+				min = 0
+				max = 100
+			}
+		}
+		custom_tooltip = blades_and_thrones_war.1.b.tt
+	}
+
+	option = {
+		name = blades_and_thrones_war.1.c
+		add_legitimacy = legitimacy_mild_bonus
+		add_stability = stability_weak_bonus
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_penalty
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = -3
+				min = 0
+				max = 100
+			}
+		}
+		custom_tooltip = blades_and_thrones_war.1.c.tt
+	}
+
+	option = {
+		name = blades_and_thrones_war.1.d
+		add_prestige = prestige_weak_bonus
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_bonus
+		}
+		custom_tooltip = blades_and_thrones_war.1.d.tt
+	}
+}
+
+blades_and_thrones_war.2 = { #战争失利：战败耻辱与忠诚压力
+	type = country_event
+	title = blades_and_thrones_war.2.title
+	desc = blades_and_thrones_war.2.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			# 存入本次重整军备金额（3个月军饷），供选项 tooltip 动态显示
+			set_variable = {
+				name = blades_and_thrones_triple_pay_display
+				value = blades_and_thrones_triple_monthly_pay_cost
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_war.2.a
+		trigger = {
+			gold >= {
+				value = root.blades_and_thrones_triple_monthly_pay_cost
+			}
+		}
+		add_gold = {
+			value = root.blades_and_thrones_triple_monthly_pay_cost
+			multiply = -1
+		}
+		"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+			estate_add_gold = {
+				value = root.blades_and_thrones_triple_monthly_pay_cost
+			}
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_bonus
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = 3
+				min = 0
+				max = 100
+			}
+		}
+		remove_variable = blades_and_thrones_war_shame_variable
+		custom_tooltip = blades_and_thrones_war.2.a.tt
+	}
+
+	option = {
+		name = blades_and_thrones_war.2.b
+		add_legitimacy = legitimacy_mild_penalty
+		add_country_modifier = {
+			modifier = blades_and_thrones_army_purged_modifier
+			years = 10
+			mode = add
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_severe_penalty
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = 5
+				min = 0
+				max = 100
+			}
+		}
+		remove_variable = blades_and_thrones_war_shame_variable
+		custom_tooltip = blades_and_thrones_war.2.b.tt
+	}
+
+	option = {
+		name = blades_and_thrones_war.2.c
+		add_legitimacy = legitimacy_weak_bonus
+		add_stability = stability_weak_penalty
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_penalty
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = -2
+				min = 0
+				max = 100
+			}
+		}
+		remove_variable = blades_and_thrones_war_shame_variable
+		custom_tooltip = blades_and_thrones_war.2.c.tt
+	}
+
+	option = {
+		name = blades_and_thrones_war.2.d
+		add_legitimacy = legitimacy_mild_penalty
+		add_stability = stability_mild_penalty
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_penalty
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = -4
+				min = 0
+				max = 100
+			}
+		}
+		custom_tooltip = blades_and_thrones_war.2.d.tt
+	}
+}
+
+blades_and_thrones_war.99 = { #调试：战争反馈测试
+	type = country_event
+	title = blades_and_thrones_war.99.title
+	desc = blades_and_thrones_war.99.desc
+	outcome = neutral
+	orphan = yes
+	trigger = {
+		is_human = yes
+	}
+
+	option = {
+		name = blades_and_thrones_war.99.a
+		set_variable = {
+			name = blades_and_thrones_war_glory_variable
+			value = 1
+			years = 5
+		}
+		trigger_event_non_silently = {
+			id = blades_and_thrones_war.1
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_war.99.b
+		set_variable = {
+			name = blades_and_thrones_war_shame_variable
+			value = 1
+			years = 5
+		}
+		trigger_event_non_silently = {
+			id = blades_and_thrones_war.2
+		}
+	}
+}

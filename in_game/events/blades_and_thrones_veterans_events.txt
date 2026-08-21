@@ -1,0 +1,256 @@
+namespace = blades_and_thrones_veterans
+
+# ============ 老兵返乡：战后裁军抉择 ============
+# 和平到来时，士兵阶层迎来"解甲归田"的抉择：
+# A. 发放遣散费 → 花钱换安稳（削减 30% 士兵POP，满意度+忠诚+）
+# B. 欠饷遣散   → 省钱但留怨（削减 30% 士兵POP，得"老兵不满"修正）
+# C. 保留精锐   → 百战之师留用（士兵POP不动，得"精锐老兵"修正，维护更贵）
+# 触发：月度脉冲检测（和平 + 士兵POP + 战争刚结束），见 on_action。
+blades_and_thrones_veterans.1 = { #老兵返乡：战后裁军抉择（遣散费/欠饷/保留精锐）
+	type = country_event
+	title = blades_and_thrones_veterans.1.title
+	desc = blades_and_thrones_veterans.1.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			# 累加本国士兵 POP 总规模（存 display 变量供 tooltip 与费用计算）
+			set_variable = {
+				name = blades_and_thrones_veteran_soldier_size
+				value = 0
+			}
+			every_owned_location = {
+				every_pop = {
+					limit = {
+						owner = root
+						pop_type = pop_type:soldiers
+					}
+					root = {
+						change_variable = {
+							name = blades_and_thrones_veteran_soldier_size
+							add = prev.pop_size
+						}
+					}
+				}
+			}
+			set_variable = {
+				name = blades_and_thrones_veteran_severance_display
+				value = {
+					value = var:blades_and_thrones_veteran_soldier_size
+					multiply = 0.05
+					min = 20
+				}
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.1.a
+		trigger = {
+			gold >= var:blades_and_thrones_veteran_severance_display
+		}
+		custom_tooltip = blades_and_thrones_veterans.1.a.tt
+		hidden_effect = {
+			add_gold = {
+				value = var:blades_and_thrones_veteran_severance_display
+				multiply = -1
+			}
+			# 削减 30% 士兵 POP（解甲归田）
+			every_owned_location = {
+				every_pop = {
+					limit = {
+						owner = root
+						pop_type = pop_type:soldiers
+					}
+					add_pop_size = {
+						value = pop_size
+						multiply = -0.3
+					}
+				}
+			}
+			# 退伍过渡期：余下超编士兵数月内陆续失业归田
+			add_country_modifier = {
+				modifier = blades_and_thrones_demobilization_transition_modifier
+				years = 2
+				mode = add
+			}
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_mild_bonus
+			}
+			add_stability = stability_weak_bonus
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.1.b
+		custom_tooltip = blades_and_thrones_veterans.1.b.tt
+		hidden_effect = {
+			# 不发遣散费，士兵照样转业，但怨气积压
+			every_owned_location = {
+				every_pop = {
+					limit = {
+						owner = root
+						pop_type = pop_type:soldiers
+					}
+					add_pop_size = {
+						value = pop_size
+						multiply = -0.3
+					}
+				}
+			}
+			# 退伍过渡期：余下超编士兵数月内陆续失业归田
+			add_country_modifier = {
+				modifier = blades_and_thrones_demobilization_transition_modifier
+				years = 2
+				mode = add
+			}
+			add_country_modifier = {
+				modifier = blades_and_thrones_veteran_unrest_modifier
+				years = 3
+				mode = add
+			}
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_mild_penalty
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.1.c
+		custom_tooltip = blades_and_thrones_veterans.1.c.tt
+		hidden_effect = {
+			add_country_modifier = {
+				modifier = blades_and_thrones_veteran_core_modifier
+				years = 10
+				mode = add
+			}
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_mild_bonus
+			}
+			add_legitimacy = legitimacy_weak_bonus
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.1.d
+		custom_tooltip = blades_and_thrones_veterans.1.d.tt
+	}
+}
+
+# ============ 老兵后续：欠饷遣散的老兵骚动 ============
+# 选了"欠饷遣散"且不满修正仍在 + 士兵满意度低 → 老兵骚动（花钱安抚 or 镇压 or 任其闹）
+blades_and_thrones_veterans.2 = { #老兵骚动：欠饷遣散后的怨气爆发
+	type = country_event
+	title = blades_and_thrones_veterans.2.title
+	desc = blades_and_thrones_veterans.2.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+		has_country_modifier = blades_and_thrones_veteran_unrest_modifier
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.2.a
+		custom_tooltip = blades_and_thrones_veterans.2.a.tt
+		hidden_effect = {
+			add_gold = {
+				value = 200
+				multiply = -1
+			}
+			remove_country_modifier = blades_and_thrones_veteran_unrest_modifier
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_mild_bonus
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.2.b
+		custom_tooltip = blades_and_thrones_veterans.2.b.tt
+		hidden_effect = {
+			remove_country_modifier = blades_and_thrones_veteran_unrest_modifier
+			# 镇压老兵：代价是稳定度与人力
+			add_stability = stability_mild_penalty
+			add_country_modifier = {
+				modifier = blades_and_thrones_veteran_suppressed_modifier
+				years = 2
+				mode = add
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.2.c
+		custom_tooltip = blades_and_thrones_veterans.2.c.tt
+		hidden_effect = {
+			# 任其闹：不满延续，但省下钱与麻烦
+			set_variable = {
+				name = blades_and_thrones_veteran_unrest_prolonged
+				value = yes
+				months = 12
+			}
+		}
+	}
+}
+
+# ============ 老兵后续：精锐老兵的归宿 ============
+# 选了"保留精锐"且精锐修正仍在 + 长和平 → 精锐部队是留是散
+blades_and_thrones_veterans.3 = { #精锐归宿：百战之师的去留
+	type = country_event
+	title = blades_and_thrones_veterans.3.title
+	desc = blades_and_thrones_veterans.3.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+		has_country_modifier = blades_and_thrones_veteran_core_modifier
+		at_war = no
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.3.a
+		custom_tooltip = blades_and_thrones_veterans.3.a.tt
+		hidden_effect = {
+			# 精锐并入常备军：精锐修正转为永久训练传统
+			remove_country_modifier = blades_and_thrones_veteran_core_modifier
+			add_country_modifier = {
+				modifier = blades_and_thrones_veteran_institutionalized_modifier
+				years = 20
+				mode = add
+			}
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_mild_bonus
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.3.b
+		custom_tooltip = blades_and_thrones_veterans.3.b.tt
+		hidden_effect = {
+			# 保留精锐编制：维持现状，精锐修正延续
+			set_variable = {
+				name = blades_and_thrones_veteran_core_prolonged
+				value = yes
+				months = 24
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_veterans.3.c
+		custom_tooltip = blades_and_thrones_veterans.3.c.tt
+		hidden_effect = {
+			# 解散精锐：省维护费，得稳定度
+			remove_country_modifier = blades_and_thrones_veteran_core_modifier
+			add_stability = stability_weak_bonus
+		}
+	}
+}

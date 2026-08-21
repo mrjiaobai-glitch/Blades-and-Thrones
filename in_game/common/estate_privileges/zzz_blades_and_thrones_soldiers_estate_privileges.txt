@@ -1,0 +1,185 @@
+zzz_mercenary_mutiny_soldiers_military_register = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	country_modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		peasants_estate_target_satisfaction = small_privilege_target_satisfaction_penalty
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_levy_size = 0.10
+		global_army_levy_size_modifier = 0.05
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.25
+		monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.01
+		monthly_towards_quantity = societal_value_monthly_move
+	}
+}
+
+zzz_mercenary_mutiny_soldiers_professional_officer_corps = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	# 职业军官团是军事革命的产物（荷兰改革/三十年战争之后）：1600 年前不存在"职业军官"概念。
+	# 写法同原版 autonomous_kadiluks（clergy_estate.txt）。
+	potential = {
+		OR = {
+			current_age = age_4_reformation
+			current_age = age_5_absolutism
+			current_age = age_6_revolutions
+		}
+	}
+
+	country_modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		discipline = 0.025
+		land_morale_modifier = 0.05
+		monthly_army_tradition = 0.05
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.25
+		country_cabinet_efficiency = -0.03
+		monthly_towards_quality = societal_value_monthly_move
+	}
+}
+
+zzz_mercenary_mutiny_soldiers_state_mercenary_contracts = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	country_modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		hire_mercenary_premium_cost_modifier = -0.15
+		mercenary_maintenance_efficiency = 0.10
+		global_mercenaries_modifier = 0.10
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.20
+	}
+}
+
+zzz_mercenary_mutiny_soldiers_military_courts = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	country_modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		monthly_rebel_growth = -0.001
+		pop_join_rebel_threshold = -0.02
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.30
+		country_cabinet_efficiency = -0.05
+	}
+}
+
+zzz_mercenary_mutiny_soldiers_standing_army = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	# 常备军在中世纪是例外（法王查理七世 1445 年才建第一支常备军团），
+	# 地理大发现时代（约 1500 年后）才成为可行的国家制度。
+	potential = {
+		OR = {
+			current_age = age_3_discovery
+			current_age = age_4_reformation
+			current_age = age_5_absolutism
+			current_age = age_6_revolutions
+		}
+	}
+
+	country_modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		global_manpower_modifier = 0.05
+		global_soldiers_desired_pop_scaled = 0.10
+		army_maintenance_efficiency = -0.10
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.20
+		monthly_towards_centralization = societal_value_monthly_move
+	}
+}
+
+zzz_mercenary_mutiny_soldiers_old_soldiers_council = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	# 老兵干政是早期现象（罗马禁卫军、拜占庭式军队），专制主义时代后
+	# 被职业军官团取代——1800 年前后不再出现（已授予的仍保留，与职业军官团形成换代）。
+	potential = {
+		NOT = {
+			OR = {
+				current_age = age_5_absolutism
+				current_age = age_6_revolutions
+			}
+		}
+	}
+
+	country_modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_in_cabinet = yes
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_power_from_cabinet = 0.10
+		country_cabinet_efficiency = 0.05
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.25
+		monthly_towards_offensive = societal_value_monthly_move
+		monthly_legitimacy = -0.02
+	}
+}
+
+zzz_mercenary_mutiny_soldiers_idle_production = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	country_modifier = {
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = large_privilege_target_satisfaction
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 1.00
+		discipline = -0.025
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_to_build_rgo = yes
+	}
+}
+
+zzz_mercenary_mutiny_soldiers_farmer_supply_train = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	country_modifier = {
+		# 授予收益：士兵 +15% 满意度（medium × 3），农民 -7.5%（medium penalty × 1.5）
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		peasants_estate_target_satisfaction = medium_privilege_target_satisfaction_penalty
+		army_logistics_distance_modifier = 0.10
+	}
+}
+
+zzz_rebalanced_nepal_mercenary_soldiers_royal_hand = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	# 王室之手让军人集团坐大：士兵阶层力量超过 0.5 后便无法轻易收回。
+	# can_revoke 语义：条件满足 = 可以撤销（原版 burghers 王权 >= 0.5 同款写法）。
+	# 故此处取反：士兵权力 <= 0.5 时可撤销，超过 0.5 后不可撤销。
+	can_revoke = {
+		NOT = {
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0.5
+		}
+	}
+
+	country_modifier = {
+		global_crown_estate_power = 0.25
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.50
+		global_nobles_estate_power = -0.25
+		global_clergy_estate_power = -0.20
+		global_burghers_estate_power = -0.20
+		global_peasants_estate_power = -0.20
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		nobles_estate_target_satisfaction = small_privilege_target_satisfaction_penalty
+		clergy_estate_target_satisfaction = small_privilege_target_satisfaction_penalty
+		burghers_estate_target_satisfaction = small_privilege_target_satisfaction_penalty
+		peasants_estate_target_satisfaction = small_privilege_target_satisfaction_penalty
+		monthly_towards_centralization = societal_value_monthly_move
+	}
+}
+
+# 团练自治：王室默许地方军人自组团练、营建营所。
+# 授予后士兵阶层可建造“团练所”（各地，地方军事据点）；
+# 撤销后不再新建，既有团练所留存。
+blades_and_thrones_militia_autonomy = {
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	# 特权 tooltip 内置团练所建筑属性（原版 kulm_law 同款写法：
+	# country_modifier 的 potential_trigger 里放 custom_tooltip）。
+	country_modifier = {
+		potential_trigger = {
+			custom_tooltip = {
+				text = blades_and_thrones_militia_training_ground_stats_tt
+				always = yes
+			}
+		}
+	}
+
+	country_modifier = {
+		allow_blades_and_thrones_militia_training_ground = yes
+		zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = medium_privilege_target_satisfaction
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.25
+		monthly_towards_decentralization = societal_value_monthly_move
+	}
+}

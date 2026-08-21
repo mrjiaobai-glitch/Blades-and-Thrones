@@ -1,0 +1,11 @@
+# 士兵阶层可统军：与原版 auto_modifiers/country.txt 给 7 个原版阶层
+# X_allowed_leading_military = yes 的默认做法对齐——士兵阶层默认允许统军，
+# 使 train_general / train_admiral 的随机角色池（estate_type_allowed_in_command）
+# 能生成行伍出身的将领，也让士兵阶层角色可担任军事职务。
+# （blocked_from_leading_military 的 modifier 类型已定义，留作将来特权使用。）
+zzz_blades_and_thrones_soldiers_leading_military = {
+	potential_trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_leading_military = yes
+}

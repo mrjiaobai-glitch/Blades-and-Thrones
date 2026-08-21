@@ -1,0 +1,373 @@
+mercenary_mutiny_create_regular_sub_unit_from_original_effect = {
+	if = {
+		limit = { sub_unit_type = unit_type:a_akinji }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_akinji owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_almogavars }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_almogavars owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_archers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_archers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_armored_horsemen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_armored_horsemen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_arquebusiers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_arquebusiers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_baggage_train }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_baggage_train owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_bedouin_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_bedouin_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_bengali_elephant_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_bengali_elephant_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_camp_followers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_camp_followers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_catalan_crossbowmen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_catalan_crossbowmen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_caterans }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_caterans owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_cavalrymen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_cavalrymen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_chambered_cannon }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_chambered_cannon owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_champions }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_champions owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_crossbowmen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_crossbowmen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_crusader_knights }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_crusader_knights owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_early_arquebusiers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_early_arquebusiers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_early_longbowmen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_early_longbowmen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_early_paik_infantry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_early_paik_infantry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_falconet }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_falconet owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_flying_battery }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_flying_battery owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_footmen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_footmen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_fusiliers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_fusiliers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_gallop_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_gallop_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_gallowglass }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_gallowglass owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_genoese_crossbowmen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_genoese_crossbowmen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_halberdiers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_halberdiers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_handgonners }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_handgonners owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_heavy_cavalrymen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_heavy_cavalrymen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_heavy_lancers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_heavy_lancers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hobelars }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_hobelars owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_horsemen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_horsemen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_houfnice }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_houfnice owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hungarian_hussars }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_hungarian_hussars owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hunters }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_hunters owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hussars }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_hussars owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_hwacha }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_hwacha owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_indian_elephant_auxiliary }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_indian_elephant_auxiliary owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_indian_elephant_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_indian_elephant_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_iron_helmet_musketeers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_iron_helmet_musketeers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_kerns }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_kerns owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_khmer_ballista_elephant_infantry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_khmer_ballista_elephant_infantry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_lancers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_lancers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_almogavars }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_late_almogavars owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_gallowglass }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_late_gallowglass owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_longbowmen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_late_longbowmen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_late_paik_infantry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_late_paik_infantry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_1 }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_legionaries_1 owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_2 }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_legionaries_2 owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_3 }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_legionaries_3 owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_4 }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_legionaries_4 owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_5 }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_legionaries_5 owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_legionaries_6 }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_legionaries_6 owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_light_lancers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_light_lancers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_logistics_corps }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_logistics_corps owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_longbowmen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_longbowmen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_lour_lances }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_lour_lances owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_mamluk_horsemen_renaissance }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_mamluk_horsemen_renaissance owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_mamluk_unit_renaissance }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_mamluk_unit_renaissance owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_men_at_arms }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_men_at_arms owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_musketeers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_musketeers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_order_knights }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_order_knights owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_order_knights_2 }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_order_knights_2 owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_orissan_elephant_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_orissan_elephant_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_paik_infantry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_paik_infantry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_pikemen }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_pikemen owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_pistoleers }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_pistoleers owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_pontifical_swiss_guard }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_pontifical_swiss_guard owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_reformed_gallowglass }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_reformed_gallowglass owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_reislaufer }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_reislaufer owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_royal_mortar }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_royal_mortar owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_schiltron }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_schiltron owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_sharpshooters }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_sharpshooters owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_siamese_advanced_elephant_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_siamese_advanced_elephant_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_sowar_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_sowar_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_supply_carts }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_supply_carts owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_supply_convoy }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_supply_convoy owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_thai_elephant_cavalry }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_thai_elephant_cavalry owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_wagon_train }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_wagon_train owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:a_warriors }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_warriors owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_barque }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_barque owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_brig }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_brig owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_caravel }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_caravel owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_cog }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_cog owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_flute }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_flute owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_frigate }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_frigate owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_genoese_galley }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_genoese_galley owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_hanseatic_cog }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_hanseatic_cog owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_heavy_frigate }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_heavy_frigate owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_hulk }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_hulk owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_italian_galleass }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_italian_galleass owner = scope:mercenary_mutiny_army_country } }
+	}
+	else_if = {
+		limit = { sub_unit_type = unit_type:n_pinnace }
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = n_pinnace owner = scope:mercenary_mutiny_army_country } }
+	}
+	else = {
+		scope:mercenary_mutiny_capital = { create_sub_unit_with_owner = { type = a_footmen owner = scope:mercenary_mutiny_army_country } }
+	}
+}

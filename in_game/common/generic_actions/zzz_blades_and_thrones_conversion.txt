@@ -1,0 +1,1529 @@
+# ============ 三态转化系统：通用行动 ============
+# 常备军 ↔ 雇佣兵 ↔ 无地军团国 ↔ 士兵POP 的玩家主动转化。
+# 入口：军事转化菜单事件（fire_generic_action 启动，带完整选择流程）。
+# ai_tick = never（仅玩家使用）。
+
+# --- 收编佣兵（佣兵公司 → 常备军）---
+blades_and_thrones_integrate_mercs = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			any_hired_mercenary = {
+				count > 0
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+
+	select_trigger = {
+		looking_for_a = mercenary
+		interaction_source_list = {
+			scope:actor = {
+				ordered_hired_mercenary = {
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target
+		name = "blades_and_thrones_integrate_mercs_select_merc"
+		none_available_msg_key = "blades_and_thrones_integrate_mercs_no_mercs"
+		column = {
+			data = name
+		}
+		visible = {
+			is_mercenary_hired_by = scope:actor
+		}
+	}
+
+	effect = {
+		# effect 顶层 = 国家作用域，scope:actor 一定可用；存为具名 scope 供 unit effect 使用
+		scope:actor = {
+			save_scope_as = blades_and_thrones_company_actor
+		}
+		if = {
+			limit = {
+				exists = scope:target
+			}
+			scope:target = {
+				blades_and_thrones_integrate_mercenary_effect = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = -100
+		if = {
+			limit = {
+				scope:actor = {
+					mercenary_mutiny_threat_ratio >= 1.5
+				}
+			}
+			add = 80
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					has_variable = blades_and_thrones_military_crisis
+					var:blades_and_thrones_military_crisis >= 50
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					gold >= 2000
+				}
+			}
+			add = 40
+		}
+	}
+}
+
+# --- 组建军团（常备军 → 无地军团国）---
+blades_and_thrones_found_company = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			regular_army_size > 0
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+
+	select_trigger = {
+		looking_for_a = unit
+		source = actor
+		target_flag = target
+		name = "blades_and_thrones_found_company_select_unit"
+		none_available_msg_key = "blades_and_thrones_found_company_no_units"
+		column = {
+			data = name
+		}
+		visible = {
+			has_mercenaries = no
+			has_levies = no
+			trigger_if = {
+				limit = {
+					exists = leader
+				}
+				leader = {
+					is_ruler = no
+				}
+			}
+			unit_location ?= {
+				has_owner = yes
+				owner = {
+					this = scope:actor
+				}
+			}
+		}
+	}
+
+	effect = {
+		# effect 顶层 = 国家作用域（type = owncountry），scope:actor 一定可用。
+		# 先把国家存为具名 scope，供 unit 作用域内的 effect 访问。
+		scope:actor = {
+			save_scope_as = blades_and_thrones_company_actor
+		}
+		if = {
+			limit = {
+				exists = scope:target
+			}
+			scope:target = {
+				blades_and_thrones_found_company_effect = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = -100
+		# 2024-08 放开 AI：和平期有闲置兵力 + 财政能力 → 组建外派军团
+		# （世界会出现 AI 佣兵军团国；危机深重时也会"甩包袱"式组建）
+		if = {
+			limit = {
+				scope:actor = {
+					at_war = no
+					regular_army_size >= 8
+					gold >= 400
+				}
+			}
+			add = 120
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					at_war = no
+					has_variable = blades_and_thrones_military_crisis
+					var:blades_and_thrones_military_crisis >= 70
+				}
+			}
+			add = 90
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					gold >= 800
+				}
+			}
+			add = 30
+		}
+		# AI 防膨胀：已有军团国/流亡者附庸时不再组建（避免单国无限造无地国占用国家实体）
+		if = {
+			limit = {
+				scope:actor = {
+					any_subject = {
+						is_subject_type = mercenary_company
+					}
+				}
+			}
+			add = -1000
+		}
+	}
+}
+
+# --- 收编军团（无地军团国 → 常备军）---
+blades_and_thrones_reinstate_company = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			any_subject = {
+				is_subject_type = mercenary_company
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+
+	select_trigger = {
+		looking_for_a = country
+		interaction_source_list = {
+			scope:actor = {
+				every_subject = {
+					limit = {
+						is_subject_type = mercenary_company
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target
+		name = "blades_and_thrones_reinstate_company_select_company"
+		none_available_msg_key = "blades_and_thrones_reinstate_company_no_companies"
+		column = {
+			data = name
+		}
+		visible = {
+			is_subject_of = scope:actor
+			is_subject_type = mercenary_company
+			any_unit = {
+				count > 0
+			}
+		}
+		enabled = {
+			# 赎买：灾变和解自立的军团需付费买断雇佣合同（外派军团免费归队）
+			trigger_if = {
+				limit = {
+					has_variable = mercenary_mutiny_exiles_country
+				}
+				scope:actor = {
+					gold >= {
+						value = scope:target.army_size
+						multiply = 0.1
+					}
+				}
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+			}
+			scope:target = {
+				blades_and_thrones_reinstate_company_effect = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = -50
+		if = {
+			limit = {
+				scope:actor = { at_war = yes }
+			}
+			add = 120
+		}
+		if = {
+			limit = {
+				scope:actor = { at_war = no }
+			}
+			add = 30
+		}
+	}
+}
+
+# --- 遣散军队（常备军 → 士兵POP）---
+blades_and_thrones_demobilize_army = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			regular_army_size > 0
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+
+	select_trigger = {
+		looking_for_a = unit
+		source = actor
+		target_flag = target
+		name = "blades_and_thrones_demobilize_army_select_unit"
+		none_available_msg_key = "blades_and_thrones_demobilize_army_no_units"
+		column = {
+			data = name
+		}
+		visible = {
+			has_mercenaries = no
+			has_levies = no
+			trigger_if = {
+				limit = {
+					exists = leader
+				}
+				leader = {
+					is_ruler = no
+				}
+			}
+			unit_location ?= {
+				has_owner = yes
+				owner = {
+					this = scope:actor
+				}
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+			}
+			scope:target = {
+				blades_and_thrones_demobilize_army_effect = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = -120
+		if = {
+			limit = {
+				scope:actor = {
+					at_war = no
+					mercenary_mutiny_threat_ratio < 0.75
+				}
+			}
+			add = 80
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					gold < 300
+				}
+			}
+			add = 60
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					regular_army_size > 10
+				}
+			}
+			add = 40
+		}
+	}
+}
+
+# --- 退伍安置（士兵POP → 农民POP）---
+blades_and_thrones_resettle_soldiers = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			any_owned_location = {
+				any_pop = {
+					pop_type = pop_type:soldiers
+				}
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+
+	select_trigger = {
+		looking_for_a = location
+		interaction_source_list = {
+			scope:actor = {
+				every_owned_location = {
+					limit = {
+						any_pop = {
+							pop_type = pop_type:soldiers
+						}
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target
+		name = "blades_and_thrones_resettle_soldiers_select_location"
+		none_available_msg_key = "blades_and_thrones_resettle_soldiers_no_locations"
+		column = {
+			data = name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+			}
+			scope:target = {
+				blades_and_thrones_resettle_soldiers_effect = yes
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = -150
+		if = {
+			limit = {
+				scope:actor = {
+					estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate >= 0.75
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					at_war = no
+				}
+			}
+			add = 50
+		}
+	}
+}
+
+# --- 指派军团统治者（为佣兵军团国指派一位宫廷角色出任统治者）---
+blades_and_thrones_appoint_company_ruler = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			any_subject = {
+				is_subject_type = mercenary_company
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = never
+
+	select_trigger = {
+		looking_for_a = country
+		interaction_source_list = {
+			scope:actor = {
+				every_subject = {
+					limit = {
+						is_subject_type = mercenary_company
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target
+		name = "blades_and_thrones_appoint_company_ruler_select_company"
+		none_available_msg_key = "blades_and_thrones_appoint_company_ruler_no_companies"
+		column = {
+			data = name
+		}
+		visible = {
+			is_subject_of = scope:actor
+			is_subject_type = mercenary_company
+		}
+	}
+
+	select_trigger = {
+		looking_for_a = character
+		source = actor
+		target_flag = target_1
+		name = "blades_and_thrones_appoint_company_ruler_select_character"
+		none_available_msg_key = "blades_and_thrones_appoint_company_ruler_no_characters"
+		column = {
+			data = name
+		}
+		visible = {
+			is_alive = yes
+			NOT = {
+				OR = {
+					is_ruler = yes
+					is_regent = yes
+					is_heir = yes
+				}
+			}
+			OR = {
+				is_courtier = yes
+				AND = {
+					is_general = yes
+					NOT = { has_unit = yes }
+				}
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target_1
+				exists = scope:target
+			}
+			scope:target_1 = {
+				move_country = scope:target
+			}
+			scope:target = {
+				set_new_ruler = scope:target_1
+			}
+		}
+	}
+
+	ai_will_do = {
+		value = 0
+	}
+}
+
+# --- 出租军团（主动定向卖兵：瑞士/黑森模式）---
+# 把常备军挂牌租给外交范围内任意非敌对的国家（不必是盟友、不必在打仗）。
+# 决策逻辑：玩家自行判断目标（扩张方向/外交关系）；AI 按好感度与"不租邻国"评分。
+# 采用原生雇佣市场机制（make_unit_available_for_hire）：价格固定 1.0 倍、租期 24 个月，
+# 到期自动归还；目标国收到报价通知事件，租不租由对方按自身利益决定。
+blades_and_thrones_lease_army = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			regular_army_size > 0
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+
+	# 第一步：选部队（常备军；排除已借出/佣兵/征召部队）
+	select_trigger = {
+		looking_for_a = unit
+		source = actor
+		target_flag = lease_unit_target
+		name = "blades_and_thrones_lease_army_select_unit"
+		none_available_msg_key = "blades_and_thrones_lease_army_no_units"
+		column = {
+			data = name
+		}
+		column = {
+			data = unit_location
+		}
+		visible = {
+			is_army = yes
+			NOT = { any_sub_unit = { is_condottieri = yes } }
+			NOT = { any_sub_unit = { is_mercenary = yes } }
+			NOT = { any_sub_unit = { is_levy = yes } }
+		}
+	}
+
+	# 第二步：选目标国（外交范围内任意非敌对国家）
+	select_trigger = {
+		looking_for_a = country
+		target_flag = recipient
+		interaction_source_list = {
+			scope:actor = {
+				every_country = {
+					limit = {
+						NOT = { this = scope:actor }
+						NOT = { is_at_war_with = scope:actor }
+					}
+					add_to_list = source
+				}
+			}
+		}
+		cache_interaction_source_list = yes
+		name = "blades_and_thrones_lease_army_select_country"
+		none_available_msg_key = "blades_and_thrones_lease_army_no_countries"
+		column = {
+			data = name
+		}
+		visible = {
+			scope:actor = {
+				within_diplomatic_range = prev
+			}
+		}
+		enabled = {
+			# 不卖给厌恶我们的人（抑制敌国：低好感者买不到兵）
+			opinion = { target = scope:actor value >= 0 }
+			# AI 只租给非邻国（不资助潜在扩张目标）；玩家可自行判断
+			trigger_if = {
+				limit = { is_ai = yes }
+				NOT = { is_neighbor_of = scope:actor }
+			}
+		}
+		# AI 排序：优先好感度高的国家
+		pre_evaluation_sort_value = {
+			value = "opinion(scope:actor)"
+		}
+		pre_evaluation_number_to_evaluate_fully = 5
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:lease_unit_target
+				exists = scope:recipient
+			}
+			scope:lease_unit_target = {
+				make_unit_available_for_hire = {
+					cost_multiplier = 1.0
+					months = 24
+					save_scope_as = leased_unit
+				}
+			}
+			# 报价通知（scope:from = 出租方）
+			scope:recipient = {
+				trigger_event_non_silently = {
+					id = blades_and_thrones_lease.1
+				}
+			}
+			scope:actor = {
+				add_opinion = {
+					target = scope:recipient
+					modifier = opinion_lent_unit
+				}
+			}
+			# 帮助潜在盟友：并肩作战者同仇敌忾（共同敌人 → 深化同盟纽带）
+			if = {
+				limit = {
+					scope:recipient = {
+						any_current_war = {
+							is_in_war = scope:actor
+						}
+					}
+				}
+				scope:actor = {
+					add_opinion = {
+						target = scope:recipient
+						modifier = blades_and_thrones_opinion_shared_war
+					}
+				}
+			}
+			# 抑制敌国：目标正在与我方不参与的战争交战 → 敌方阵营对我反感
+			scope:recipient = {
+				every_current_war = {
+					limit = {
+						NOT = { is_in_war = scope:actor }
+					}
+					if = {
+						limit = { is_an_attacker = scope:recipient }
+						defender_leader = {
+							if = {
+								limit = { NOT = { this = scope:actor } }
+								add_opinion = {
+									target = scope:actor
+									modifier = blades_and_thrones_opinion_armed_our_enemy
+								}
+							}
+						}
+					}
+					if = {
+						limit = { is_a_defender = scope:recipient }
+						attacker_leader = {
+							if = {
+								limit = { NOT = { this = scope:actor } }
+								add_opinion = {
+									target = scope:actor
+									modifier = blades_and_thrones_opinion_armed_our_enemy
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# AI 判断：自身利益 + 外交立场（帮助潜在盟友 / 抑制敌国）
+	ai_will_do = {
+		value = -800
+		if = {
+			limit = {
+				scope:actor = {
+					at_war = no
+					regular_army_size > 10
+				}
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:actor = { gold < 500 }
+			}
+			add = 100
+		}
+		if = {
+			limit = {
+				scope:recipient = { opinion = { target = scope:actor value >= 50 } }
+			}
+			add = 150
+		}
+		if = {
+			limit = {
+				scope:recipient = { is_neighbor_of = scope:actor }
+			}
+			add = -200
+		}
+		# 帮助潜在盟友：并肩作战（共同敌人）→ 联合对抗
+		if = {
+			limit = {
+				scope:recipient = {
+					any_current_war = {
+						is_in_war = scope:actor
+					}
+				}
+			}
+			add = 80
+		}
+		# 战争中的国家更需要兵力
+		if = {
+			limit = {
+				scope:recipient = { at_war = yes }
+			}
+			add = 40
+		}
+		# 抑制敌国：目标正在打我的敌人 → 资助其对抗（代理战争）
+		if = {
+			limit = {
+				scope:recipient = {
+					any_current_war = {
+						NOT = { is_in_war = scope:actor }
+						OR = {
+							attacker_leader = { is_at_war_with = scope:actor }
+							defender_leader = { is_at_war_with = scope:actor }
+						}
+					}
+				}
+			}
+			add = 120
+		}
+		# 不资助敌方阵营：目标与我的敌人结盟 → 拒绝出租
+		if = {
+			limit = {
+				any_country = {
+					is_at_war_with = scope:actor
+					scope:recipient = { is_allied_with = { target = prev } }
+				}
+			}
+			add = -150
+		}
+	}
+}
+
+# --- 赐予定居地（流亡者安家路线：有地国赠地给流亡者）---
+# 军团国（附庸）可走原版"赐地给附庸"外交交互；流亡者（非附庸）走此行动。
+# 流亡者获得第一块土地后，由月脉冲自动触发"安家立业"转正。
+blades_and_thrones_grant_settlement = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			num_locations > 0
+			any_country = {
+				country_type = army
+				OR = {
+					has_variable = mercenary_mutiny_annex_exiles_marker
+					is_subject_type = mercenary_company
+					is_subject_type = mercenary_company_trusted
+					is_subject_type = mercenary_company_veteran
+					is_subject_type = mercenary_company_grand
+				}
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+	ai_tick_frequency = 24
+
+	select_trigger = {
+		looking_for_a = country
+		interaction_source_list = {
+			scope:actor = {
+				every_country = {
+					limit = {
+						country_type = army
+						OR = {
+							has_variable = mercenary_mutiny_annex_exiles_marker
+							is_subject_type = mercenary_company
+							is_subject_type = mercenary_company_trusted
+							is_subject_type = mercenary_company_veteran
+							is_subject_type = mercenary_company_grand
+						}
+						NOT = { this = scope:actor }
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target
+		name = "blades_and_thrones_grant_settlement_select_exile"
+		none_available_msg_key = "blades_and_thrones_grant_settlement_no_exiles"
+		column = {
+			data = name
+		}
+	}
+
+	select_trigger = {
+		looking_for_a = location
+		interaction_source_list = {
+			scope:actor = {
+				every_owned_location = {
+					limit = {
+						NOT = { is_capital = yes }
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target_1
+		name = "blades_and_thrones_grant_settlement_select_location"
+		none_available_msg_key = "blades_and_thrones_grant_settlement_no_locations"
+		column = {
+			data = name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+				exists = scope:target_1
+			}
+			scope:target_1 = {
+				change_location_owner = scope:target
+			}
+			scope:target = {
+				add_opinion = {
+					target = scope:actor
+					modifier = opinion_lent_unit
+				}
+				# 军团国获得地盘 → 藩镇化（地方军阀，半独立）
+				if = {
+					limit = {
+						OR = {
+							is_subject_type = mercenary_company
+							is_subject_type = mercenary_company_trusted
+							is_subject_type = mercenary_company_veteran
+							is_subject_type = mercenary_company_grand
+						}
+					}
+					# 记录原路线（1 = 佣兵系 / 2 = 代管系），供削藩降级使用
+					if = {
+						limit = {
+							OR = {
+								is_subject_type = mercenary_company
+								is_subject_type = mercenary_company_veteran
+							}
+						}
+						set_variable = {
+							name = blades_and_thrones_warlord_origin
+							value = 1
+						}
+					}
+					else = {
+						set_variable = {
+							name = blades_and_thrones_warlord_origin
+							value = 2
+						}
+					}
+					# 军阀有自有税收，停发一切拨款/津贴（年度拨款变量）
+					remove_variable = blades_and_thrones_subsidy_level
+					make_subject_of = {
+						target = scope:actor
+						type = subject_type:mercenary_company_warlord
+					}
+					scope:actor = {
+						trigger_event_non_silently = {
+							id = blades_and_thrones_company.6
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# AI：只赐给守得住的强军团（相对实力 >= 0.5），且宗主地多时才给；
+	# 地点侧：只赐无临近度的地（proximity = 0 的负收益地——甩包袱），
+	# 任何有临近度的地 AI 永不赐（有临近度 = 有控制与税收价值，宗主自留）。
+	ai_will_do = {
+		value = -100
+		if = {
+			limit = {
+				exists = scope:target
+				scope:target = {
+					OR = {
+						is_subject_type = mercenary_company_veteran
+						is_subject_type = mercenary_company_grand
+					}
+				}
+				scope:actor = {
+					num_locations >= 8
+				}
+			}
+			add = 60
+		}
+		if = {
+			limit = {
+				exists = scope:target
+				scope:target = {
+					OR = {
+						is_subject_type = mercenary_company
+						is_subject_type = mercenary_company_trusted
+					}
+				}
+			}
+			add = -50
+		}
+		# 地点侧：无临近度的地（负收益）——AI 唯一会赐的地
+		if = {
+			limit = {
+				exists = scope:target_1
+				scope:target_1 = {
+					proximity = 0
+				}
+			}
+			add = 60
+		}
+		# 任何有临近度的地：一票否决（AI 永不授予）
+		if = {
+			limit = {
+				exists = scope:target_1
+				scope:target_1 = {
+					proximity > 0
+				}
+			}
+			add = -100
+		}
+		# 无临近度地内的细分：低发展、异文化/异教地优先（更烫手的山芋先甩）
+		if = {
+			limit = {
+				exists = scope:target_1
+				scope:target_1 = {
+					proximity = 0
+					development < 10
+				}
+			}
+			add = 15
+		}
+		if = {
+			limit = {
+				exists = scope:target_1
+				scope:target_1 = {
+					proximity = 0
+					OR = {
+						# 注意：root 是国家（generic action），国家没有 dominant_culture；
+						# 与 select_trigger 里同款写法对齐（location 的 dominant_* 比较 scope:actor 的 culture/religion）
+						NOT = { dominant_culture = scope:actor.culture }
+						NOT = { dominant_religion = scope:actor.religion }
+					}
+				}
+			}
+			add = 10
+		}
+	}
+}
+
+# --- 夺取立足地（征服者式：以刀剑立国 / 殖民式：在无主地建立据点）---
+# 无地军团选定一块土地：
+# · 有主地（异教/异文化、非宗主与盟友）→ 立即自动宣战（参照原版征服者流程）
+# · 无主地（如新大陆）→ 直接占领建立据点，随后可安家转正。
+blades_and_thrones_claim_foothold = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			country_type = army
+			OR = {
+				has_variable = mercenary_mutiny_exiles_country
+				has_variable = mercenary_mutiny_original_exile_marker
+				has_variable = blades_and_thrones_volunteer_company
+				is_subject_type = mercenary_company
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	# AI：两年评估一次；弱军团偏好拓荒无主地，强军团偏好征服（权重在 ai_will_do）
+	ai_tick = monthly
+	ai_tick_frequency = 24
+
+	select_trigger = {
+		looking_for_a = area
+		target_flag = target_1
+		name = "blades_and_thrones_claim_foothold_select_area"
+		none_available_msg_key = "blades_and_thrones_claim_foothold_no_areas"
+		column = {
+			data = name
+		}
+		visible = {
+			OR = {
+				# 可征服的有主地（异教/异文化、非宗主与盟友）
+				any_location_in_area = {
+					has_owner = yes
+					NOT = { top_owner = scope:actor }
+					scope:actor = {
+						not = { is_subject_or_below_of = prev.top_owner }
+					}
+					NOT = { dominant_religion.group = scope:actor.religion.group }
+					NOT = {
+						owner ?= {
+							receives_defensive_support_from = scope:actor
+						}
+					}
+				}
+				# 无主地（新大陆等：可直接建立据点）——军团国亦可选（弱军团拓荒路）
+				any_location_in_area = {
+					NOT = { has_owner = yes }
+				}
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target_1
+			}
+			# 优先：无主地 → 直接占领建立据点（军团国不可用）
+			scope:target_1 = {
+				ordered_location_in_area = {
+					order_by = population
+					max = 1
+					limit = {
+						NOT = { has_owner = yes }
+					}
+					save_scope_as = vacant_location
+				}
+			}
+			if = {
+				limit = {
+					exists = scope:vacant_location
+				}
+				scope:vacant_location = {
+					change_location_owner = scope:actor
+				}
+				scope:actor = {
+					# 军团国拓荒 → 藩镇化（地方军阀：有地盘、停发补贴、半独立）
+					if = {
+						limit = {
+							OR = {
+								is_subject_type = mercenary_company
+								is_subject_type = mercenary_company_trusted
+								is_subject_type = mercenary_company_veteran
+								is_subject_type = mercenary_company_grand
+							}
+						}
+						# 记录原路线（1 = 佣兵系 / 2 = 代管系），供削藩降级使用
+						if = {
+							limit = {
+								OR = {
+									is_subject_type = mercenary_company
+									is_subject_type = mercenary_company_veteran
+								}
+							}
+							set_variable = {
+								name = blades_and_thrones_warlord_origin
+								value = 1
+							}
+						}
+						else = {
+							set_variable = {
+								name = blades_and_thrones_warlord_origin
+								value = 2
+							}
+						}
+						remove_variable = blades_and_thrones_subsidy_level
+						overlord ?= {
+							save_scope_as = blades_and_thrones_company_overlord
+						}
+						make_subject_of = {
+							target = scope:blades_and_thrones_company_overlord
+							type = subject_type:mercenary_company_warlord
+						}
+						set_variable = {
+							name = blades_and_thrones_claim_foothold_cooldown
+							value = yes
+							years = 5
+						}
+						trigger_event_non_silently = {
+							id = blades_and_thrones_company.6
+						}
+					}
+					# 流亡国/志愿军团：维持原样——安家抉择（12 个月冷却防重复）
+					else = {
+						set_variable = {
+							name = blades_and_thrones_settle_offer_cooldown
+							value = yes
+							months = 12
+						}
+						trigger_event_non_silently = {
+							id = blades_and_thrones_landless.1
+						}
+					}
+				}
+			}
+			# 否则：有主地 → 自动宣战征服
+			else_if = {
+				limit = {
+					exists = scope:target_1
+				}
+				# 军团国背信：宣战征服前脱离宗主、背负背信恶名（军阀已半独立，无需脱离）
+				scope:actor = {
+					if = {
+						limit = {
+							OR = {
+								is_subject_type = mercenary_company
+								is_subject_type = mercenary_company_trusted
+								is_subject_type = mercenary_company_veteran
+								is_subject_type = mercenary_company_grand
+							}
+						}
+						# 宗主解除与军团国的臣属关系（原版语义：宗主作用域执行，附庸作参数）
+						overlord ?= {
+							cancel_subject = prev
+						}
+						add_prestige = prestige_mild_penalty
+						overlord ?= {
+							add_opinion = {
+								target = prev
+								modifier = blades_and_thrones_opinion_betrayed
+							}
+						}
+					}
+				}
+				scope:target_1 = {
+					ordered_location_in_area = {
+						order_by = population
+						max = 1
+						limit = {
+							has_owner = yes
+							NOT = { top_owner = scope:actor }
+							scope:actor = {
+								not = { is_subject_or_below_of = prev.top_owner }
+							}
+							NOT = { dominant_religion.group = scope:actor.religion.group }
+							NOT = {
+								owner ?= {
+									receives_defensive_support_from = scope:actor
+								}
+							}
+						}
+						save_scope_as = target_location
+					}
+				}
+				scope:actor = {
+					if = {
+						limit = {
+							exists = scope:target_location
+						}
+						add_casus_belli = {
+							target = scope:target_location.owner
+							type = casus_belli:cb_blades_and_thrones_claim_foothold
+							province = scope:target_location.province
+						}
+						declare_war_with_cb = {
+							target = scope:target_location.owner
+							type = casus_belli:cb_blades_and_thrones_claim_foothold
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# AI 偏好：弱军团偏好无主地拓荒，强军团偏好征服有主地（夺地后 5 年冷却）
+	ai_will_do = {
+		value = -100
+		# 性格→路径：军阀性格的军团渴望割据立国（AI 主动夺取立足地）
+		if = {
+			limit = {
+				scope:actor = {
+					ai_personality = ai_personality:ai_warlord
+					NOT = { has_variable = blades_and_thrones_claim_foothold_cooldown }
+				}
+			}
+			add = 80
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					OR = {
+						is_subject_type = mercenary_company
+						is_subject_type = mercenary_company_trusted
+					}
+					NOT = { has_variable = blades_and_thrones_claim_foothold_cooldown }
+				}
+				scope:target_1 = {
+					any_location_in_area = {
+						NOT = { has_owner = yes }
+					}
+				}
+			}
+			add = 50
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					OR = {
+						is_subject_type = mercenary_company_veteran
+						is_subject_type = mercenary_company_grand
+					}
+					NOT = { has_variable = blades_and_thrones_claim_foothold_cooldown }
+				}
+				scope:target_1 = {
+					any_location_in_area = {
+						has_owner = yes
+						NOT = { top_owner = scope:actor }
+					}
+				}
+			}
+			add = 60
+		}
+		# 性格→路径：佣兵人格逐利（想抢地盘换钱），代管人格安分（不想割据）
+		if = {
+			limit = {
+				scope:actor = {
+					ai_personality = ai_personality:ai_mercenary_company
+				}
+			}
+			add = 20
+		}
+		if = {
+			limit = {
+				scope:actor = {
+					ai_personality = ai_personality:ai_trusted_company
+				}
+			}
+			subtract = 40
+		}
+	}
+}
+
+# ============================================================================
+# 收回藩地（逐块削藩）：宗主收回军阀的一块领地。
+# 门槛：地块 proximity > 0（只收"现在有价值"的地——与赐地逻辑镜像对称：
+# 无临近度的地赐出去，有临近度的地收回来）。
+# 代价：军阀忠诚 -30（记恨）；收光全部地盘 → 军阀降级回原路线低级形态（失去地盘即失去军阀身份）。
+# ============================================================================
+blades_and_thrones_revoke_warlord_land = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			any_subject = {
+				is_subject_type = mercenary_company_warlord
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+	ai_tick_frequency = 12
+
+	select_trigger = {
+		looking_for_a = country
+		interaction_source_list = {
+			scope:actor = {
+				every_subject = {
+					limit = {
+						is_subject_type = mercenary_company_warlord
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target
+		name = "blades_and_thrones_revoke_select_warlord"
+		none_available_msg_key = "blades_and_thrones_revoke_no_warlords"
+		column = {
+			data = name
+		}
+	}
+
+	select_trigger = {
+		looking_for_a = location
+		interaction_source_list = {
+			scope:target = {
+				every_owned_location = {
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target_1
+		name = "blades_and_thrones_revoke_select_location"
+		none_available_msg_key = "blades_and_thrones_revoke_no_locations"
+		column = {
+			data = name
+		}
+		enabled = {
+			proximity > 0
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+				exists = scope:target_1
+			}
+			scope:target_1 = {
+				change_location_owner = scope:actor
+			}
+			scope:target = {
+				# 削藩记恨：忠诚暴跌（10 年修正）
+				add_country_modifier = {
+					modifier = blades_and_thrones_revoked_land_modifier
+					years = 10
+					mode = add
+				}
+				# 收光全部地盘 → 军阀失去身份，降级回原路线低级形态
+				if = {
+					limit = {
+						num_locations = 0
+					}
+					if = {
+						limit = { var:blades_and_thrones_warlord_origin = 1 }
+						make_subject_of = {
+							target = scope:actor
+							type = subject_type:mercenary_company
+						}
+					}
+					else = {
+						make_subject_of = {
+							target = scope:actor
+							type = subject_type:mercenary_company_trusted
+						}
+					}
+					# 恢复拨款（年度拨款变量，按原路线：佣兵线 1 档 / 代管线 2 档）
+					# 注意：必须先判断 warlord_origin 再 remove（原顺序 remove 在前导致判断恒 false）
+					if = {
+						limit = { var:blades_and_thrones_warlord_origin = 1 }
+						set_variable = {
+							name = blades_and_thrones_subsidy_level
+							value = 1
+						}
+					}
+					else = {
+						set_variable = {
+							name = blades_and_thrones_subsidy_level
+							value = 2
+						}
+					}
+					remove_variable = blades_and_thrones_warlord_origin
+					# 性格→路径：形态切换不改性格——军阀被削藩后仍是原来的性格，
+					# 它会按性格选择后续道路（佣兵人格继续逐利，代管人格安心归队）
+					scope:actor = {
+						trigger_event_non_silently = {
+							id = blades_and_thrones_company.8
+						}
+					}
+				}
+			}
+			scope:actor = {
+				trigger_event_non_silently = {
+					id = blades_and_thrones_company.7
+				}
+			}
+		}
+	}
+
+	# AI：军阀领地临近度高（有价值）且宗主实力占优（打得过）才削藩
+	ai_will_do = {
+		value = -100
+		if = {
+			limit = {
+				exists = scope:target
+				exists = scope:target_1
+				scope:target_1 = {
+					proximity >= 50
+				}
+				scope:actor = {
+					army_size > {
+						value = scope:target.army_size
+						multiply = 1.5
+					}
+				}
+			}
+			add = 60
+		}
+	}
+}
+
+# ============================================================================
+# 换地（以远换近）：宗主用自己的一块地（更远/更差）交换军阀的一块地（更近/更好）。
+# 温和手段：军阀得到补偿、保住军阀身份（不降级），忠诚损失小。
+# ============================================================================
+blades_and_thrones_exchange_warlord_land = {
+	type = owncountry
+
+	potential = {
+		scope:actor = {
+			num_locations > 1
+			any_subject = {
+				is_subject_type = mercenary_company_warlord
+			}
+		}
+	}
+
+	allow = {
+	}
+
+	ai_tick = monthly
+	ai_tick_frequency = 12
+
+	select_trigger = {
+		looking_for_a = country
+		interaction_source_list = {
+			scope:actor = {
+				every_subject = {
+					limit = {
+						is_subject_type = mercenary_company_warlord
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target
+		name = "blades_and_thrones_exchange_select_warlord"
+		none_available_msg_key = "blades_and_thrones_revoke_no_warlords"
+		column = {
+			data = name
+		}
+	}
+
+	select_trigger = {
+		looking_for_a = location
+		interaction_source_list = {
+			scope:target = {
+				every_owned_location = {
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target_1
+		name = "blades_and_thrones_exchange_select_warlord_location"
+		none_available_msg_key = "blades_and_thrones_revoke_no_locations"
+		column = {
+			data = name
+		}
+	}
+
+	select_trigger = {
+		looking_for_a = location
+		interaction_source_list = {
+			scope:actor = {
+				every_owned_location = {
+					limit = {
+						NOT = { is_capital = yes }
+					}
+					add_to_list = source
+				}
+			}
+		}
+		target_flag = target_2
+		name = "blades_and_thrones_exchange_select_overlord_location"
+		none_available_msg_key = "blades_and_thrones_grant_settlement_no_locations"
+		column = {
+			data = name
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+				exists = scope:target_1
+				exists = scope:target_2
+			}
+			# 交换两块地的归属
+			scope:target_1 = {
+				change_location_owner = scope:actor
+			}
+			scope:target_2 = {
+				change_location_owner = scope:target
+			}
+			# 换地是公平置换（有补偿），军阀勉强接受，忠诚小幅波动
+			scope:target = {
+				add_country_modifier = {
+					modifier = blades_and_thrones_exchanged_land_modifier
+					years = 3
+					mode = add
+				}
+			}
+		}
+	}
+
+	# AI：拿回的军阀地临近度高、补偿的地是无临近度的负资产（净赚临近度）才换
+	ai_will_do = {
+		value = -100
+		if = {
+			limit = {
+				exists = scope:target
+				exists = scope:target_1
+				exists = scope:target_2
+				scope:target_1 = {
+					proximity >= 50
+				}
+				scope:target_2 = {
+					proximity = 0
+				}
+			}
+			add = 60
+		}
+	}
+}

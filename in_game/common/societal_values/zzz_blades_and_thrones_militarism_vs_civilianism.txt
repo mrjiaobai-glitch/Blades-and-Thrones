@@ -1,0 +1,32 @@
+# 军国主义 vs 文官主义：刀锋与王座专属价值观轴。
+# 两端均为正面修正（"两条路线"型轴，先例：原版 mysticism_vs_jurisprudence、
+# latinization_vs_hellenization）——玩家选择国家走的路线，而非好坏权衡。
+# 深层张力：军国端抬升士兵阶层影响力（权力）→ 直接喂给军事危机/政变机制（mod 核心循环）。
+# 门控：仅拥有士兵阶层的国家可见此轴（原版 mysticism 用 modifier:allow_xxx 同款思路）。
+militarism_vs_civilianism = {
+	allow = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+
+	left_modifier = { # 军国（Militarism）：以武立国
+		monthly_army_tradition = 0.05
+		land_morale_modifier = 0.10
+		# 人力：以武立国的兵源维度（与士气/传统构成"质量+数量"组合）
+		global_manpower_modifier = 0.10
+		# 士兵阶层影响力（权力）上升：政治风险同步上升（mod 核心循环），
+		# 数值 0.25 与常规特权档（0.20-0.50）同级——全推到底相当于多拿一个特权级权力。
+		global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.25
+	}
+
+	right_modifier = { # 文官（Civilianism）：以文治国
+		country_cabinet_efficiency = 0.10
+		research_speed_modifier = 0.10
+		# stability_investment 只有 small(0.02)/large(0.1) 两档，翻倍用直接数字 0.04
+		stability_investment = 0.04
+		monthly_legitimacy = 0.05
+		# 文官治国以贵族（传统精英代表）为柱石
+		nobles_estate_target_satisfaction = medium_permanent_target_satisfaction
+	}
+
+	opinion_importance_multiplier = 0.5
+}

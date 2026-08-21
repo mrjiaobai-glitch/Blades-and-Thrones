@@ -1,0 +1,152 @@
+namespace = blades_and_thrones_conversion
+
+# 军事转化菜单：常备军 ↔ 雇佣兵 ↔ 无地军团国 ↔ 士兵POP
+# 入口：军事情报汇总事件选项 / 调试菜单选项
+# 每个选项通过 fire_generic_action 启动对应的通用行动（带完整选择流程）。
+blades_and_thrones_conversion.1 = { #军事转化菜单：军队 ↔ 军团 ↔ 士兵POP
+	type = country_event
+	title = blades_and_thrones_conversion.1.title
+	desc = blades_and_thrones_conversion.1.desc
+	outcome = neutral
+
+	# --- 收编佣兵（佣兵公司 → 常备军）---
+	option = {
+		name = blades_and_thrones_conversion.1.a
+		trigger = {
+			any_hired_mercenary = {
+				count > 0
+			}
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.a.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_integrate_mercs
+				actor = root
+			}
+		}
+	}
+
+	# --- 组建军团（常备军 → 无地军团国）---
+	option = {
+		name = blades_and_thrones_conversion.1.b
+		trigger = {
+			regular_army_size > 0
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.b.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_found_company
+				actor = root
+			}
+		}
+	}
+
+	# --- 收编军团（无地军团国 → 常备军）---
+	# 外派军团免费归队；灾变和解自立者需赎买（按兵力付费）
+	option = {
+		name = blades_and_thrones_conversion.1.c
+		trigger = {
+			any_subject = {
+				is_subject_type = mercenary_company
+			}
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.c.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_reinstate_company
+				actor = root
+			}
+		}
+	}
+
+	# --- 遣散军队（常备军 → 士兵POP）---
+	option = {
+		name = blades_and_thrones_conversion.1.d
+		trigger = {
+			regular_army_size > 0
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.d.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_demobilize_army
+				actor = root
+			}
+		}
+	}
+
+	# --- 退伍安置（士兵POP → 农民POP）---
+	option = {
+		name = blades_and_thrones_conversion.1.e
+		trigger = {
+			any_owned_location = {
+				any_pop = {
+					pop_type = pop_type:soldiers
+				}
+			}
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.e.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_resettle_soldiers
+				actor = root
+			}
+		}
+	}
+
+	# --- 出租军团（主动卖兵给外交范围内任意非敌对国）---
+	option = {
+		name = blades_and_thrones_conversion.1.f
+		trigger = {
+			regular_army_size > 0
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.f.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_lease_army
+				actor = root
+			}
+		}
+	}
+
+	# --- 赐予定居地（流亡者安家）---
+	option = {
+		name = blades_and_thrones_conversion.1.g
+		trigger = {
+			any_country = {
+				country_type = army
+				has_variable = mercenary_mutiny_annex_exiles_marker
+			}
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.g.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_grant_settlement
+				actor = root
+			}
+		}
+	}
+
+	# --- 夺取立足地（无地国专属：以刀剑立国）---
+	option = {
+		name = blades_and_thrones_conversion.1.h
+		trigger = {
+			country_type = army
+			OR = {
+				has_variable = mercenary_mutiny_exiles_country
+				has_variable = mercenary_mutiny_original_exile_marker
+				is_subject_type = mercenary_company
+			}
+		}
+		custom_tooltip = blades_and_thrones_conversion.1.h.tt
+		hidden_effect = {
+			fire_generic_action = {
+				type = blades_and_thrones_claim_foothold
+				actor = root
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_conversion.1.i
+	}
+}

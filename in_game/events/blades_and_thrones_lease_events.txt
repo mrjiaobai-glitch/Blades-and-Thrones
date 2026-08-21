@@ -1,0 +1,17 @@
+namespace = blades_and_thrones_lease
+
+# 出租军团报价通知：目标国收到出租方的主动推销。
+# root = 目标国，scope:from = 出租方；租不租由目标国按自身利益判断（去佣兵市场雇佣）。
+blades_and_thrones_lease.1 = { #出租报价：外国军团向您推销雇佣服务
+	type = country_event
+	title = blades_and_thrones_lease.1.title
+	desc = blades_and_thrones_lease.1.desc
+	outcome = neutral
+	trigger = {
+		is_human = yes
+	}
+
+	option = {
+		name = blades_and_thrones_lease.1.a
+	}
+}

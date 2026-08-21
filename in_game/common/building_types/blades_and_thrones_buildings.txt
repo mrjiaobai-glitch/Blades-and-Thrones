@@ -1,0 +1,200 @@
+mercenary_mutiny_manpower_pool = {
+	audio_tier = 2
+	is_foreign = yes
+	is_special = yes
+	stronger_power_projection = no
+	need_good_relation = yes
+	want_foreign_pop_created = no
+	pop_type = soldiers
+	max_levels = 1
+
+	category = military_category
+	forbidden_for_estates = yes
+
+	employment_size = manpower_employment
+
+	rural_settlement = no
+	town = yes
+	city = yes
+	megalopolis = yes
+
+	country_potential = {
+		has_reform = government_reform:mercenary_mutiny_exiles_reform
+	}
+
+	build_time = medium_soldier_building
+
+	modifier = {
+		manpower_to_building_owner = 0.005
+	}
+
+	possible_production_methods = {
+		early_soldier_building_maintenance
+	}
+	construction_demand = early_soldier_building_construction
+}
+
+# 佣兵合同大厅：流亡佣兵团（无地国）的收入来源。
+# 无地国没有税收——改革 desc 承诺"依靠佣兵合同维持自身"，机制上此前只有
+# 人力池（给兵）没有合同收入（给钱）。仿原版海盗兄弟会改革建筑
+# （capital_country_modifier = { monthly_gold_income = 20 }）先例：
+# 外国建筑给所有国国家级月度金收入。数值刻意极小（每座 +1/月）：
+# 用户指定，象征性合同抽成，多建多收。
+# 岗位 0.05（约 50 个）：建筑必须有岗位才生效（原版 453 建筑全带
+# employment_size），但岗位过大会以 SOLDIERS=40 晋升权重吸引农民填岗形成
+# 士兵永动机——0.05 足够让建筑生效又不养出大量士兵 POP。
+# 贸易容量 0.5：merchant_capacity_from_building（location 级、归建筑所有者），
+# 与军团港同级——合同大厅人来人往，顺带撮合一点买卖。
+mercenary_mutiny_contract_hall = {
+	audio_tier = 2
+	is_foreign = yes
+	is_special = yes
+	stronger_power_projection = no
+	need_good_relation = yes
+	want_foreign_pop_created = no
+	pop_type = soldiers
+	max_levels = 1
+
+	category = military_category
+	forbidden_for_estates = yes
+
+	employment_size = 0.05
+
+	rural_settlement = no
+	town = yes
+	city = yes
+	megalopolis = yes
+
+	country_potential = {
+		has_reform = government_reform:mercenary_mutiny_exiles_reform
+	}
+
+	build_time = medium_soldier_building
+
+	modifier = {
+		merchant_capacity_from_building = 0.5
+		# 登记造册的散兵（每月人力）：无地军团国无领土 POP、无月度人力，
+		# 人力池（max_manpower）只是上限，必须有流入才能补充损耗/招募。
+		# 建筑人力是 vanilla 兵营机制（原版先例：神罗皇帝军械库
+		# hre_imperial_armory_foreign = 0.005/月，1644 用 0.005~0.025）；
+		# 单位：0.001 = 1 人力（README 已知坑：local_manpower 的 1 = 1000 人力）。
+		# 合同大厅人来人往，象征性每月招揽 1 名登记佣兵。
+		manpower_to_building_owner = 0.001
+	}
+
+	foreign_country_modifier = {
+		monthly_gold_income = 1
+	}
+
+	possible_production_methods = {
+		early_soldier_building_maintenance
+	}
+	construction_demand = early_soldier_building_construction
+}
+
+# 团练所：士兵阶层专属建筑。授予“团练自治”特权后，阶层可在乡村与城镇营建，
+# 作为地方军事据点（人力/征召/阶层力量），代价是本地士兵食物消费上升。
+# 岗位方案（A：岗位给农民）：
+# · EU5 建筑必须有 employment_size 岗位才能生效（原版 453 个建筑全部带岗位，
+#   无岗位建筑经游戏实测不产生任何效果）。
+# · 岗位若给士兵（pop_type = soldiers），空缺岗位会以最高晋升权重（SOLDIERS=40）
+#   吸引农民晋升填岗，形成"士兵阶层永动机"，永久抵消退伍安置/老兵返乡的阶层
+#   回落环节，与 mod 核心循环冲突。
+# · 故团练所雇佣本地农民当杂役（pop_type = peasants，参照原版
+#   peasants_training_grounds 范本），岗位规模 estate_manpower_employment = 0.1
+#   （约百人级）。"士兵阶层力量"修正来自军事据点的象征与控制力，而非雇佣士兵；
+#   团练所不直接制造士兵 POP，阶层回落循环不受影响。
+blades_and_thrones_militia_training_ground = {
+	audio_tier = 2
+	is_foreign = no
+	max_levels = estate_building_single_level
+	pop_type = peasants
+
+	category = estate_category
+	employment_size = estate_manpower_employment
+
+	rural_settlement = yes
+	town = yes
+	city = yes
+	megalopolis = yes
+
+	build_time = estate_build_time
+
+	country_potential = {
+		modifier:allow_blades_and_thrones_militia_training_ground = yes
+	}
+
+	estate = zzz_rebalanced_nepal_mercenary_soldiers_estate
+
+	possible_production_methods = {
+		estate_building_input
+	}
+
+	construction_demand = estate_construct_building
+
+	modifier = {
+		local_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.05
+		local_manpower_modifier = 0.05
+		local_soldiers_food_consumption = 0.10
+		local_levy_size_modifier = 0.10
+	}
+}
+
+# 军团港：无地军团国的海外港口据点（外国建筑，建在别国沿海）。
+# 提供：港口容量（海上存在）、少量水手、极少量贸易容量——让无地军团国
+# 也能染指海洋：维护海军、参与沿海贸易。
+# 写法要点（对齐原版 foreign 建筑语义）：
+# · is_foreign = yes：建在别国领土，modifier 归建筑所有者（军团国）而非地主；
+#   因此收益全部用 *_to_building_owner / *_from_building / building_owner_* 变体
+#   （harbor_suitability 等 location 级 modifier 会归地主，不可用）。
+# · 岗位：pop_type = soldiers + employment_size = 0.05（小岗位）——建筑必须有
+#   岗位才生效（原版 453 建筑全带 employment_size），极小值避免士兵永动机。
+# · 沿海要求：location_potential = { is_coastal = yes }。
+mercenary_mutiny_company_port = {
+	audio_tier = 2
+	is_foreign = yes
+	is_special = yes
+	stronger_power_projection = no
+	need_good_relation = yes
+	want_foreign_pop_created = no
+	pop_type = soldiers
+	max_levels = 1
+
+	category = naval_category
+	forbidden_for_estates = yes
+
+	employment_size = 0.05
+
+	rural_settlement = no
+	town = yes
+	city = yes
+	megalopolis = yes
+
+	country_potential = {
+		has_reform = government_reform:mercenary_mutiny_exiles_reform
+	}
+
+	location_potential = {
+		is_coastal = yes
+	}
+
+	build_time = medium_soldier_building
+
+	modifier = {
+		building_owner_maritime_presence = 0.05
+		sailors_to_building_owner = 0.001
+		merchant_capacity_from_building = 0.5
+		# 佣兵在港集结登船（每月人力）：无地军团国无领土 POP、无月度人力，
+		# 人力池（max_manpower）只是上限，必须有流入才能补充损耗/招募。
+		# 建筑人力是 vanilla 兵营机制（原版先例：神罗皇帝军械库
+		# hre_imperial_armory_foreign = 0.005/月，1644 用 0.005~0.025）；
+		# 单位：0.001 = 1 人力（README 已知坑：local_manpower 的 1 = 1000 人力）。
+		# 港口是军团国最大的兵源地，象征性每月招揽 2 名佣兵。
+		manpower_to_building_owner = 0.002
+	}
+
+	possible_production_methods = {
+		early_soldier_building_maintenance
+	}
+	construction_demand = early_soldier_building_construction
+}

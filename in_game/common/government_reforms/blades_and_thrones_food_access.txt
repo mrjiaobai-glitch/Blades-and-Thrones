@@ -1,0 +1,16 @@
+# 四海为家（原"购粮权"）：无地军团国的生存根基——走到哪都有粮、有路。
+# 原版没有国家级食物权/通行权 modifier——用「改革标记 + on_action 动态维护」实现：
+# 1) 购粮：拥有此改革的国家，其军队驻留的每个有主地点，自动向地主建立
+#    food_access 关系（create_relation，10 年期限，月度脉冲自动续期）。
+# 2) 通行：自动与外交范围内所有非交战国家建立 blades_and_thrones_landless_passage
+#    （mod 自定义隐藏关系，含 military_access + food_access，5 年续期）——
+#    与无地军团国通用通行机制同一关系类型，各国默许军团过境。
+blades_and_thrones_food_access_reform = {
+	country_modifier = {
+		# 改革槽 +1：BLT 开局授予 2 个改革（本改革 + 流亡佣兵团），
+		# 基础槽只有 1——本改革自带槽位保证两者共存（双保险，
+		# 流亡佣兵团改革同样自带 +1 槽）。
+		government_reform_slots = 1
+		pure_tooltip_entry = blades_and_thrones_food_access_tt
+	}
+}

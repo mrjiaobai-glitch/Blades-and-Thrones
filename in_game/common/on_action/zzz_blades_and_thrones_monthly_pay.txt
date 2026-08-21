@@ -1,0 +1,1100 @@
+# ============================================================================
+# 褰╄泲鍥斤紙BLT 鑷敱鍐涘洟锛夊紑灞€淇锛氱嫭绔嬫棤鍦板浗瀹舵病鏈夊ぉ鐒剁伯椋熻幏鍙栨潈
+# 锛堥檮搴搁潬 subject type 鐨?food_access = yes 娲伙紱鐙珛鍥藉闈犺嚜宸辩殑棰嗗湡鎴栧叧绯伙級锛?
+# 鍐涢槦浼氶タ姝烩€斺€斿紑灞€涓?CHI锛堝痉鍖栨墍鍦ㄥ浗锛夊缓绔嬮暱鏈?food_access 鍏崇郴锛?
+# 鍙欎簨锛氬紑灏佺姽澶ぞ鍖轰笌涓師鏈濆环鐨勯粯濂戯紝鑷敱鍐涘洟鍦ㄥ痉鍖栭┗鐣欒喘绮€?
+# ============================================================================
+on_game_start = {
+	on_actions = {
+		blades_and_thrones_egg_start
+	}
+}
+
+blades_and_thrones_egg_start = {
+	trigger = {
+		has_tag = BLT
+	}
+	effect = {
+		# first/second 蹇呴』鐢?scope 寮曠敤锛坈:CHI锛夆€斺€旇８ tag 浼氶潤榛樺け璐?
+		create_relation = {
+			first = c:CHI
+			second = root
+			type = relation_type:food_access
+			months = 12000
+		}
+	}
+}
+
+monthly_country_pulse = {
+	on_actions = {
+		mercenary_mutiny_soldier_pay_pulse
+		blades_and_thrones_loyalty_pulse
+		blades_and_thrones_war_pulse
+		blades_and_thrones_company_pulse
+		blades_and_thrones_food_pulse
+		blades_and_thrones_company_upgrade_pulse
+		blades_and_thrones_company_recruit_pulse
+		blades_and_thrones_militia_pulse
+		blades_and_thrones_landless_passage_pulse
+	}
+}
+
+# ============================================================================
+# 鍥涙捣涓哄锛坆lades_and_thrones_food_access_reform锛屽師"璐伯鏉?锛夌殑鍔ㄦ€佺淮鎶わ細
+# 鎷ユ湁璇ユ敼闈╃殑鏃犲湴鍐涘洟鍥借嚜鍔ㄨ幏寰椾袱绉嶇敓瀛樻潈鍒┾€斺€?
+#   1) 閫氳锛氫笌澶栦氦鑼冨洿鍐呮墍鏈夐潪浜ゆ垬鍥藉鑷姩寤虹珛 military access 鍏崇郴
+#      锛坆lades_and_thrones_landless_passage锛歮od 鑷畾涔夐殣钘忓叧绯伙紝鍚?
+#      military_access + food_access锛? 骞存湡闄愯嚜鍔ㄧ画鏈燂級銆傚啗闃熷洓娴蜂负瀹讹紝
+#      璧板埌鍝兘鑳借繃澧冣€斺€旀棤鍦板啗鍥笌鏃犲湴鍥介€氱敤閫氳鏈哄埗鍚屼竴鍏崇郴绫诲瀷銆?
+#   2) 璐伯锛氬啗闃熼┗鐣欑殑姣忎釜鏈変富鍦扮偣鑷姩鍚戝湴涓诲缓绔?food_access 鍏崇郴
+#      锛?0 骞存湡闄愶紱鍏崇郴涓嶅瓨鍦ㄦ椂寤虹珛锛屽ぉ鐒惰嚜鍔ㄧ画鏈燂級銆?
+# 娉ㄦ剰锛歝reate_relation 鐨?first/second 鐢ㄦ樉寮?scope锛坰ave_scope_as锛夛紝
+# 涓嶇敤 this锛堝師鐗堜粎 second = this 鏈夊厛渚嬶紝first 鏃犫€斺€旈伩鍏嶈涔夋涔夛級銆?
+# ============================================================================
+blades_and_thrones_food_pulse = {
+	trigger = {
+		has_reform = government_reform:blades_and_thrones_food_access_reform
+	}
+	effect = {
+		# 鈥斺€?閫氳锛氬洓娴蜂负瀹讹紝澶勫鍙繃澧?鈥斺€?
+		every_country = {
+			limit = {
+				# 娉ㄦ剰锛氭帓闄よ嚜韬繀椤荤敤 this != root锛堝師鐗堟爣鍑嗗啓娉曪級锛?
+				# NOT = { this = root } 鍦?on_action 鐨?every 杩唬閲屾棤鏁堬紝
+				# 浼氭妸鍏崇郴寤虹粰鑷繁锛坈reate_relation 鎶?"the 2 countries are the same"锛?
+				this != root
+				within_diplomatic_range = root
+				NOT = { is_at_war_with = root }
+				NOT = {
+					root = {
+						receives_military_access_from = prev
+					}
+				}
+			}
+			# first 蹇呴』鐢?this锛堣凯浠ｅ厓绱狅級鑰岄潪 prev鈥斺€斿疄娴?on_action 鐨?every_country
+			# 涓讳綋閲?prev 鎸囧悜澶栧眰 root锛宖irst = prev 浼氬鑷?first = second = root锛?
+			# create_relation 鎶?"the 2 countries are the same"锛堝師鐗?create_alliance
+			# 鍚屾锛歠irst = this锛夈€?
+			create_relation = {
+				type = relation_type:blades_and_thrones_landless_passage
+				first = this
+				second = root
+				years = 5
+			}
+		}
+		# 鈥斺€?璐伯锛氶┗鐣欎箣鍦板嵆鏈夌伯 鈥斺€?
+		every_army = {
+			unit_location ?= {
+				owner ?= {
+					# 鎺掗櫎鑷韩鍚屾牱鐢?this != root锛坥wner 浣滅敤鍩熷唴 this = 鍦颁富锛?
+					this != root
+					NOT = { gives_food_access_to = root }
+					save_scope_as = blades_and_thrones_food_owner
+				}
+			}
+			scope:blades_and_thrones_food_owner ?= {
+				create_relation = {
+					first = scope:blades_and_thrones_food_owner
+					second = root
+					type = relation_type:food_access
+					months = 120
+				}
+			}
+		}
+	}
+}
+
+mercenary_mutiny_soldier_pay_pulse = {
+	trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	effect = {
+		set_variable = {
+			name = blades_and_thrones_army_loyalty_display
+			value = blades_and_thrones_army_loyalty
+		}
+		set_variable = {
+			name = blades_and_thrones_pay_cost_display
+			value = mercenary_mutiny_monthly_pay_cost
+		}
+		# 鍐涗簨鍗辨満鍊肩疮璁★細濞佽儊姣旂巼椹卞姩锛屾弧 100 鏃跺ず鑸嶇伨鍙樺繀瀹氳Е鍙?
+		if = {
+			limit = {
+				NOT = { has_variable = blades_and_thrones_military_crisis }
+			}
+			set_variable = {
+				name = blades_and_thrones_military_crisis
+				value = 0
+			}
+		}
+		change_variable = {
+			name = blades_and_thrones_military_crisis
+			add = blades_and_thrones_military_crisis_change
+			min = 0
+			max = 100
+		}
+		set_variable = {
+			name = blades_and_thrones_military_crisis_display
+			value = var:blades_and_thrones_military_crisis
+		}
+		# 鍗辨満鍙樺寲鍒嗚В锛?鍙樺寲鍘熷洜"鍙嶉锛夛細鍚勫垎椤瑰瓨鍏?display 鍙橀噺渚?GUI 鏄剧ず
+		set_variable = {
+			name = blades_and_thrones_crisis_change_threat_display
+			value = blades_and_thrones_crisis_change_threat
+		}
+		set_variable = {
+			name = blades_and_thrones_crisis_change_loyalty_display
+			value = blades_and_thrones_crisis_change_loyalty
+		}
+		set_variable = {
+			name = blades_and_thrones_crisis_change_satisfaction_display
+			value = blades_and_thrones_crisis_change_satisfaction
+		}
+		set_variable = {
+			name = blades_and_thrones_crisis_change_war_display
+			value = blades_and_thrones_crisis_change_war
+		}
+		set_variable = {
+			name = blades_and_thrones_crisis_change_decay_display
+			value = blades_and_thrones_crisis_change_decay
+		}
+		# 鍐涢シ鍙戞斁锛氬浗搴撳厖瓒冲垯姝ｅ父鍙戦シ锛堝苟閫愭娓呭伩娆犻シ锛夛紱鍥藉簱涓嶈冻鍒欐瑺楗封€斺€?
+		# 娆犻シ鏈堟暟绱Н銆佸＋鍏甸樁灞傛弧鎰忓害涓嬮檷銆佸啗闃熷繝璇氬彈鎹燂紙蹇犺瘹鑴氭湰鍊煎惈娆犻シ鍑忛」锛夛紝
+		# 琛ラシ鍚庢瑺楗锋湀鏁伴€愭湀鍥炶惤銆?
+		if = {
+			limit = {
+				gold >= root.mercenary_mutiny_monthly_pay_cost
+			}
+			add_gold = {
+				value = root.mercenary_mutiny_monthly_pay_cost
+				multiply = -1
+			}
+			"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+				estate_add_gold = {
+					value = root.mercenary_mutiny_monthly_pay_cost
+				}
+			}
+			if = {
+				limit = {
+					has_variable = blades_and_thrones_pay_arrears
+					var:blades_and_thrones_pay_arrears > 0
+				}
+				change_variable = {
+					name = blades_and_thrones_pay_arrears
+					add = -1
+					min = 0
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					root.mercenary_mutiny_monthly_pay_cost > 0
+				}
+				if = {
+					limit = {
+						NOT = { has_variable = blades_and_thrones_pay_arrears }
+					}
+					set_variable = {
+						name = blades_and_thrones_pay_arrears
+						value = 0
+					}
+				}
+				change_variable = {
+					name = blades_and_thrones_pay_arrears
+					add = 1
+					min = 0
+					max = 24
+				}
+				add_estate_satisfaction = {
+					type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+					value = estate_satisfaction_weak_penalty
+				}
+			}
+		}
+	}
+}
+
+blades_and_thrones_loyalty_pulse = {
+	trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		is_human = yes
+	}
+	effect = {
+		blades_and_thrones_prepare_intel_report_effect = yes
+		if = {
+			limit = {
+				NOT = { has_variable = blades_and_thrones_intel_cooldown }
+			}
+			set_variable = {
+				name = blades_and_thrones_intel_cooldown
+				value = yes
+				months = 6
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_intel.1
+			}
+		}
+		# 蹇犺瘹璇锋効锛坙oyalty.1锛夛細浣庡繝璇氱殑甯歌鐗㈤獨銆傛敞鎰忎笌鍝楀彉锛坙oyalty.8锛変簰鏂モ€斺€?
+		# 璇锋効鏄?杩樿兘鍟嗛噺"鐨勪綆鍗变簨浠讹紝鍝楀彉鏄?宸茬粡鍔ㄦ墜"鐨勯珮鍗变簨浠讹紝浜岃€呬笉鍙悓鏈?
+		# 鍚屽脊銆傚綋鍝楀彉鏉′欢锛堝繝璇?0.3 涓旀弧鎰忓害<0.4锛屾垨鑷亙/浣欐尝鏈熼棿蹇犺瘹<0.4锛?
+		# 婊¤冻鏃讹紝鐩存帴璧板摋鍙樸€佽烦杩囪鎰匡紙鎺掗櫎鏉′欢涓庝笅鏂瑰摋鍙?if 瀹屽叏涓€鑷达級銆?
+		if = {
+			limit = {
+				blades_and_thrones_army_loyalty < 0.35
+				has_any_active_disaster = no
+				NOT = { has_variable = blades_and_thrones_low_loyalty_event_cooldown }
+				NOT = {
+					OR = {
+						AND = {
+							blades_and_thrones_army_loyalty < 0.3
+							"root.estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" < 0.4
+						}
+						AND = {
+							OR = {
+								has_variable = blades_and_thrones_soldiers_emboldened
+								has_variable = blades_and_thrones_restoration_unrest
+							}
+							blades_and_thrones_army_loyalty < 0.4
+						}
+					}
+				}
+			}
+			set_variable = {
+				name = blades_and_thrones_low_loyalty_event_cooldown
+				value = yes
+				months = 12
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_loyalty.1
+			}
+		}
+		if = {
+			limit = {
+				blades_and_thrones_army_loyalty >= 0.8
+				NOT = { has_variable = blades_and_thrones_high_loyalty_event_cooldown }
+			}
+			set_variable = {
+				name = blades_and_thrones_high_loyalty_event_cooldown
+				value = yes
+				months = 24
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_loyalty.2
+			}
+		}
+		# ==================================================================
+		# 鍥犳灉閾撅細鍝楀彉锛坙oyalty.8锛夆€斺€斾綆蹇犺瘹 + 浣庢弧鎰忓害鐨勫叺鍙樺墠鍏嗐€?
+		# 瑙﹀彂鏉′欢姣斿繝璇氳鎰匡紙loyalty.1锛屼粎蹇犺瘹 < 0.35锛夋洿涓ヨ嫑锛?
+		# 蹇犺瘹 < 0.3 涓斿＋鍏垫弧鎰忓害 < 0.4锛屼笖鏃犵伨闅捐繘琛屼腑锛堜笉涓庡叾浠栫伨闅惧爢鍙狅級銆?
+		# 12 涓湀鍐峰嵈锛涘摋鍙樺鐞嗕笉褰擄紙闀囧帇鈫掓€ㄦ仺/鏀句换鈫掓伓鍖栵級浼氭妸鏀垮彉闃堝€兼斁瀹姐€?
+		# 涓ょ被鎺ョ画浼氭斁瀹介槇鍊硷紙蹇犺瘹 < 0.4 鍗冲彲鍝楀彉锛夛細
+		#   路 鍐涗汉鑷亙锛坆lades_and_thrones_soldiers_emboldened锛屽ず鑸嶉晣鍘嬪悗 12 鏈堬級
+		#     鈥斺€旀墦璧㈠唴鎴樼殑鍐涢槦鏇撮毦浼哄€欙紱
+		#   路 澶嶈緹浣欐尝锛坆lades_and_thrones_restoration_unrest锛屽啗鏀垮簻杩樻斂鍚?12 鏈堬級
+		#     鈥斺€旇澶烘潈鐨勫啗浜哄績鏈変笉鐢樸€?
+		# ==================================================================
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						blades_and_thrones_army_loyalty < 0.3
+						"root.estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" < 0.4
+					}
+					AND = {
+						OR = {
+							has_variable = blades_and_thrones_soldiers_emboldened
+							has_variable = blades_and_thrones_restoration_unrest
+						}
+						blades_and_thrones_army_loyalty < 0.4
+					}
+				}
+				has_any_active_disaster = no
+				NOT = { has_variable = blades_and_thrones_mutiny_event_cooldown }
+			}
+			set_variable = {
+				name = blades_and_thrones_mutiny_event_cooldown
+				value = yes
+				months = 12
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_loyalty.8
+			}
+		}
+	}
+}
+
+blades_and_thrones_company_pulse = {
+	trigger = {
+		# 2024-08 放开 AI：AI 宗主同样会被不忠军团索饷（拒绝两次 → 独立，
+		# AI 世界也会出现自由军团）。扮演机会（test.12）仍限玩家（下方）。
+		OR = {
+			any_subject = {
+				has_variable = mercenary_mutiny_disloyal_subject
+				NOT = { has_country_modifier = mercenary_mutiny_placated }
+			}
+			AND = {
+				is_human = yes
+				has_variable = mercenary_mutiny_company_ref
+				NOT = { has_variable = mercenary_mutiny_company_play_offered }
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				NOT = { has_variable = mercenary_mutiny_company_demand_cooldown }
+			}
+			trigger_event_non_silently = {
+				id = mercenary_mutiny_test.10
+			}
+			set_variable = {
+				name = mercenary_mutiny_company_demand_cooldown
+				value = yes
+				months = 8
+			}
+		}
+		# 鍐涘洟鍥藉凡鑷珛闂ㄦ埛锛堜笉鍐嶆槸鎴戠殑闄勫睘鍥斤級涓斿皻鏈彁渚涜繃鎵紨鏈轰細 鈫?寮圭獥涓€娆?
+		if = {
+			limit = {
+				has_variable = mercenary_mutiny_company_ref
+				NOT = { has_variable = mercenary_mutiny_company_play_offered }
+			}
+			var:mercenary_mutiny_company_ref ?= {
+				if = {
+					limit = {
+						NOT = { is_subject_of = root }
+					}
+					trigger_event_non_silently = {
+						id = mercenary_mutiny_test.12
+					}
+				}
+			}
+		}
+	}
+}
+
+blades_and_thrones_war_pulse = {
+	trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	effect = {
+		# 绱姞澹叺POP鎬昏妯★紙渚涜€佸叺杩斾埂"澹叺杩囧墿"妫€娴嬶紱鑴氭湰鍊兼棤娉曡凯浠OP锛屾晠鏁堟灉閲岀疮鍔狅級
+		set_variable = {
+			name = blades_and_thrones_veteran_soldier_pool_size
+			value = 0
+		}
+		every_owned_location = {
+			every_pop = {
+				limit = {
+					# every_owned_location 已保证归属，无需（也不能）在 pop 层
+					# 再判 owner——实测 pop 层 owner 链接报 "returned an invalid
+					# object"（观察者 3 小时刷 1221 条）
+					pop_type = pop_type:soldiers
+				}
+				root = {
+					change_variable = {
+						name = blades_and_thrones_veteran_soldier_pool_size
+						add = prev.pop_size
+					}
+				}
+			}
+		}
+		# 璁板綍"涓婃湀鏄惁鍦ㄦ墦浠?锛堢敤浜庢娴嬫垬浜夊垰缁撴潫 鈫?瑙﹀彂鑰佸叺杩斾埂锛?
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_war_months
+			}
+			set_variable = {
+				name = blades_and_thrones_war_was_active
+				value = yes
+			}
+		}
+		else = {
+			remove_variable = blades_and_thrones_war_was_active
+		}
+		if = {
+			limit = {
+				at_war = yes
+				NOT = { has_variable = blades_and_thrones_war_months }
+			}
+			set_variable = {
+				name = blades_and_thrones_war_months
+				value = 1
+			}
+		}
+		else_if = {
+			limit = {
+				at_war = yes
+				has_variable = blades_and_thrones_war_months
+			}
+			change_variable = {
+				name = blades_and_thrones_war_months
+				add = 1
+			}
+		}
+		else = {
+			remove_variable = blades_and_thrones_war_months
+		}
+		# 鑰佸叺杩斾埂瑙﹀彂锛氬拰骞?+ 鏈夊＋鍏礟OP锛屼笖锛堟垬浜夊垰缁撴潫 OR 澹叺瑙勬ā杩囧墿锛?
+		if = {
+			limit = {
+				at_war = no
+				is_human = yes
+				NOT = { has_variable = blades_and_thrones_veteran_event_cooldown }
+				any_owned_location = {
+					any_pop = {
+						pop_type = pop_type:soldiers
+					}
+				}
+				OR = {
+					# 鎴樹簤鍒氱粨鏉燂紙涓婃湀浣滄垬锛?
+					has_variable = blades_and_thrones_war_was_active
+					# 澹叺瑙勬ā杩囧墿锛氬＋鍏礟OP鎬昏妯?> 1000 涓斿父澶囧啗杩滃皬浜庡＋鍏礟OP锛堟棤宀楀彲渚濓級
+					AND = {
+						var:blades_and_thrones_veteran_soldier_pool_size > 1000
+						mercenary_mutiny_total_strength < {
+							value = var:blades_and_thrones_veteran_soldier_pool_size
+							multiply = 0.5
+						}
+					}
+				}
+			}
+			set_variable = {
+				name = blades_and_thrones_veteran_event_cooldown
+				value = yes
+				months = 12
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_veterans.1
+			}
+		}
+		# 鑰佸叺楠氬姩锛氭瑺楗烽仯鏁ｇ殑鑰佸叺涓嶆弧 + 澹叺婊℃剰搴︿綆 鈫?楠氬姩鎶夋嫨锛?2鏈堝喎鍗达級
+		if = {
+			limit = {
+				is_human = yes
+				has_country_modifier = blades_and_thrones_veteran_unrest_modifier
+				"root.estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" < 0.4
+				NOT = { has_variable = blades_and_thrones_veteran_unrest_event_cooldown }
+			}
+			set_variable = {
+				name = blades_and_thrones_veteran_unrest_event_cooldown
+				value = yes
+				months = 12
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_veterans.2
+			}
+		}
+		# 绮鹃攼褰掑锛氫繚鐣欑簿閿?+ 闀垮拰骞筹紙鎴樹簤鏈堟暟>24 鍚庢秷澶辩殑鍜屽钩鏈燂級鈫?绮鹃攼浣曞幓浣曚粠锛?4鏈堝喎鍗达級
+		if = {
+			limit = {
+				is_human = yes
+				has_country_modifier = blades_and_thrones_veteran_core_modifier
+				at_war = no
+				NOT = { has_variable = blades_and_thrones_veteran_core_event_cooldown }
+			}
+			set_variable = {
+				name = blades_and_thrones_veteran_core_event_cooldown
+				value = yes
+				months = 24
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_veterans.3
+			}
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_war_months
+				var:blades_and_thrones_war_months >= 24
+				has_variable = blades_and_thrones_junta_stability
+			}
+			change_variable = {
+				name = blades_and_thrones_junta_stability
+				add = -1
+				min = 0
+				max = 100
+			}
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_war_months
+				var:blades_and_thrones_war_months >= 18
+				any_current_war = {
+					is_an_attacker = root
+				}
+			}
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_weak_penalty
+			}
+		}
+		else_if = {
+			limit = {
+				has_variable = blades_and_thrones_war_months
+				var:blades_and_thrones_war_months >= 36
+				any_current_war = {
+					NOT = { is_an_attacker = root }
+				}
+			}
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_weak_penalty
+			}
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_war_months
+				var:blades_and_thrones_war_months >= 24
+				any_current_war = {
+					count >= 2
+				}
+			}
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_weak_penalty
+			}
+		}
+		if = {
+			limit = {
+				has_variable = blades_and_thrones_war_months
+			}
+			set_variable = {
+				name = blades_and_thrones_war_months_display
+				value = var:blades_and_thrones_war_months
+			}
+		}
+		else = {
+			set_variable = {
+				name = blades_and_thrones_war_months_display
+				value = 0
+			}
+		}
+	}
+}
+
+# 鍥㈢粌鎵€鈥滈樁灞傝嚜寤衡€濇ā鎷燂細鍘熺敓闃跺眰 AI 瀵硅嚜瀹氫箟寤虹瓚鏃犲缓閫犳剰鎰匡紙纭紪鐮佸惎鍙戝紡鍙鐩栧師鐢熷缓绛戯級锛?
+# 鏁呯敱 mod 姣忔湀鑴夊啿浠ｈ銆傜帺瀹讹細姣忔湀 20% 姒傜巼鍦ㄩ殢鏈哄彲寤哄湴鐐硅惀寤轰竴搴э紙50 閲戠敱闃跺眰鎵挎媴锛夛紱
+# AI锛氭瘡鏈?5% 姒傜巼锛屼笖瑕佹眰澹叺闃跺眰婊℃剰搴?鈮?0.5锛堥樁灞傗€滄弧鎰忊€濇墠鎵╁啗锛夛紝鑺傚杩滄參浜庣帺瀹躲€?
+# 鎾ら攢鐗规潈鍚庣珛鍗冲仠姝€?
+blades_and_thrones_militia_pulse = {
+	trigger = {
+		has_estate_privilege = estate_privilege:blades_and_thrones_militia_autonomy
+	}
+	effect = {
+		if = {
+			limit = {
+				is_human = yes
+				"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+					estate_gold >= 50
+				}
+				any_owned_location = {
+					NOT = { has_building = building_type:blades_and_thrones_militia_training_ground }
+					can_build_building = building_type:blades_and_thrones_militia_training_ground
+				}
+			}
+			random_list = {
+				20 = {
+					random_owned_location = {
+						limit = {
+							NOT = { has_building = building_type:blades_and_thrones_militia_training_ground }
+							can_build_building = building_type:blades_and_thrones_militia_training_ground
+						}
+						"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+							estate_add_gold = {
+								value = -50
+							}
+						}
+						change_building_level_in_location = {
+							building = building_type:blades_and_thrones_militia_training_ground
+							value = 1
+						}
+					}
+				}
+				80 = {
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate >= 0.5
+				"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+					estate_gold >= 50
+				}
+				any_owned_location = {
+					NOT = { has_building = building_type:blades_and_thrones_militia_training_ground }
+					can_build_building = building_type:blades_and_thrones_militia_training_ground
+				}
+			}
+			random_list = {
+				5 = {
+					random_owned_location = {
+						limit = {
+							NOT = { has_building = building_type:blades_and_thrones_militia_training_ground }
+							can_build_building = building_type:blades_and_thrones_militia_training_ground
+						}
+						"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+							estate_add_gold = {
+								value = -50
+							}
+						}
+						change_building_level_in_location = {
+							building = building_type:blades_and_thrones_militia_training_ground
+							value = 1
+						}
+					}
+				}
+				95 = {
+				}
+			}
+		}
+	}
+}
+
+# 鏃犲湴鍥芥湀鑴夊啿锛氭祦娴€氳缁存姢 + 瀹夊/澶嶅浗妫€娴?+ 娲楀姭鏈轰細銆?
+# 閫氳锛氭瘡鏈堜负鏃犲湴鍥斤紙娴佷骸鑰?浣ｅ叺鍐涘洟鍥斤級琛ュ缓涓庡浜よ寖鍥村唴闈炰氦鎴樺浗瀹剁殑
+# 閫氳鍏崇郴锛? 骞磋嚜鍔ㄨ繃鏈燂紝姝ゅ缁缓锛夈€傛柟鍚戯細鏈夊湴鍥界粰銆佹棤鍦板浗鏀躲€?
+blades_and_thrones_landless_passage_pulse = {
+	trigger = {
+		country_type = army
+		OR = {
+			has_variable = mercenary_mutiny_exiles_country
+			has_variable = mercenary_mutiny_original_exile_marker
+			has_variable = blades_and_thrones_volunteer_company
+			is_subject_type = mercenary_company
+		}
+	}
+	effect = {
+		# 娴佷骸浣ｅ叺鍥㈡敼闈╀繚搴曪細鏀归潻 potential 鏇炬紡鎺?volunteer_company 鍒嗘敮锛?
+		# 瀵艰嚧澶栨淳鍐涘洟鍥借繃鏈堣寮曟搸绉婚櫎鏀归潻锛堜粠鑰屽け鍘讳汉鍔涙睜/鍐涘洟娓缓閫犳潈锛夈€?
+		# potential 宸蹭慨澶嶏紙瑙?government_reforms/blades_and_thrones_exiles.txt锛夛紝
+		# 姝ゅ涓哄凡瀛樺湪瀛樻。/宸插垱寤哄啗鍥㈢殑骞傜瓑鎭㈠锛氭湁鍐涘洟韬唤浣嗘敼闈╃己澶卞垯琛ュ洖銆?
+		if = {
+			limit = {
+				NOT = { has_reform = government_reform:mercenary_mutiny_exiles_reform }
+				OR = {
+					has_variable = mercenary_mutiny_exiles_country
+					has_variable = mercenary_mutiny_original_exile_marker
+					has_variable = blades_and_thrones_volunteer_company
+					has_or_had_tag = BLT
+				}
+			}
+			add_reform = government_reform:mercenary_mutiny_exiles_reform
+		}
+		every_country = {
+			limit = {
+				# 鎺掗櫎鑷韩鐢?this != root锛堝師鐗堟爣鍑嗗啓娉曪紝瑙?food_pulse 閫氳鍧楁敞閲婏級
+				this != root
+				within_diplomatic_range = root
+				NOT = { is_at_war_with = root }
+				NOT = {
+					root = {
+						receives_military_access_from = prev
+					}
+				}
+			}
+			# first 蹇呴』鐢?this锛堣凯浠ｅ厓绱狅級鑰岄潪 prev鈥斺€斿疄娴?on_action 鐨?every_country
+			# 涓讳綋閲?prev 鎸囧悜澶栧眰 root锛宖irst = prev 浼氬鑷?first = second = root锛?
+			# create_relation 鎶?"the 2 countries are the same"锛堝師鐗?create_alliance
+			# 鍚屾锛歠irst = this锛夈€?
+			create_relation = {
+				type = relation_type:blades_and_thrones_landless_passage
+				first = this
+				second = root
+				years = 5
+			}
+		}
+		# 瀹夊妫€娴嬶細鑾峰緱绗竴鍧楀湡鍦?鈫?瀹夊绔嬩笟浜嬩欢锛圓I 鑷姩"鍦ㄦ鎵庢牴"锛夈€?
+		# 12 涓湀鍐峰嵈闃叉"缁х画娴佹氮"鍚庡弽澶嶅脊绐楋紱鎵庢牴鍚庣敱浜嬩欢璁剧疆 settled 鏍囪銆?
+		if = {
+			limit = {
+				num_locations > 0
+				NOT = { has_variable = blades_and_thrones_landless_settled }
+				NOT = { has_variable = blades_and_thrones_settle_offer_cooldown }
+			}
+			set_variable = {
+				name = blades_and_thrones_settle_offer_cooldown
+				value = yes
+				months = 12
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_landless.1
+			}
+		}
+		# 澶嶅浗妫€娴嬶細澶哄洖鏁呴兘 鈫?鍏夊浜嬩欢锛圓I 鑷姩"鍏夊鏁呴兘"锛?
+		if = {
+			limit = {
+				has_variable = mercenary_mutiny_homeland
+				NOT = { has_variable = blades_and_thrones_landless_settled }
+				var:mercenary_mutiny_homeland ?= {
+					owner = root
+				}
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_landless.3
+			}
+		}
+		# 娲楀姭鏈轰細锛氶┗鎵庡湪浠栧浗棰嗗湴鏃讹紝姣忔湀灏忔鐜囪Е鍙戞礂鍔妷鎷╋紙AI 鎸?ai_chance 鍐冲畾锛?
+		if = {
+			limit = {
+				any_unit = {
+					unit_location = {
+						has_owner = yes
+						owner = {
+							NOT = { this = root }
+						}
+					}
+				}
+			}
+			random_list = {
+				5 = {
+					trigger_event_non_silently = {
+						id = blades_and_thrones_landless.2
+					}
+				}
+				95 = {
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# 鍐涗汉鎽勬斂骞村害鑴夊啿锛氳拷鍔犲埌鍘熺増 in_regency_yearly_pulse銆?
+# Wiki锛圡od files load order 鈫?On actions 渚嬪锛夛細on_action 鍏佽杩藉姞
+# on_actions/events/random_events锛堝畼鏂圭ず渚嬪嵆 monthly_country_pulse 杩藉姞
+# on_actions鈥斺€斾笌 mod 鐜版湁鐢ㄦ硶涓€鑷达級锛屼笉鍏佽鏇挎崲 trigger/effect 鍧椼€?
+# 浠呭綋澶勪簬澹叺闃跺眰鎽勬斂鏃惰Е鍙戞憚鏀夸簨浠讹紱chance_to_happen = 20 瀵归綈鍘熺増
+# in_regency_yearly_pulse 涓诲潡鐨勮瘎浼伴鐜囥€?
+# ============================================================================
+in_regency_yearly_pulse = {
+	on_actions = {
+		blades_and_thrones_regency_pulse
+	}
+}
+
+blades_and_thrones_regency_pulse = {
+	trigger = {
+		has_regent = yes
+		regency_type = regency_type:zzz_rebalanced_nepal_mercenary_soldiers_estate_regency
+	}
+	effect = {
+		random_events = {
+			chance_to_happen = 20
+			10 = blades_and_thrones_regency.1
+			10 = blades_and_thrones_regency.2
+		}
+	}
+}
+
+# ============================================================================
+# 鍐涘洟鍗囩骇鑴夊啿锛氭寜"鐩稿瀹椾富瀹炲姏"椹卞姩鍐涘洟鍥藉崌绾?闄嶇骇锛堝姏閲忓喅瀹氬湴浣嶏級銆?
+#   路 浣庣骇锛堝悎鍚屽伐/浠ｇ锛夌浉瀵瑰疄鍔?>= 0.5  鈫?鍗囬珮绾э紙寮哄姏浣ｅ叺鍥?澶у瀷浠ｇ锛?
+#   路 楂樼骇鐩稿瀹炲姏 < 0.35                 鈫?闄嶅洖浣庣骇锛堝姏閲忔病浜嗙壒鏉冩病浜嗭級
+#   路 鍐涢榾锛堟湁鍦扮洏锛変笉鍙備笌鍗囬檷锛堣川鍙樺舰鎬侊級
+# 鐜╁瀹椾富浼氭敹鍒伴€氱煡浜嬩欢锛汚I 瀹椾富闈欓粯鍗囬檷锛堝姩鎬佷笘鐣岋級銆?
+# ============================================================================
+blades_and_thrones_company_upgrade_pulse = {
+	trigger = {
+		any_subject = {
+			OR = {
+				is_subject_type = mercenary_company
+				is_subject_type = mercenary_company_trusted
+				is_subject_type = mercenary_company_veteran
+				is_subject_type = mercenary_company_grand
+			}
+		}
+	}
+	effect = {
+		every_subject = {
+			limit = {
+				OR = {
+					is_subject_type = mercenary_company
+					is_subject_type = mercenary_company_trusted
+					is_subject_type = mercenary_company_veteran
+					is_subject_type = mercenary_company_grand
+				}
+				NOT = { has_variable = blades_and_thrones_company_upgrade_cooldown }
+			}
+			# 鐩稿瀹椾富瀹炲姏 = 鍐涘洟 army_size / 瀹椾富 army_size
+			save_temporary_scope_value_as = {
+				name = strength_ratio
+				value = {
+					value = prev.army_size
+					divide = root.army_size
+				}
+			}
+			# 鍗囩骇锛氱浉瀵瑰疄鍔?>= 0.5 鈫?楂樼骇褰㈡€侊紙鍙劚绂荤瓑鐗规潈瑙ｉ攣锛?
+			if = {
+				limit = {
+					scope:strength_ratio >= 0.5
+					OR = {
+						is_subject_type = mercenary_company
+						is_subject_type = mercenary_company_trusted
+					}
+				}
+				if = {
+					limit = { is_subject_type = mercenary_company }
+					make_subject_of = {
+						target = root
+						type = subject_type:mercenary_company_veteran
+					}
+				}
+				else = {
+					make_subject_of = {
+						target = root
+						type = subject_type:mercenary_company_grand
+					}
+				}
+				set_variable = {
+					name = blades_and_thrones_company_upgrade_cooldown
+					value = yes
+					months = 12
+				}
+				# 鎷ㄦ妗ｄ綅鍗囩骇锛氫剑鍏电嚎 1鈫?锛堣€佸叺鍚堝悓閲戯級锛屼唬绠＄嚎 2鈫?锛堝ぇ鍐涘洟鍐涜垂锛?
+				if = {
+					limit = { is_subject_type = mercenary_company_veteran }
+					set_variable = {
+						name = blades_and_thrones_subsidy_level
+						value = 3
+					}
+				}
+				else = {
+					set_variable = {
+						name = blades_and_thrones_subsidy_level
+						value = 4
+					}
+				}
+				# 鐜╁瀹椾富閫氱煡
+				if = {
+					limit = { root = { is_human = yes } }
+					root = {
+						trigger_event_non_silently = {
+							id = blades_and_thrones_company.4
+						}
+					}
+				}
+			}
+			# 闄嶇骇锛氱浉瀵瑰疄鍔?< 0.35 鈫?闄嶅洖浣庣骇
+			else_if = {
+				limit = {
+					scope:strength_ratio < 0.35
+					OR = {
+						is_subject_type = mercenary_company_veteran
+						is_subject_type = mercenary_company_grand
+					}
+				}
+				if = {
+					limit = { is_subject_type = mercenary_company_veteran }
+					make_subject_of = {
+						target = root
+						type = subject_type:mercenary_company
+					}
+				}
+				else = {
+					make_subject_of = {
+						target = root
+						type = subject_type:mercenary_company_trusted
+					}
+				}
+				set_variable = {
+					name = blades_and_thrones_company_upgrade_cooldown
+					value = yes
+					months = 12
+				}
+				# 鎷ㄦ妗ｄ綅闄嶇骇锛氫剑鍏电嚎 3鈫?锛屼唬绠＄嚎 4鈫?锛堝姏閲忔病浜嗘嫧娆句篃娌′簡锛?
+				if = {
+					limit = { is_subject_type = mercenary_company }
+					set_variable = {
+						name = blades_and_thrones_subsidy_level
+						value = 1
+					}
+				}
+				else = {
+					set_variable = {
+						name = blades_and_thrones_subsidy_level
+						value = 2
+					}
+				}
+				if = {
+					limit = { root = { is_human = yes } }
+					root = {
+						trigger_event_non_silently = {
+							id = blades_and_thrones_company.5
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# ============================================================================
+# 军团 AI 扩军脉冲：让 AI 军团国主动'招兵买马'（佣兵以战养战、代管整军经武）。
+# 机制：
+# · 只对 AI 军团国生效（玩家军团自己管理军队）
+# · 条件：金币充足（> 200，付得起招募费）+ 相对宗主实力 < 0.8
+#   （留升级空间——实力 ≥ 0.5 升级、≥ 0.8 封顶防无限膨胀，与升级脉冲联动）
+# · 每月 15% 概率：花费 100 金，在军团所在地创建 1 支基础步兵（a_footmen）
+# 叙事：军团从不闲着——有钱就招兵，招兵就变强，变强就想自立。
+# ============================================================================
+blades_and_thrones_company_recruit_pulse = {
+	trigger = {
+		is_ai = yes
+		OR = {
+			is_subject_type = mercenary_company
+			is_subject_type = mercenary_company_trusted
+			is_subject_type = mercenary_company_veteran
+			is_subject_type = mercenary_company_grand
+			is_subject_type = mercenary_company_warlord
+		}
+	}
+	effect = {
+		# 相对宗主实力 = 军团 army_size / 宗主 army_size
+		save_temporary_scope_value_as = {
+			name = strength_ratio
+			value = {
+				value = army_size
+				divide = overlord.army_size
+			}
+		}
+		random_list = {
+			15 = {
+				trigger = {
+					gold > 200
+					manpower > 0
+					scope:strength_ratio < 0.8
+				}
+				add_gold = -100
+				capital = {
+					create_sub_unit_with_owner = {
+						type = a_footmen
+						owner = root
+						origin = this
+						experience = 50
+					}
+				}
+			}
+			85 = {
+			}
+		}
+	}
+}
+
+# ============================================================================
+# 骞村害鎷ㄦ璐﹀崟鑴夊啿锛氱粺璁″啗鍥㈣ˉ鍔╁勾搴︽€婚锛屽悜鐜╁瀹椾富寮广€屽勾搴﹀啗璐硅处鍗曘€嶃€?
+# 瀹為檯杞处宸叉敼鐢卞睘鍥界被鍨?modifier 鎵挎媴锛堝師鐗堝厛渚?sco_auld_alliance_funding锛?
+# overlord_modifier 璐熼噾鏀跺叆 = 瀹椾富鏈堝害鎵ｆ锛宻ubject_modifier 姝ｉ噾鏀跺叆 = 鍐涘洟
+# 鏈堝害鍒拌处锛夛紝鏈剦鍐蹭笉鍐?add_gold锛堥伩鍏嶅弻閲嶆敮浠橈級锛屽彧鍋氳处鍗曞睍绀恒€?
+# 妗ｄ綅锛坆lades_and_thrones_subsidy_level 鍙橀噺锛夛細1 浣庣骇浣ｅ叺 300/骞达紙25/鏈堬級銆?
+# 2 浣庣骇浠ｇ 600/骞达紙50/鏈堬級銆? 楂樼骇浣ｅ叺 600/骞达紙50/鏈堬級銆? 楂樼骇浠ｇ 900/骞达紙75/鏈堬級锛?
+# 鍐涢榾锛堟棤鍙橀噺銆佹棤 modifier锛変笉鍙戞斁鈥斺€旇棭闀囪嚜鑲ャ€?
+# ============================================================================
+yearly_country_pulse = {
+	on_actions = {
+		blades_and_thrones_subsidy_pulse
+	}
+}
+
+blades_and_thrones_subsidy_pulse = {
+	trigger = {
+		any_subject = {
+			has_variable = blades_and_thrones_subsidy_level
+		}
+	}
+	effect = {
+		# 鍒濆鍖栬处鍗曠粺璁″彉閲?
+		root = {
+			set_variable = {
+				name = blades_and_thrones_bill_total
+				value = 0
+			}
+			set_variable = {
+				name = blades_and_thrones_bill_level1
+				value = 0
+			}
+			set_variable = {
+				name = blades_and_thrones_bill_level2
+				value = 0
+			}
+			set_variable = {
+				name = blades_and_thrones_bill_level3
+				value = 0
+			}
+			set_variable = {
+				name = blades_and_thrones_bill_level4
+				value = 0
+			}
+		}
+		every_subject = {
+			limit = {
+				has_variable = blades_and_thrones_subsidy_level
+			}
+			if = {
+				limit = { var:blades_and_thrones_subsidy_level = 1 }
+				root = {
+					# 年度账单统计：change_variable 只认 add/subtract/multiply 等
+					# 操作符（value 是 set_variable 的键）——旧写法 value = 300
+					# 报 "Invalid operation type" 且统计永远不生效
+					change_variable = {
+						name = blades_and_thrones_bill_total
+						add = 300
+					}
+					change_variable = {
+						name = blades_and_thrones_bill_level1
+						add = 300
+					}
+				}
+			}
+			else_if = {
+				limit = { var:blades_and_thrones_subsidy_level = 2 }
+				root = {
+					change_variable = {
+						name = blades_and_thrones_bill_total
+						add = 600
+					}
+					change_variable = {
+						name = blades_and_thrones_bill_level2
+						add = 600
+					}
+				}
+			}
+			else_if = {
+				limit = { var:blades_and_thrones_subsidy_level = 3 }
+				root = {
+					change_variable = {
+						name = blades_and_thrones_bill_total
+						add = 600
+					}
+					change_variable = {
+						name = blades_and_thrones_bill_level3
+						add = 600
+					}
+				}
+			}
+			else_if = {
+				limit = { var:blades_and_thrones_subsidy_level = 4 }
+				root = {
+					change_variable = {
+						name = blades_and_thrones_bill_total
+						add = 900
+					}
+					change_variable = {
+						name = blades_and_thrones_bill_level4
+						add = 900
+					}
+				}
+			}
+		}
+		# 鐜╁瀹椾富锛氬勾搴﹀啗璐硅处鍗?
+		if = {
+			limit = {
+				is_human = yes
+				var:blades_and_thrones_bill_total > 0
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_company.9
+			}
+		}
+	}
+}

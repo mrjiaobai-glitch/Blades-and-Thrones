@@ -1,0 +1,16 @@
+# 刀锋与王座的军事转化行动 AI 列表：
+# 显式注册供 AI 评估/执行（未注册的 action 会导致 AI 执行命令无效）。
+# potential：仅士兵阶层存在的国家才评估这些行动（性能优化，root scope = 评估国家）。
+blades_and_thrones_list = {
+	potential = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	actions = {
+		blades_and_thrones_integrate_mercs
+		blades_and_thrones_found_company
+		blades_and_thrones_reinstate_company
+		blades_and_thrones_demobilize_army
+		blades_and_thrones_resettle_soldiers
+		blades_and_thrones_lease_army
+	}
+}

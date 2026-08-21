@@ -1,0 +1,6 @@
+zzz_blades_and_thrones_soldiers_base_satisfaction = {
+	potential_trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = 0.5
+}

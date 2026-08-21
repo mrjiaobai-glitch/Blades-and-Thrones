@@ -1,0 +1,101 @@
+# 彩蛋开局国家：自由军团（无主无地军队国家）
+# type = army：无地军队国家（Setup modding 官方语法）。无 capital、无 own 领土。
+# POP 方案：无地国家没有平民 POP（只有王室）——在 CHI（中国）领土的德化建
+# 外国建筑 mercenary_mutiny_manpower_pool（tag = BLT，is_foreign 建筑），
+# 建筑就业岗位（employment_size = manpower_employment，pop_type = soldiers）
+# 自动填充的士兵 POP 归属建筑所有者（BLT）——外国建筑里工作的 POP 都是你的。
+# manpower_pool 的 potential 需要 mercenary_mutiny_exiles_reform → 开局直接授予。
+# 军队驻在德化（中国城市）——粮食与过境问题由「四海为家」改革解决：
+# on_game_start 先建立 CHI→BLT 的 food_access 关系（开局即有粮），此后
+# 每月脉冲自动维护：与外交范围内所有非交战国家建立通行关系（military
+# access），并随军队驻留自动向地主建立购粮关系（food access）。
+# （create_relation 的 first/second 必须用 scope 引用，如 c:CHI——裸 tag 会静默失败）。
+# 视野：全球视野（全部地理区域——自由军团游走天下）。
+# 政体必须显式指定：type = army 国家不会自动获得政体（缺政体 → government_type
+# 为空 → 脚本按政体评估时报 "Invalid left side during comparison 'government_type'"）。
+# 用共和国（对齐 mod 军团国先例：夺舍佣兵国 change_government_type = republic）。
+# 统治者：蒋姓，属性全 100（角色 blt_jiang_zuozong 定义在 05_zzz_blades_and_thrones_characters.txt——
+# 05 前缀保证角色先于本文件加载，ruler 引用必然有效）。
+# 编码要求：本文件（setup/start）必须为 UTF-8 无 BOM。
+countries = {
+	countries = {
+		BLT = {
+			type = army
+			# capital：军队驻扎地（外国资本——原版游戏内军团国 capital = 宗主首都，同为先例）。
+			# 无 capital 会导致大量原版脚本每月报错（original_capital/region/area/succession_law invalid）。
+			capital = dehua_jiujiang
+			# 初始革新：starting_technology_level = 开局自动研究所有
+			# starting_technology_level <= 该值的 advance（原版 Setup modding 语法）。
+			# 欧洲主流国家为 3（传统时代全部主流革新：文字/法律/农业/银行/军事等）；
+			# 原版无国家使用 4（4 = 宗教组织等顶级传统时代革新），故取 3。
+			starting_technology_level = 3
+			currency_data = {
+				gold = 1000
+				prestige = 50
+			}
+			government = {
+				type = republic
+				# heir_selection 必须显式指定（republic 无默认继承机制——
+				# 缺它则 ruler 指定不生效，引擎生成随机角色摄政；
+				# 原版威尼斯/热那亚等共和国均带 heir_selection + ruler）
+				heir_selection = oligarchic_elective
+				ruler = blt_jiang_zuozong
+				# ruler_term：仿照原版固定统治者（SWE/VEN）——统治期记录，
+				# 保证开局统治者是预设角色而非随机生成
+				ruler_term = {
+					character = blt_jiang_zuozong
+					# 开局日期是 1337.1.1（EU5 不是 1444）——ruler_term 的
+					# start_date 必须不晚于游戏开局，否则统治期不生效
+					start_date = 1337.1.1
+					regnal_number = 1
+				}
+				reforms = {
+					mercenary_mutiny_exiles_reform
+					blades_and_thrones_food_access_reform
+				}
+			}
+			discovered_regions = {
+				alaska_region anatolia_region andes_region arabia_region aridoamerica_region australia_region balkan_region baltic_region bengal_region bohemia_core_region brazil_region canada_region caribbean_region carpathia_region caucasus_region central_africa_region central_america_region central_india_region chaco_region colombia_region crescent_region deccan_region east_china_region east_coast_region east_siberia_region egypt_region ethiopia_region france_region great_britain_region great_lakes_region great_plains_region guinea_region hindustan_region iberia_region indochina_region indonesia_region ireland_region italy_region japan_region khorasan_region kongo_region korea_region la_plata_region louisiana_region macaronesia_region madagascar_region maghreb_region manchuria_region melanesia_region mesoamerica_region micronesia_region mongolia_region new_zealand_region north_atlantic_islands_region north_china_region north_german_region nubia_region persia_region polynesia_region russian_region ruthenia_region sahel_region scandinavian_region somalia_region south_china_region south_german_region southern_africa_islands_region southern_africa_region steppes_region swahili_coast_region tibet_region ural_region west_china_region west_coast_region west_siberia_region western_india_region xinjiang_region zimbabwe_region
+			}
+		}
+	}
+}
+
+# 外国建筑：在 CHI（中国）领土的德化建造 BLT 所有的佣兵人力池——
+# 就业岗位自动填充的士兵 POP 归属 BLT（外国建筑机制）；
+# 同地再建一座佣兵合同大厅（每月 +1 金合同抽成，象征性收入来源）
+building_manager = {
+	mercenary_mutiny_manpower_pool = {
+		location = dehua
+		tag = BLT
+		level = 1
+	}
+	mercenary_mutiny_contract_hall = {
+		location = dehua
+		tag = BLT
+		level = 1
+	}
+}
+
+# 开局部队：一支满编步兵军团（约 5000 人）驻在九江-德化，
+# 外加 4 支运粮队（auxiliary 补给单位 a_camp_followers——传统时代
+# 原版运粮单位，确保大军长途跋涉不挨饿；"四海为家"改革 + 运粮队
+# 双保险：即使地主国拒绝售粮，部队自带的辎重也能撑住行军）。
+unit_manager = {
+	army = {
+		country = BLT
+		location = dehua_jiujiang
+		sub_units = {
+			a_footmen = { strength = 1.0 }
+			a_footmen = { strength = 1.0 }
+			a_footmen = { strength = 1.0 }
+			a_footmen = { strength = 1.0 }
+			a_footmen = { strength = 1.0 }
+			a_camp_followers = { strength = 1.0 }
+			a_camp_followers = { strength = 1.0 }
+			a_camp_followers = { strength = 1.0 }
+			a_camp_followers = { strength = 1.0 }
+		}
+		morale = 0.9
+	}
+}

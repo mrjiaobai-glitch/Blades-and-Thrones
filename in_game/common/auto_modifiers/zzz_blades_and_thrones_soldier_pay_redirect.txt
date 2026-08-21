@@ -1,0 +1,7 @@
+zzz_mercenary_mutiny_soldier_pay_redirect = {
+	potential_trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	army_maintenance_efficiency = 1.0
+	fort_maintenance_efficiency = 1.0
+}

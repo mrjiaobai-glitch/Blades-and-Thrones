@@ -1,0 +1,132 @@
+on_winning_war = {
+	on_actions = {
+		blades_and_thrones_war_victory
+	}
+}
+
+on_losing_war = {
+	on_actions = {
+		blades_and_thrones_war_defeat
+	}
+}
+
+blades_and_thrones_war_victory = {
+	trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	effect = {
+		set_variable = {
+			name = blades_and_thrones_war_glory_variable
+			value = 1
+			years = 5
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_bonus
+		}
+		if = {
+			limit = {
+				scope:war = {
+					is_an_attacker = root
+				}
+			}
+			add_prestige = prestige_mild_bonus
+			if = {
+				limit = {
+					has_variable = blades_and_thrones_junta_stability
+				}
+				change_variable = {
+					name = blades_and_thrones_junta_stability
+					add = 4
+					min = 0
+					max = 100
+				}
+			}
+		}
+		else = {
+			add_legitimacy = legitimacy_weak_bonus
+			if = {
+				limit = {
+					has_variable = blades_and_thrones_junta_stability
+				}
+				change_variable = {
+					name = blades_and_thrones_junta_stability
+					add = 8
+					min = 0
+					max = 100
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_human = yes
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_war.1
+			}
+		}
+	}
+}
+
+blades_and_thrones_war_defeat = {
+	trigger = {
+		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+	}
+	effect = {
+		if = {
+			limit = {
+				scope:war = {
+					is_an_attacker = root
+				}
+			}
+			set_variable = {
+				name = blades_and_thrones_war_shame_variable
+				value = 1.5
+				years = 5
+			}
+			add_legitimacy = legitimacy_weak_penalty
+			if = {
+				limit = {
+					has_variable = blades_and_thrones_junta_stability
+				}
+				change_variable = {
+					name = blades_and_thrones_junta_stability
+					add = -6
+					min = 0
+					max = 100
+				}
+			}
+		}
+		else = {
+			set_variable = {
+				name = blades_and_thrones_war_shame_variable
+				value = 1
+				years = 5
+			}
+			add_legitimacy = legitimacy_mild_penalty
+			if = {
+				limit = {
+					has_variable = blades_and_thrones_junta_stability
+				}
+				change_variable = {
+					name = blades_and_thrones_junta_stability
+					add = -10
+					min = 0
+					max = 100
+				}
+			}
+		}
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_penalty
+		}
+		if = {
+			limit = {
+				is_human = yes
+			}
+			trigger_event_non_silently = {
+				id = blades_and_thrones_war.2
+			}
+		}
+	}
+}

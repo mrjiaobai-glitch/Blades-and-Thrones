@@ -1,0 +1,18 @@
+# 夺舍叛军进度驱动（auto_modifier）：
+# 把原 on_monthly 里手动 add_rebel_progress 的档位逻辑转为 modifier 驱动——
+# modifier（monthly_pretender_rebel_growth）会进入叛军界面的 GetMonthlyChange
+# 显示（"由 xxx 产生：+15%"），玩家看到的就是实际发生的，不再出现
+# "实际每月 +20%、界面却显示减少"的错位（手动 add_rebel_progress 不显示）。
+# 数值由 mercenary_mutiny_rebel_progress_drive 脚本值按威胁比率/满意度动态计算
+# （脚本值每次使用重新计算，auto_modifier 天然每月跟随）。
+blades_and_thrones_mutiny_progress = {
+	potential_trigger = {
+		any_active_disaster = {
+			disaster_type = disaster_type:mercenary_mutiny
+		}
+	}
+	scales_with = {
+		value = mercenary_mutiny_rebel_progress_drive
+	}
+	monthly_pretender_rebel_growth = 1
+}

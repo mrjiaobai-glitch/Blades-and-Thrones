@@ -1,0 +1,119 @@
+# 军制时代联动：军事革命的时间叙事（1337-1836）。
+# 早期（传统/文艺复兴/地理大发现，约 200 年）：征召军制与佣兵联盟的黄金时代；常备军昂贵低效。
+# 晚期（宗教改革/专制/革命）：常备军与混合军制崛起；征召与佣兵过时。
+# 缩放由 blades_and_thrones_era_early_scale / late_scale 脚本值驱动（按 current_age）。
+
+blades_and_thrones_era_levy_early = {
+	potential_trigger = {
+		has_policy = levy_state_policy
+	}
+	scales_with = {
+		value = blades_and_thrones_era_early_scale
+	}
+	global_army_levy_size_modifier = 0.10
+	global_manpower_modifier = 0.05
+	army_maintenance_efficiency = 0.10
+}
+
+blades_and_thrones_era_levy_late = {
+	potential_trigger = {
+		has_policy = levy_state_policy
+	}
+	scales_with = {
+		value = blades_and_thrones_era_late_scale
+	}
+	discipline = -0.025
+	land_morale_modifier = -0.05
+}
+
+blades_and_thrones_era_standing_early = {
+	potential_trigger = {
+		has_policy = standing_army_state_policy
+	}
+	scales_with = {
+		value = blades_and_thrones_era_early_scale
+	}
+	army_maintenance_efficiency = -0.10
+}
+
+blades_and_thrones_era_standing_late = {
+	potential_trigger = {
+		has_policy = standing_army_state_policy
+	}
+	scales_with = {
+		value = blades_and_thrones_era_late_scale
+	}
+	discipline = 0.05
+	land_morale_modifier = 0.05
+	army_maintenance_efficiency = 0.10
+}
+
+blades_and_thrones_era_mercenary_early = {
+	potential_trigger = {
+		has_policy = mercenary_league_policy
+	}
+	scales_with = {
+		value = blades_and_thrones_era_early_scale
+	}
+	hire_mercenary_premium_cost_modifier = -0.10
+	mercenary_maintenance_efficiency = 0.10
+}
+
+blades_and_thrones_era_mercenary_late = {
+	potential_trigger = {
+		has_policy = mercenary_league_policy
+	}
+	scales_with = {
+		value = blades_and_thrones_era_late_scale
+	}
+	hire_mercenary_premium_cost_modifier = 0.10
+	global_mercenaries_modifier = -0.05
+}
+
+blades_and_thrones_era_mixed_late = {
+	potential_trigger = {
+		has_policy = mixed_military_policy
+	}
+	scales_with = {
+		value = blades_and_thrones_era_late_scale
+	}
+	discipline = 0.025
+	land_morale_modifier = 0.025
+}
+
+# 特权时代缩放：国家佣兵合同（state_mercenary_contracts）
+# 早期（佣兵黄金时代）：雇佣溢价更低、佣兵维护更省
+# 晚期（佣兵过时）：溢价优惠衰减
+blades_and_thrones_era_mercenary_contracts_early = {
+	potential_trigger = {
+		has_estate_privilege = estate_privilege:zzz_mercenary_mutiny_soldiers_state_mercenary_contracts
+	}
+	scales_with = {
+		value = blades_and_thrones_era_early_scale
+	}
+	hire_mercenary_premium_cost_modifier = -0.05
+	mercenary_maintenance_efficiency = 0.05
+}
+
+blades_and_thrones_era_mercenary_contracts_late = {
+	potential_trigger = {
+		has_estate_privilege = estate_privilege:zzz_mercenary_mutiny_soldiers_state_mercenary_contracts
+	}
+	scales_with = {
+		value = blades_and_thrones_era_late_scale
+	}
+	hire_mercenary_premium_cost_modifier = 0.05
+}
+
+# 无地国掠夺专长：流浪军团靠刀剑吃饭（原版 army 国家已有 +33% 掠夺量，mod 再叠加）
+blades_and_thrones_landless_looter = {
+	potential_trigger = {
+		OR = {
+			has_variable = mercenary_mutiny_exiles_country
+			has_variable = mercenary_mutiny_original_exile_marker
+			has_variable = blades_and_thrones_volunteer_company
+			is_subject_type = mercenary_company
+		}
+	}
+	amount_looted_modifier = 0.25
+}

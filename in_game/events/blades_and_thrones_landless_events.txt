@@ -1,0 +1,132 @@
+namespace = blades_and_thrones_landless
+
+# ============ 安家立业：无地国获得第一块土地 ============
+blades_and_thrones_landless.1 = { #安家立业：获得第一块土地后的抉择
+	type = country_event
+	title = blades_and_thrones_landless.1.title
+	desc = blades_and_thrones_landless.1.desc
+	outcome = neutral
+	major = yes
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_landless.1.a
+		# 移除流亡身份（流亡改革），成为有土地的军事国家
+		remove_reform = government_reform:mercenary_mutiny_exiles_reform
+		remove_variable = mercenary_mutiny_annex_exiles_marker
+		# 夺舍残部（original_exile_marker）同样结束流亡身份，恢复原名
+		remove_variable = mercenary_mutiny_original_exile_marker
+		# 转正：从军队型国家变为正常领土国家
+		trigger_if = {
+			limit = { country_type = army }
+			change_country_type = location
+		}
+		add_country_modifier = {
+			modifier = blades_and_thrones_settled_military_modifier
+		}
+		add_prestige = 5
+		# 性格→路径：在此扎根 → 拥土之后野心膨胀，流浪佣兵蜕变为军阀
+		# （玩家与 AI 都走此路径：性格随身份的质变而演化，之后驱动扩张/割据行为）
+		set_personality = ai_personality:ai_warlord
+		set_variable = {
+			name = blades_and_thrones_landless_settled
+			value = yes
+		}
+		remove_variable = blades_and_thrones_settle_offer_cooldown
+		custom_tooltip = blades_and_thrones_landless.1.a.tt
+	}
+
+	option = {
+		name = blades_and_thrones_landless.1.b
+		custom_tooltip = blades_and_thrones_landless.1.b.tt
+	}
+}
+
+# ============ 洗劫：无地军团驻扎他国领地的生存之道 ============
+blades_and_thrones_landless.2 = { #纵兵劫掠：驻扎他国时的洗劫抉择
+	type = country_event
+	title = blades_and_thrones_landless.2.title
+	desc = blades_and_thrones_landless.2.desc
+	outcome = neutral
+	trigger = {
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				name = blades_and_thrones_plunder_display
+				value = {
+					value = root.army_size
+					multiply = 0.005
+					min = 10
+				}
+			}
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_landless.2.a
+		ai_chance = {
+			factor = 40
+		}
+		add_gold = {
+			value = var:blades_and_thrones_plunder_display
+		}
+		add_stability = stability_weak_penalty
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_mild_bonus
+		}
+		custom_tooltip = blades_and_thrones_landless.2.a.tt
+	}
+
+	option = {
+		name = blades_and_thrones_landless.2.b
+		ai_chance = {
+			factor = 60
+		}
+		add_legitimacy = 2.5
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_penalty
+		}
+		custom_tooltip = blades_and_thrones_landless.2.b.tt
+	}
+}
+
+# ============ 复国：夺回故都 ============
+blades_and_thrones_landless.3 = { #还都：光复故都，结束流亡
+	type = country_event
+	title = blades_and_thrones_landless.3.title
+	desc = blades_and_thrones_landless.3.desc
+	outcome = neutral
+	major = yes
+	trigger = {
+	}
+
+	option = {
+		name = blades_and_thrones_landless.3.a
+		remove_reform = government_reform:mercenary_mutiny_exiles_reform
+		remove_variable = mercenary_mutiny_annex_exiles_marker
+		# 夺舍残部（original_exile_marker）同样结束流亡身份，恢复原名
+		remove_variable = mercenary_mutiny_original_exile_marker
+		# 转正：从军队型国家变为正常领土国家（若已转正则跳过）
+		trigger_if = {
+			limit = { country_type = army }
+			change_country_type = location
+		}
+		add_country_modifier = {
+			modifier = blades_and_thrones_restored_country_modifier
+		}
+		add_legitimacy = legitimacy_severe_bonus
+		add_stability = stability_mild_bonus
+		set_variable = {
+			name = blades_and_thrones_landless_settled
+			value = yes
+		}
+		remove_variable = blades_and_thrones_settle_offer_cooldown
+		remove_variable = mercenary_mutiny_homeland
+		custom_tooltip = blades_and_thrones_landless.3.a.tt
+	}
+}

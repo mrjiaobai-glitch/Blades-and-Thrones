@@ -1,0 +1,23 @@
+INJECT:army_maintenance_mod = {
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = 0.05
+}
+
+INJECT:army_maintenance_reverse_mod = {
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = -0.05
+}
+
+INJECT:navy_maintenance_mod = {
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = 0.05
+}
+
+INJECT:navy_maintenance_reverse_mod = {
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = -0.05
+}
+
+INJECT:fort_maintenance_mod = {
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = 0.05
+}
+
+INJECT:fort_maintenance_reverse_mod = {
+	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = -0.05
+}

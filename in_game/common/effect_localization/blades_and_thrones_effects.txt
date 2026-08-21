@@ -1,0 +1,87 @@
+# 自定义 scripted effect 的本地化（对照原版 effect_localization/country_effects.txt 模式）。
+# 引擎在 tooltip/日志中展示这些效果时，用这里的 global 键显示中文名而非脚本名。
+# 命名规则：BT_<EFFECT 名大写>_EFFECT；loc 键见 yml（BT_EFFECT_* 前缀）。
+
+mercenary_mutiny_create_rebel_effect = {
+	global = BT_EFFECT_CREATE_REBEL
+}
+
+mercenary_mutiny_activate_civil_war_effect = {
+	global = BT_EFFECT_ACTIVATE_CIVIL_WAR
+}
+
+mercenary_mutiny_takeover_effect = {
+	global = BT_EFFECT_TAKEOVER
+}
+
+mercenary_mutiny_create_army_country_effect = {
+	global = BT_EFFECT_CREATE_ARMY_COUNTRY
+}
+
+mercenary_mutiny_convert_annexed_to_army_country_effect = {
+	global = BT_EFFECT_CONVERT_ANNEXED
+}
+
+mercenary_mutiny_country_takeover_effect = {
+	global = BT_EFFECT_COUNTRY_TAKEOVER
+}
+
+mercenary_mutiny_mercenaries_destroyed_effect = {
+	global = BT_EFFECT_MERCENARIES_DESTROYED
+}
+
+mercenary_mutiny_early_suppressed_effect = {
+	global = BT_EFFECT_EARLY_SUPPRESSED
+}
+
+mercenary_mutiny_create_regular_units_from_stored_strength_effect = {
+	global = BT_EFFECT_RECREATE_UNITS
+}
+
+mercenary_mutiny_create_original_exile_country_effect = {
+	global = BT_EFFECT_CREATE_EXILE_COUNTRY
+}
+
+mercenary_mutiny_takeover_with_exile_effect = {
+	global = BT_EFFECT_TAKEOVER_WITH_EXILE
+}
+
+mercenary_mutiny_resolve_disaster_effect = {
+	global = BT_EFFECT_RESOLVE_DISASTER
+}
+
+mercenary_mutiny_create_regular_sub_unit_from_original_effect = {
+	global = BT_EFFECT_REGULARIZE_SUBUNIT
+}
+
+blades_and_thrones_prepare_intel_report_effect = {
+	global = BT_EFFECT_PREPARE_INTEL
+}
+
+blades_and_thrones_clone_sub_unit_as_regular_effect = {
+	global = BT_EFFECT_CLONE_REGULAR
+}
+
+blades_and_thrones_integrate_mercenary_core_effect = {
+	global = BT_EFFECT_INTEGRATE_MERC_CORE
+}
+
+blades_and_thrones_integrate_mercenary_effect = {
+	global = BT_EFFECT_INTEGRATE_MERC
+}
+
+blades_and_thrones_found_company_effect = {
+	global = BT_EFFECT_FOUND_COMPANY
+}
+
+blades_and_thrones_reinstate_company_effect = {
+	global = BT_EFFECT_REINSTATE_COMPANY
+}
+
+blades_and_thrones_demobilize_army_effect = {
+	global = BT_EFFECT_DEMOBILIZE_ARMY
+}
+
+blades_and_thrones_resettle_soldiers_effect = {
+	global = BT_EFFECT_RESETTLE_SOLDIERS
+}

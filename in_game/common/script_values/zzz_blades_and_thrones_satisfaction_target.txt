@@ -1,0 +1,32 @@
+# 覆盖原版 current_target_satisfaction：追加士兵阶层分支（其余阶层与原版一致）。
+# 用 REPLACE_OR_CREATE 实现条目级合并——不整文件覆盖，避免影响 auto_coin_minting_enabled
+# 等其他条目，并与未来原版更新、其他新增阶层 mod 的冲突面最小化（仅本条目冲突）。
+REPLACE_OR_CREATE:current_target_satisfaction = {
+	scope:country = {
+		if = { limit = { scope:estate_type = estate_type:nobles_estate }
+			if = { limit = { exists = var:nobles_estate_target } value = var:nobles_estate_target }
+			else = { value = 0.5 }
+		} else_if = { limit = { scope:estate_type = estate_type:clergy_estate }
+			if = { limit = { exists = var:clergy_estate_target } value = var:clergy_estate_target }
+			else = { value = 0.5 }
+		} else_if = { limit = { scope:estate_type = estate_type:burghers_estate }
+			if = { limit = { exists = var:burghers_estate_target } value = var:burghers_estate_target }
+			else = { value = 0.5 }
+		} else_if = { limit = { scope:estate_type = estate_type:peasants_estate }
+			if = { limit = { exists = var:peasants_estate_target } value = var:peasants_estate_target }
+			else = { value = 0.5 }
+		} else_if = { limit = { scope:estate_type = estate_type:tribes_estate }
+			if = { limit = { exists = var:tribes_estate_target } value = var:tribes_estate_target }
+			else = { value = 0.5 }
+		} else_if = { limit = { scope:estate_type = estate_type:cossacks_estate }
+			if = { limit = { exists = var:cossacks_estate_target } value = var:cossacks_estate_target }
+			else = { value = 0.5 }
+		} else_if = { limit = { scope:estate_type = estate_type:dhimmi_estate }
+			if = { limit = { exists = var:dhimmi_estate_target } value = var:dhimmi_estate_target }
+			else = { value = 0.5 }
+		} else_if = { limit = { scope:estate_type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate }
+			if = { limit = { exists = var:zzz_rebalanced_nepal_mercenary_soldiers_estate_target } value = var:zzz_rebalanced_nepal_mercenary_soldiers_estate_target }
+			else = { value = 0.5 }
+		} else = { value = 0.5 }
+	}
+}

@@ -1,0 +1,113 @@
+# ============================================================================
+# 军团国改革树：佣兵传统 / 雇佣兵团化 / 掠夺方针（三选一，互斥）。
+# 适用：佣兵军团国（mercenary_company 附庸，country_type = army）。
+# 互斥写法对齐原版 military_regime_reform / admiralty_regime_reform
+# （allow = NOT has_reform），此处三选一用 NOR 三者。
+# 每个改革带社会价值观 focus 并推动对应方向（军国/文官/好战），
+# 与《刀锋与王座》的"军国主义 vs 文官主义"轴联动。
+# ============================================================================
+
+# 佣兵传统：保持佣兵身份——专业雇佣兵团
+blades_and_thrones_company_tradition_reform = {
+	potential = {
+		country_type = army
+		OR = {
+			is_subject_type = mercenary_company
+			has_reform = government_reform:blades_and_thrones_company_tradition_reform
+			has_reform = government_reform:blades_and_thrones_company_regularize_reform
+			has_reform = government_reform:blades_and_thrones_company_looting_reform
+		}
+	}
+
+	allow = {
+		NOR = {
+			has_reform = government_reform:blades_and_thrones_company_tradition_reform
+			has_reform = government_reform:blades_and_thrones_company_regularize_reform
+			has_reform = government_reform:blades_and_thrones_company_looting_reform
+		}
+	}
+
+	societal_values = {
+		militarism_focus
+	}
+
+	country_modifier = {
+		mercenary_maintenance_efficiency = 0.10
+		global_mercenaries_modifier = 0.05
+		monthly_army_tradition = 0.05
+		monthly_legitimacy = -0.02
+		monthly_towards_militarism = societal_value_monthly_move
+	}
+
+	years = 2
+}
+
+# 雇佣兵团化：洗白转正规军——从佣兵集团转型国家军队
+blades_and_thrones_company_regularize_reform = {
+	potential = {
+		country_type = army
+		OR = {
+			is_subject_type = mercenary_company
+			has_reform = government_reform:blades_and_thrones_company_tradition_reform
+			has_reform = government_reform:blades_and_thrones_company_regularize_reform
+			has_reform = government_reform:blades_and_thrones_company_looting_reform
+		}
+	}
+
+	allow = {
+		NOR = {
+			has_reform = government_reform:blades_and_thrones_company_tradition_reform
+			has_reform = government_reform:blades_and_thrones_company_regularize_reform
+			has_reform = government_reform:blades_and_thrones_company_looting_reform
+		}
+	}
+
+	societal_values = {
+		civilianism_focus
+	}
+
+	country_modifier = {
+		discipline = 0.025
+		land_morale_modifier = 0.05
+		army_maintenance_efficiency = -0.10
+		# 转正后失去佣兵网络的折扣，再招佣兵更贵
+		hire_mercenary_premium_cost_modifier = 0.05
+		monthly_towards_civilianism = societal_value_monthly_move
+	}
+
+	years = 2
+}
+
+# 掠夺方针：以战养战——战争本身即收益
+blades_and_thrones_company_looting_reform = {
+	potential = {
+		country_type = army
+		OR = {
+			is_subject_type = mercenary_company
+			has_reform = government_reform:blades_and_thrones_company_tradition_reform
+			has_reform = government_reform:blades_and_thrones_company_regularize_reform
+			has_reform = government_reform:blades_and_thrones_company_looting_reform
+		}
+	}
+
+	allow = {
+		NOR = {
+			has_reform = government_reform:blades_and_thrones_company_tradition_reform
+			has_reform = government_reform:blades_and_thrones_company_regularize_reform
+			has_reform = government_reform:blades_and_thrones_company_looting_reform
+		}
+	}
+
+	societal_values = {
+		belligerent_focus
+	}
+
+	country_modifier = {
+		amount_looted_modifier = 0.25
+		monthly_war_exhaustion = 0.01
+		monthly_legitimacy = -0.02
+		monthly_towards_belligerent = societal_value_monthly_move
+	}
+
+	years = 2
+}

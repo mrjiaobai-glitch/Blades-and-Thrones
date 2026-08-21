@@ -1,0 +1,34 @@
+# 消息类型：ask_soldiers_for_suppression（请求士兵平叛）
+# 依据官方 Wiki（Action modding → Generic actions → Messages）：
+# generic action 需要定义 PERFORM_<key>_ACTION 消息类型（格式同原版
+# main_menu/gui/messagetypes.txt 的 PERFORM_bribe_estate_ACTION）。
+PERFORM_ask_soldiers_for_suppression_ACTION = {
+	log = yes
+	onmap = no
+	popup = yes
+	idle = no
+	option = yes
+	pausepopup = no
+	message_category = government
+}
+
+# 收回藩地 / 换地（军阀管理）
+PERFORM_blades_and_thrones_revoke_warlord_land_ACTION = {
+	log = yes
+	onmap = no
+	popup = yes
+	idle = no
+	option = yes
+	pausepopup = no
+	message_category = government
+}
+
+PERFORM_blades_and_thrones_exchange_warlord_land_ACTION = {
+	log = yes
+	onmap = no
+	popup = yes
+	idle = no
+	option = yes
+	pausepopup = no
+	message_category = government
+}

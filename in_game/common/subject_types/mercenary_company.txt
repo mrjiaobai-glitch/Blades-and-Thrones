@@ -1,0 +1,466 @@
+# ============================================================================
+# 鍐涘洟鍥介檮搴哥被鍨嬩綋绯伙紙浜旂骇鏍戠姸锛夛細
+#   鍚堝悓宸ヤ剑鍏碉紙浣庣骇锛夆攢鈹€瑙勬ā鈹€鈹€> 寮哄姏浣ｅ叺鍥斤紙楂樼骇锛夆攢鈹€鈹?
+#                                                 鈹溾攢鈹€> 鍦版柟鍐涢榾锛堜富骞诧紝鏈夊湴鐩橈級
+#   浠ｇ鍐涢槦锛堜綆绾э級鈹€鈹€瑙勬ā鈹€鈹€> 澶у瀷浠ｇ锛堥珮绾э級鈹€鈹€鈹€鈹€鈹€鈹€鈹?
+# 瑙勫垯锛?
+# 路 浣庣骇锛氭棤寮鸿鑴辩锛坰ubject_can_cancel = no锛夈€佹棤鍙嶅彌锛坵ill_join_independence_wars = no锛?
+# 路 楂樼骇锛氭鍔涘己澶?鈫?鍙拰骞宠劚绂伙紱寮哄姏浣ｅ叺鍥藉彲鎴樺満鍊掓垐锛屽ぇ鍨嬩唬绠℃案涓嶅€掓垐
+# 路 鍐涢榾锛氳幏寰楀湴鐩樺悗鐨勫舰鎬侊紙瀹椾富璧愬湴/鎷撹崚锛夛紝鍗婄嫭绔嬶紝瀹椾富鍙楅毦鏃跺彲鍊掓垐鐙珛
+# 路 鍗囩骇/闄嶇骇鐢卞畻涓讳晶鑴夊啿鎸夌浉瀵瑰疄鍔涳紙army_size 瀵规瘮瀹椾富锛夐┍鍔?
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# 鍚堝悓宸ヤ剑鍏碉紙浣庣骇锛夛細閫愬埄鐨勯泧浣ｅ叺鍥紝涓嶅惉鍙蜂护銆佷笉鍙傛垬銆佺储楗枫€傛棤寮鸿鑴辩銆佹棤鍙嶅彌銆?
+# ----------------------------------------------------------------------------
+mercenary_company = {
+
+	type = army
+	subject_pays = subject_pays_vassal
+	level = 0
+
+	# 浣ｅ叺鍐涘洟鍥芥槸"鍚嶄箟鑷ｅ睘"锛氫笉鍚彿浠わ紝涓嶅弬鍔犲畻涓荤殑浠讳綍鎴樹簤
+	join_offensive_wars_always = { always = no }
+	join_offensive_wars_auto_call = { always = no }
+	join_offensive_wars_can_call = { always = no }
+	join_defensive_wars_always = { always = no }
+	join_defensive_wars_auto_call = { always = no }
+	join_defensive_wars_can_call = { always = no }
+	# 浣庣骇锛氭棤浠讳綍閫斿緞鍙嶅彌锛堜笉鍔犲叆鐙珛鎴樹簤鍊掓垐锛?
+	will_join_independence_wars = no
+	# 浣庣骇锛氫笉鑳借嚜琛岃劚绂伙紙鍚堝悓閿佹锛岄櫎闈炲畻涓昏В绾︼級
+	subject_can_cancel = no
+	overlord_can_cancel = yes
+	# 寮变簬瀹椾富锛堢窘缈兼湭涓帮級
+	strength_vs_overlord = -0.5
+	# 澶栦氦鏉冿紙瀵归綈鍘熺増 vassal 鎯緥锛夛細
+	# 路 fleet_basing_rights锛氬畻涓诲彲鍦ㄥ啗鍥㈡腐鍙ｉ┗娉婅埌闃燂紙閰嶅悎 foreign 鍐涘洟娓缓绛戯級
+	# 路 food_access锛氬畻涓诲彲杩涘叆鍐涘洟棰嗗湡璐伯锛堝啗鍥㈡棤棰嗗湡鏃舵棤瀹為檯鏁堟灉锛屽瓧娈典繚鎸佸畬鏁达級
+	# 鍐涘洟鍥藉湪瀹椾富棰嗗湡鐨勯┗鐣?璐伯鐢?鏃犲湴鍐涘洟'鏀归潻 + 鏈堝害閫氳鑴夊啿鎻愪緵锛堣 on_action锛夈€?
+	fleet_basing_rights = yes
+	food_access = yes
+
+	# 鍒跺害瀹屾暣鎬э紙瀵圭収 tributary/march 鎯緥锛夛細
+	# 路 overlord_protects_external = no锛氬啗鍥笉琚畻涓讳繚鎶も€斺€旈€愬埄闆囦剑鍏碉紝瀹椾富涓嶄负浠栦滑鍑哄ご
+	# 路 counts_as_external = yes锛氬啗鍥㈡敾鍑诲畻涓诲叾浠栭檮搴告椂瑙嗕负澶栭儴濞佽儊锛?涓嶅繝'瀹氫綅锛?
+	# 路 institution_spread锛氭€濇疆鍦ㄥ畻涓讳笌鍐涘洟鍥戒箣闂寸紦鎱紶鎾紙鏃犲湴娴佸姩鎬э級
+	# 路 use_overlord_map_color/name = no锛氬湴鍥句笂鐙珛鏄剧ず锛堜笉闅忓畻涓婚鑹?鍚嶅瓧锛?
+	# 路 can_change_rank = no锛氬啗鍥㈠浗绛夌骇鐢卞舰鎬佸喅瀹氾紙浣?楂樼骇锛夛紝闃茬帺瀹惰嚜琛屼贡鍗?
+	overlord_protects_external = no
+	counts_as_external = yes
+	institution_spread_to_overlord = monthly_institution_spread_weak
+	institution_spread_to_subject = monthly_institution_spread_weak
+	use_overlord_map_color = no
+	use_overlord_map_name = no
+	can_change_rank = no
+	can_change_heir_selection = yes
+
+	# 鍏崇郴鐮磋鏃舵竻鐞嗕笉蹇?瀹夋姎淇
+	on_disable = {
+		remove_country_modifier = mercenary_mutiny_disloyal_subject
+		remove_country_modifier = mercenary_mutiny_placated
+		remove_variable = mercenary_mutiny_disloyal_subject
+	}
+
+	has_limited_diplomacy = yes
+	can_be_annexed = no
+
+	creation_visible = {
+		always = no
+	}
+	visible_through_diplomacy = {
+		always = no
+	}
+	visible_through_treaty = {
+		always = no
+	}
+
+
+	# 主题修正：宗主收军团之利（合同税），军团逐利难治
+	overlord_modifier = {
+		monthly_prestige = 0.01
+		# 军团经济补助（月度支出）：对应附庸侧 subject_modifier 的正收入
+		monthly_gold_income = -25
+	}
+	subject_modifier = {
+		country_cabinet_efficiency = -0.15
+		monthly_prestige = 0.02
+		# 宗主经济补助（月度，替代旧的年度一次性拨款）：原版先例 sco_auld_alliance_funding
+		monthly_gold_income = 25
+		# 扩军倾向：AI 军团的目标军队规模放大（expected_army_size_modifier，原版 warrior_banners 同款）
+		expected_army_size_modifier = 0.25
+		# 人力池（max_manpower 千人）：无地军团无领土 POP，靠此基础人力补充部队损耗
+		# （原版先例：神罗皇帝军械库 max_manpower = 5）
+		max_manpower = 5
+	}
+
+	diplo_chance_accept_subject = {
+		base = -9999
+	}
+	diplo_chance_accept_overlord = {
+		base = -9999
+	}
+}
+
+# ----------------------------------------------------------------------------
+# 浠ｇ鍐涢槦锛堜綆绾э級锛氬浗瀹跺啗闃熺殑浠ｇ鏈烘瀯銆傚惉浠わ細闃插尽蹇呭弬銆佽繘鏀诲彲鍙紱鏃犲己琛岃劚绂汇€佹棤鍙嶅彌銆?
+# 鍐涜垂鎷ㄦ渚涘吇锛堢ǔ瀹氾級锛屾嫋娆?鈫?鎬犲伐锛堜簨浠跺眰琛ㄨ揪锛夛紝缁濅笉鍙嶅彌銆?
+# ----------------------------------------------------------------------------
+mercenary_company_trusted = {
+
+	type = army
+	subject_pays = subject_pays_vassal
+	level = 0
+
+	# 浠ｇ鍐涢槦鍚护浜庡浗瀹讹細闃插尽鎴樹簤蹇呭弬銆佽繘鏀绘垬浜夊彲琚彫鍞?
+	join_defensive_wars_always = { always = yes }
+	join_defensive_wars_auto_call = { always = yes }
+	join_offensive_wars_can_call = { always = yes }
+	join_offensive_wars_auto_call = { always = yes }
+	# 浣庣骇锛氭棤鍙嶅彌銆佹棤寮鸿鑴辩
+	will_join_independence_wars = no
+	subject_can_cancel = no
+	overlord_can_cancel = yes
+	# 寮变簬瀹椾富
+	strength_vs_overlord = -0.5
+	# 澶栦氦鏉冿紙瀵归綈鍘熺増 vassal 鎯緥锛夛細
+	# 路 fleet_basing_rights锛氬畻涓诲彲鍦ㄥ啗鍥㈡腐鍙ｉ┗娉婅埌闃燂紙閰嶅悎 foreign 鍐涘洟娓缓绛戯級
+	# 路 food_access锛氬畻涓诲彲杩涘叆鍐涘洟棰嗗湡璐伯锛堝啗鍥㈡棤棰嗗湡鏃舵棤瀹為檯鏁堟灉锛屽瓧娈典繚鎸佸畬鏁达級
+	# 鍐涘洟鍥藉湪瀹椾富棰嗗湡鐨勯┗鐣?璐伯鐢?鏃犲湴鍐涘洟'鏀归潻 + 鏈堝害閫氳鑴夊啿鎻愪緵锛堣 on_action锛夈€?
+	fleet_basing_rights = yes
+	food_access = yes
+
+	# 鍒跺害瀹屾暣鎬э紙瀵圭収 tributary/march 鎯緥锛夛細
+	# 路 overlord_protects_external = no锛氬啗鍥笉琚畻涓讳繚鎶も€斺€旈€愬埄闆囦剑鍏碉紝瀹椾富涓嶄负浠栦滑鍑哄ご
+	# 路 counts_as_external = yes锛氬啗鍥㈡敾鍑诲畻涓诲叾浠栭檮搴告椂瑙嗕负澶栭儴濞佽儊锛?涓嶅繝'瀹氫綅锛?
+	# 路 institution_spread锛氭€濇疆鍦ㄥ畻涓讳笌鍐涘洟鍥戒箣闂寸紦鎱紶鎾紙鏃犲湴娴佸姩鎬э級
+	# 路 use_overlord_map_color/name = no锛氬湴鍥句笂鐙珛鏄剧ず锛堜笉闅忓畻涓婚鑹?鍚嶅瓧锛?
+	# 路 can_change_rank = no锛氬啗鍥㈠浗绛夌骇鐢卞舰鎬佸喅瀹氾紙浣?楂樼骇锛夛紝闃茬帺瀹惰嚜琛屼贡鍗?
+	overlord_protects_external = no
+	counts_as_external = yes
+	institution_spread_to_overlord = monthly_institution_spread_weak
+	institution_spread_to_subject = monthly_institution_spread_weak
+	use_overlord_map_color = no
+	use_overlord_map_name = no
+	can_change_rank = no
+	can_change_heir_selection = yes
+
+	on_disable = {
+		remove_country_modifier = mercenary_mutiny_disloyal_subject
+		remove_country_modifier = mercenary_mutiny_placated
+		remove_variable = mercenary_mutiny_disloyal_subject
+	}
+
+	has_limited_diplomacy = yes
+	can_be_annexed = no
+
+	creation_visible = {
+		always = no
+	}
+	visible_through_diplomacy = {
+		always = no
+	}
+	visible_through_treaty = {
+		always = no
+	}
+
+
+	# 主题修正：代管听令，宗主得军纪之利；军团守纪
+	overlord_modifier = {
+		monthly_legitimacy = 0.01
+		# 军团经济补助（月度支出）：对应附庸侧 subject_modifier 的正收入
+		monthly_gold_income = -50
+	}
+	subject_modifier = {
+		discipline = 0.025
+		country_cabinet_efficiency = -0.10
+		# 宗主经济补助（月度，替代旧的年度一次性拨款）：原版先例 sco_auld_alliance_funding
+		monthly_gold_income = 50
+		# 扩军倾向：AI 军团的目标军队规模放大（expected_army_size_modifier，原版 warrior_banners 同款）
+		expected_army_size_modifier = 0.25
+		# 人力池（max_manpower 千人）：无地军团无领土 POP，靠此基础人力补充部队损耗
+		# （原版先例：神罗皇帝军械库 max_manpower = 5）
+		max_manpower = 5
+	}
+
+	diplo_chance_accept_subject = {
+		base = -9999
+	}
+	diplo_chance_accept_overlord = {
+		base = -9999
+	}
+}
+
+# ----------------------------------------------------------------------------
+# 寮哄姏浣ｅ叺鍥斤紙楂樼骇锛夛細姝﹀姏寮哄ぇ 鈫?鎷ユ湁鐗规潈锛氬彲鑴辩瀹椾富锛堣В绾?鍊掓垐鐙珛鎴樹簤锛夈€?
+# 浠嶆槸鍚堝悓鎬ц川锛氫笉鍚彿浠ゃ€佺储楗枫€?
+# ----------------------------------------------------------------------------
+mercenary_company_veteran = {
+
+	type = army
+	subject_pays = subject_pays_vassal
+	level = 0
+
+	# 楂樼骇浣ｅ叺浠嶄笉鍙傚姞瀹椾富鎴樹簤锛堝悎鍚屾€ц川涓嶅彉锛?
+	join_offensive_wars_always = { always = no }
+	join_offensive_wars_auto_call = { always = no }
+	join_offensive_wars_can_call = { always = no }
+	join_defensive_wars_always = { always = no }
+	join_defensive_wars_auto_call = { always = no }
+	join_defensive_wars_can_call = { always = no }
+	# 楂樼骇锛氬洜姝﹀姏寮哄ぇ鑰屾嫢鏈夌壒鏉冣€斺€斿彲鑴辩銆佸彲鎴樺満鍊掓垐
+	will_join_independence_wars = yes
+	subject_can_cancel = yes
+	overlord_can_cancel = yes
+	# 瀹炲姏涓庡畻涓绘寔骞筹紙缇界考宸蹭赴锛?
+	strength_vs_overlord = 0.0
+	# 澶栦氦鏉冿紙瀵归綈鍘熺増 vassal 鎯緥锛夛細
+	# 路 fleet_basing_rights锛氬畻涓诲彲鍦ㄥ啗鍥㈡腐鍙ｉ┗娉婅埌闃燂紙閰嶅悎 foreign 鍐涘洟娓缓绛戯級
+	# 路 food_access锛氬畻涓诲彲杩涘叆鍐涘洟棰嗗湡璐伯锛堝啗鍥㈡棤棰嗗湡鏃舵棤瀹為檯鏁堟灉锛屽瓧娈典繚鎸佸畬鏁达級
+	# 鍐涘洟鍥藉湪瀹椾富棰嗗湡鐨勯┗鐣?璐伯鐢?鏃犲湴鍐涘洟'鏀归潻 + 鏈堝害閫氳鑴夊啿鎻愪緵锛堣 on_action锛夈€?
+	fleet_basing_rights = yes
+	food_access = yes
+
+	# 鍒跺害瀹屾暣鎬э紙瀵圭収 tributary/march 鎯緥锛夛細
+	# 路 overlord_protects_external = no锛氬啗鍥笉琚畻涓讳繚鎶も€斺€旈€愬埄闆囦剑鍏碉紝瀹椾富涓嶄负浠栦滑鍑哄ご
+	# 路 counts_as_external = yes锛氬啗鍥㈡敾鍑诲畻涓诲叾浠栭檮搴告椂瑙嗕负澶栭儴濞佽儊锛?涓嶅繝'瀹氫綅锛?
+	# 路 institution_spread锛氭€濇疆鍦ㄥ畻涓讳笌鍐涘洟鍥戒箣闂寸紦鎱紶鎾紙鏃犲湴娴佸姩鎬э級
+	# 路 use_overlord_map_color/name = no锛氬湴鍥句笂鐙珛鏄剧ず锛堜笉闅忓畻涓婚鑹?鍚嶅瓧锛?
+	# 路 can_change_rank = no锛氬啗鍥㈠浗绛夌骇鐢卞舰鎬佸喅瀹氾紙浣?楂樼骇锛夛紝闃茬帺瀹惰嚜琛屼贡鍗?
+	overlord_protects_external = no
+	counts_as_external = yes
+	institution_spread_to_overlord = monthly_institution_spread_weak
+	institution_spread_to_subject = monthly_institution_spread_weak
+	use_overlord_map_color = no
+	use_overlord_map_name = no
+	can_change_rank = no
+	can_change_heir_selection = yes
+
+	on_disable = {
+		remove_country_modifier = mercenary_mutiny_disloyal_subject
+		remove_country_modifier = mercenary_mutiny_placated
+		remove_variable = mercenary_mutiny_disloyal_subject
+	}
+
+	has_limited_diplomacy = yes
+	can_be_annexed = no
+
+	creation_visible = {
+		always = no
+	}
+	visible_through_diplomacy = {
+		always = no
+	}
+	visible_through_treaty = {
+		always = no
+	}
+
+
+	# 主题修正：强佣兵要价更高，宗主养虎
+	overlord_modifier = {
+		monthly_prestige = 0.02
+		# 军团经济补助（月度支出）：对应附庸侧 subject_modifier 的正收入
+		monthly_gold_income = -50
+	}
+	subject_modifier = {
+		country_cabinet_efficiency = -0.20
+		monthly_prestige = 0.05
+		# 宗主经济补助（月度，替代旧的年度一次性拨款）：原版先例 sco_auld_alliance_funding
+		monthly_gold_income = 50
+		# 扩军倾向：AI 军团的目标军队规模放大（expected_army_size_modifier，原版 warrior_banners 同款）
+		expected_army_size_modifier = 0.5
+		# 人力池（max_manpower 千人）：无地军团无领土 POP，靠此基础人力补充部队损耗
+		# （原版先例：神罗皇帝军械库 max_manpower = 5）
+		max_manpower = 10
+	}
+
+	diplo_chance_accept_subject = {
+		base = -9999
+	}
+	diplo_chance_accept_overlord = {
+		base = -9999
+	}
+}
+
+# ----------------------------------------------------------------------------
+# 澶у瀷浠ｇ锛堥珮绾э級锛氬浗瀹跺啗鐨勭簿閿愭牳蹇冦€傞槻寰″繀鍙傘€佽繘鏀诲彲鍙紱鍙拰骞宠劚绂伙紙鏉′欢鐢变簨浠?瀹炲姏椹卞姩锛夛紱
+# 浣嗘案涓嶆垬鍦哄€掓垐锛堜唬绠″啗闃熺殑蹇犺瘹鏄埗搴︽€х殑锛夈€傚疄鍔涗笌瀹椾富鎸佸钩銆?
+# ----------------------------------------------------------------------------
+mercenary_company_grand = {
+
+	type = army
+	subject_pays = subject_pays_vassal
+	level = 0
+
+	join_defensive_wars_always = { always = yes }
+	join_defensive_wars_auto_call = { always = yes }
+	join_offensive_wars_can_call = { always = yes }
+	join_offensive_wars_auto_call = { always = yes }
+	# 楂樼骇浠ｇ锛氬彲鍜屽钩鑴辩锛屼絾姘镐笉鍊掓垐
+	will_join_independence_wars = no
+	subject_can_cancel = yes
+	overlord_can_cancel = yes
+	strength_vs_overlord = 0.0
+	# 澶栦氦鏉冿紙瀵归綈鍘熺増 vassal 鎯緥锛夛細
+	# 路 fleet_basing_rights锛氬畻涓诲彲鍦ㄥ啗鍥㈡腐鍙ｉ┗娉婅埌闃燂紙閰嶅悎 foreign 鍐涘洟娓缓绛戯級
+	# 路 food_access锛氬畻涓诲彲杩涘叆鍐涘洟棰嗗湡璐伯锛堝啗鍥㈡棤棰嗗湡鏃舵棤瀹為檯鏁堟灉锛屽瓧娈典繚鎸佸畬鏁达級
+	# 鍐涘洟鍥藉湪瀹椾富棰嗗湡鐨勯┗鐣?璐伯鐢?鏃犲湴鍐涘洟'鏀归潻 + 鏈堝害閫氳鑴夊啿鎻愪緵锛堣 on_action锛夈€?
+	fleet_basing_rights = yes
+	food_access = yes
+
+	# 鍒跺害瀹屾暣鎬э紙瀵圭収 tributary/march 鎯緥锛夛細
+	# 路 overlord_protects_external = no锛氬啗鍥笉琚畻涓讳繚鎶も€斺€旈€愬埄闆囦剑鍏碉紝瀹椾富涓嶄负浠栦滑鍑哄ご
+	# 路 counts_as_external = yes锛氬啗鍥㈡敾鍑诲畻涓诲叾浠栭檮搴告椂瑙嗕负澶栭儴濞佽儊锛?涓嶅繝'瀹氫綅锛?
+	# 路 institution_spread锛氭€濇疆鍦ㄥ畻涓讳笌鍐涘洟鍥戒箣闂寸紦鎱紶鎾紙鏃犲湴娴佸姩鎬э級
+	# 路 use_overlord_map_color/name = no锛氬湴鍥句笂鐙珛鏄剧ず锛堜笉闅忓畻涓婚鑹?鍚嶅瓧锛?
+	# 路 can_change_rank = no锛氬啗鍥㈠浗绛夌骇鐢卞舰鎬佸喅瀹氾紙浣?楂樼骇锛夛紝闃茬帺瀹惰嚜琛屼贡鍗?
+	overlord_protects_external = no
+	counts_as_external = yes
+	institution_spread_to_overlord = monthly_institution_spread_weak
+	institution_spread_to_subject = monthly_institution_spread_weak
+	use_overlord_map_color = no
+	use_overlord_map_name = no
+	can_change_rank = no
+	can_change_heir_selection = yes
+
+	on_disable = {
+		remove_country_modifier = mercenary_mutiny_disloyal_subject
+		remove_country_modifier = mercenary_mutiny_placated
+		remove_variable = mercenary_mutiny_disloyal_subject
+	}
+
+	has_limited_diplomacy = yes
+	can_be_annexed = no
+
+	creation_visible = {
+		always = no
+	}
+	visible_through_diplomacy = {
+		always = no
+	}
+	visible_through_treaty = {
+		always = no
+	}
+
+
+	# 主题修正：大型代管是精锐核心，宗主倚重；军团纪律严明
+	overlord_modifier = {
+		monthly_legitimacy = 0.02
+		local_manpower = 0.005
+		# 军团经济补助（月度支出）：对应附庸侧 subject_modifier 的正收入
+		monthly_gold_income = -75
+	}
+	subject_modifier = {
+		discipline = 0.05
+		country_cabinet_efficiency = -0.10
+		# 宗主经济补助（月度，替代旧的年度一次性拨款）：原版先例 sco_auld_alliance_funding
+		monthly_gold_income = 75
+		# 扩军倾向：AI 军团的目标军队规模放大（expected_army_size_modifier，原版 warrior_banners 同款）
+		expected_army_size_modifier = 0.5
+		# 人力池（max_manpower 千人）：无地军团无领土 POP，靠此基础人力补充部队损耗
+		# （原版先例：神罗皇帝军械库 max_manpower = 5）
+		max_manpower = 10
+	}
+
+	diplo_chance_accept_subject = {
+		base = -9999
+	}
+	diplo_chance_accept_overlord = {
+		base = -9999
+	}
+}
+
+# ----------------------------------------------------------------------------
+# 鍦版柟鍐涢榾锛堜富骞诧級锛氭湁鍦扮洏鐨勫啗鍥⑩€斺€斿崐鐙珛銆佸悕涔夎嚕灞炲疄闄呰嚜绔嬨€?
+# 鎷ユ湁鍦熷湴涓庡叺鏉冿細瀹椾富鍙楅毦鏃跺彲鍊掓垐鐙珛锛堝壊鎹鍙樻椂鍒伙級锛涘彲鑷鍓叉嵁锛坰ubject_can_cancel锛夈€?
+# 瀹炲姏寮轰簬瀹椾富锛堝熬澶т笉鎺夛級銆?
+# ----------------------------------------------------------------------------
+mercenary_company_warlord = {
+
+	type = army
+	subject_pays = subject_pays_vassal
+	level = 0
+
+	# 鍐涢榾鍚嶄箟鑷ｅ睘锛氫笉鍙傚姞瀹椾富鎴樹簤锛堝惉璋冧笉鍚锛?
+	join_offensive_wars_always = { always = no }
+	join_offensive_wars_auto_call = { always = no }
+	join_offensive_wars_can_call = { always = no }
+	join_defensive_wars_always = { always = no }
+	join_defensive_wars_auto_call = { always = no }
+	join_defensive_wars_can_call = { always = no }
+	# 鍐涢榾锛氬彲鍓叉嵁鐙珛锛堣В绾︼級锛屽畻涓诲彈闅炬椂鍙€掓垐鐙珛
+	will_join_independence_wars = yes
+	subject_can_cancel = yes
+	overlord_can_cancel = yes
+	# 灏惧ぇ涓嶆帀锛氬疄鍔涘己浜庡畻涓?
+	strength_vs_overlord = 0.3
+	# 澶栦氦鏉冿紙瀵归綈鍘熺増 vassal 鎯緥锛夛細
+	# 路 fleet_basing_rights锛氬畻涓诲彲鍦ㄥ啗鍥㈡腐鍙ｉ┗娉婅埌闃燂紙閰嶅悎 foreign 鍐涘洟娓缓绛戯級
+	# 路 food_access锛氬畻涓诲彲杩涘叆鍐涘洟棰嗗湡璐伯锛堝啗鍥㈡棤棰嗗湡鏃舵棤瀹為檯鏁堟灉锛屽瓧娈典繚鎸佸畬鏁达級
+	# 鍐涘洟鍥藉湪瀹椾富棰嗗湡鐨勯┗鐣?璐伯鐢?鏃犲湴鍐涘洟'鏀归潻 + 鏈堝害閫氳鑴夊啿鎻愪緵锛堣 on_action锛夈€?
+	fleet_basing_rights = yes
+	food_access = yes
+	# 鍐涢榾涓撳睘锛堝鐓?march/eyalet 鍗婄嫭绔嬫儻渚嬶級锛?
+	# 路 瀹椾富鍙湪钘╁湴绛戣矾/寤哄缓绛?鎷?RGO锛堝啗闃€鍦扮洏浠嶇畻瀹椾富鐤嗗煙涓€閮ㄥ垎锛?
+	# 路 鍐涢榾鏈夋捣娓?鈫?娴蜂簨瀹瑰繊涓烘锛堝畻涓昏埌闃熷彲閫氳鍏舵按鍩燂級
+	can_overlord_build_roads = yes
+	can_overlord_build_buildings = yes
+	can_overlord_build_rgos = yes
+	maritime_path_tolerance = 0.25
+
+	# 鍒跺害瀹屾暣鎬э紙瀵圭収 tributary/march 鎯緥锛夛細
+	# 路 overlord_protects_external = no锛氬啗鍥笉琚畻涓讳繚鎶も€斺€旈€愬埄闆囦剑鍏碉紝瀹椾富涓嶄负浠栦滑鍑哄ご
+	# 路 counts_as_external = yes锛氬啗鍥㈡敾鍑诲畻涓诲叾浠栭檮搴告椂瑙嗕负澶栭儴濞佽儊锛?涓嶅繝'瀹氫綅锛?
+	# 路 institution_spread锛氭€濇疆鍦ㄥ畻涓讳笌鍐涘洟鍥戒箣闂寸紦鎱紶鎾紙鏃犲湴娴佸姩鎬э級
+	# 路 use_overlord_map_color/name = no锛氬湴鍥句笂鐙珛鏄剧ず锛堜笉闅忓畻涓婚鑹?鍚嶅瓧锛?
+	# 路 can_change_rank = no锛氬啗鍥㈠浗绛夌骇鐢卞舰鎬佸喅瀹氾紙浣?楂樼骇锛夛紝闃茬帺瀹惰嚜琛屼贡鍗?
+	overlord_protects_external = no
+	counts_as_external = yes
+	institution_spread_to_overlord = monthly_institution_spread_weak
+	institution_spread_to_subject = monthly_institution_spread_weak
+	use_overlord_map_color = no
+	use_overlord_map_name = no
+	can_change_rank = no
+	can_change_heir_selection = yes
+
+	on_disable = {
+		remove_country_modifier = mercenary_mutiny_disloyal_subject
+		remove_country_modifier = mercenary_mutiny_placated
+		remove_variable = mercenary_mutiny_disloyal_subject
+	}
+
+	has_limited_diplomacy = yes
+	can_be_annexed = no
+
+	creation_visible = {
+		always = no
+	}
+	visible_through_diplomacy = {
+		always = no
+	}
+	visible_through_treaty = {
+		always = no
+	}
+
+
+	# 主题修正：藩镇自肥（收税自立），宗主面上有光
+	overlord_modifier = {
+		monthly_prestige = 0.01
+	}
+	subject_modifier = {
+		monthly_prestige = 0.10
+		tax_income_efficiency = -0.05
+		# 扩军倾向：AI 军团的目标军队规模放大（expected_army_size_modifier，原版 warrior_banners 同款）
+		expected_army_size_modifier = 0.75
+		# 人力池（max_manpower 千人）：无地军团无领土 POP，靠此基础人力补充部队损耗
+		# （原版先例：神罗皇帝军械库 max_manpower = 5）
+		max_manpower = 15
+	}
+
+	diplo_chance_accept_subject = {
+		base = -9999
+	}
+	diplo_chance_accept_overlord = {
+		base = -9999
+	}
+}
