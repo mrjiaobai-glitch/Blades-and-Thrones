@@ -267,45 +267,51 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 				regular_army_size > expected_army_size
 			}
 		}
-		if = {
-			limit = {
-				NOT = {
-					has_reform = government_reform:blades_and_thrones_military_junta_reform
+		# 2024-08 修复：全部效果必须包 hidden_effect——EU5 选项预览（悬停）会
+		# 执行选项体的效果（但不执行 set_variable），create_character/set_new_ruler/
+		# trigger_event_non_silently 写在选项体会被每次悬停重复执行 →
+		# 预览卡顿 + loyalty.4 事件堆积导致无响应（用户实测）。
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_reform = government_reform:blades_and_thrones_military_junta_reform
+					}
 				}
+				# 政变变量：解锁军政府改革（正常游玩永不满足其 potential，仅此处可设置）
+				set_variable = {
+					name = blades_and_thrones_junta_reform_eligible
+					value = yes
+				}
+				add_reform = government_reform:blades_and_thrones_military_junta_reform
 			}
-			# 政变变量：解锁军政府改革（正常游玩永不满足其 potential，仅此处可设置）
+			add_stability = stability_mild_penalty
+			add_legitimacy = 2.5
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_severe_bonus
+			}
+			# 军队首领登上王座：政变成功后由士兵阶层出身的军人出任统治者
+			create_character = {
+				age = { 30 60 }
+				adm = { 30 60 }
+				dip = { 30 60 }
+				mil = { 70 100 }
+				culture = root.culture
+				religion = root.religion
+				estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				save_scope_as = blades_and_thrones_junta_ruler
+			}
+			set_new_ruler = scope:blades_and_thrones_junta_ruler
 			set_variable = {
-				name = blades_and_thrones_junta_reform_eligible
+				name = blades_and_thrones_coup_resolved
 				value = yes
 			}
-			add_reform = government_reform:blades_and_thrones_military_junta_reform
-		}
-		add_stability = stability_mild_penalty
-		add_legitimacy = 2.5
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_severe_bonus
-		}
-		# 军队首领登上王座：政变成功后由士兵阶层出身的军人出任统治者
-		create_character = {
-			age = { 30 60 }
-			adm = { 30 60 }
-			dip = { 30 60 }
-			mil = { 70 100 }
-			culture = root.culture
-			religion = root.religion
-			estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			save_scope_as = blades_and_thrones_junta_ruler
-		}
-		set_new_ruler = scope:blades_and_thrones_junta_ruler
-		set_variable = {
-			name = blades_and_thrones_coup_resolved
-			value = yes
-		}
-		# 2024-08 重构（A+B：军政府不再独立成灾难）：军人夺权后直接进入
-		# 核心抉择（loyalty.4 还政/制度化/铁腕三选一），全程 2 个弹窗。
-		trigger_event_non_silently = {
-			id = blades_and_thrones_loyalty.4
+			# 2024-08 重构（A+B：军政府不再独立成灾难）：军人夺权后直接进入
+			# 核心抉择（loyalty.4 还政/制度化/铁腕三选一），全程 2 个弹窗。
+			trigger_event_non_silently = {
+				id = blades_and_thrones_loyalty.4
+			}
 		}
 	}
 
@@ -324,15 +330,18 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 				stability > 0
 			}
 		}
-		add_stability = stability_mild_penalty
-		add_prestige = 5
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_severe_penalty
-		}
-		set_variable = {
-			name = blades_and_thrones_coup_resolved
-			value = yes
+		# 效果包 hidden_effect（预览不执行副作用，见 3.a 注释）
+		hidden_effect = {
+			add_stability = stability_mild_penalty
+			add_prestige = 5
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_severe_penalty
+			}
+			set_variable = {
+				name = blades_and_thrones_coup_resolved
+				value = yes
+			}
 		}
 	}
 
@@ -342,19 +351,21 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 		ai_chance = {
 			factor = 25
 		}
-		add_country_modifier = {
-			modifier = blades_and_thrones_military_compromise_modifier
-			years = 10
-			mode = add
-		}
-		add_stability = 5
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_mild_bonus
-		}
-		set_variable = {
-			name = blades_and_thrones_coup_resolved
-			value = yes
+		hidden_effect = {
+			add_country_modifier = {
+				modifier = blades_and_thrones_military_compromise_modifier
+				years = 10
+				mode = add
+			}
+			add_stability = 5
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_mild_bonus
+			}
+			set_variable = {
+				name = blades_and_thrones_coup_resolved
+				value = yes
+			}
 		}
 	}
 }
@@ -383,23 +394,26 @@ blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度�
 				legitimacy >= 50
 			}
 		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_restored_modifier
-		}
-		# 拨乱反正的回归礼：一次性正统性大额恢复（原 loyalty.7.a）
-		add_legitimacy = legitimacy_severe_bonus
-		add_stability = stability_weak_bonus
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_weak_penalty
-		}
-		# 因果链衔接：军人被夺权，心有不甘（复辟余波 12 个月）——
-		# 期间哗变触发阈值放宽（见 loyalty_pulse），处理不好就再哗变
-		set_variable = {
-			name = blades_and_thrones_restoration_unrest
-			value = yes
-			months = 12
+		# 效果包 hidden_effect（预览不执行副作用，防悬停卡顿/重复执行）
+		hidden_effect = {
+			remove_reform = government_reform:blades_and_thrones_military_junta_reform
+			add_country_modifier = {
+				modifier = blades_and_thrones_junta_restored_modifier
+			}
+			# 拨乱反正的回归礼：一次性正统性大额恢复（原 loyalty.7.a）
+			add_legitimacy = legitimacy_severe_bonus
+			add_stability = stability_weak_bonus
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_weak_penalty
+			}
+			# 因果链衔接：军人被夺权，心有不甘（复辟余波 12 个月）——
+			# 期间哗变触发阈值放宽（见 loyalty_pulse），处理不好就再哗变
+			set_variable = {
+				name = blades_and_thrones_restoration_unrest
+				value = yes
+				months = 12
+			}
 		}
 	}
 
@@ -414,14 +428,16 @@ blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度�
 				"root.estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" >= 0.5
 			}
 		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_established_modifier
-		}
-		add_prestige = 5
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_weak_bonus
+		hidden_effect = {
+			remove_reform = government_reform:blades_and_thrones_military_junta_reform
+			add_country_modifier = {
+				modifier = blades_and_thrones_junta_established_modifier
+			}
+			add_prestige = 5
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_weak_bonus
+			}
 		}
 	}
 
@@ -440,45 +456,47 @@ blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度�
 				stability < 0
 			}
 		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_purge_aftermath_modifier
-			years = 10
-			mode = add
-		}
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_purge_legacy_modifier
-		}
-		every_owned_location = {
-			every_pop = {
-				limit = {
-					OR = {
-						pop_type = pop_type:nobles
-						pop_type = pop_type:clergy
-						pop_type = pop_type:burghers
+		hidden_effect = {
+			remove_reform = government_reform:blades_and_thrones_military_junta_reform
+			add_country_modifier = {
+				modifier = blades_and_thrones_junta_purge_aftermath_modifier
+				years = 10
+				mode = add
+			}
+			add_country_modifier = {
+				modifier = blades_and_thrones_junta_purge_legacy_modifier
+			}
+			every_owned_location = {
+				every_pop = {
+					limit = {
+						OR = {
+							pop_type = pop_type:nobles
+							pop_type = pop_type:clergy
+							pop_type = pop_type:burghers
+						}
+					}
+					add_pop_size = {
+						value = pop_size
+						multiply = -0.10
 					}
 				}
-				add_pop_size = {
-					value = pop_size
-					multiply = -0.10
-				}
 			}
-		}
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_weak_bonus
-		}
-		add_estate_satisfaction = {
-			type = estate_type:nobles_estate
-			value = estate_satisfaction_severe_penalty
-		}
-		add_estate_satisfaction = {
-			type = estate_type:clergy_estate
-			value = estate_satisfaction_severe_penalty
-		}
-		add_estate_satisfaction = {
-			type = estate_type:burghers_estate
-			value = estate_satisfaction_severe_penalty
+			add_estate_satisfaction = {
+				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				value = estate_satisfaction_weak_bonus
+			}
+			add_estate_satisfaction = {
+				type = estate_type:nobles_estate
+				value = estate_satisfaction_severe_penalty
+			}
+			add_estate_satisfaction = {
+				type = estate_type:clergy_estate
+				value = estate_satisfaction_severe_penalty
+			}
+			add_estate_satisfaction = {
+				type = estate_type:burghers_estate
+				value = estate_satisfaction_severe_penalty
+			}
 		}
 	}
 }
