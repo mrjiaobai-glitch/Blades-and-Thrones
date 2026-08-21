@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_loyalty
+﻿namespace = blades_and_thrones_loyalty
 
 # ============================================================================
 # 哗变（loyalty.8）：低忠诚 + 低满意度的"兵变前兆"，是政变链条的中间一环。
@@ -302,6 +302,11 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 			name = blades_and_thrones_coup_resolved
 			value = yes
 		}
+		# 2024-08 重构（A+B：军政府不再独立成灾难）：军人夺权后直接进入
+		# 核心抉择（loyalty.4 还政/制度化/铁腕三选一），全程 2 个弹窗。
+		trigger_event_non_silently = {
+			id = blades_and_thrones_loyalty.4
+		}
 	}
 
 	option = {
@@ -354,11 +359,15 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 	}
 }
 
-blades_and_thrones_loyalty.4 = { #军政府站稳脚跟：制度化 or 维持现状
+blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度化巩固 / 铁腕清洗
+	# 2024-08 重构（A+B）：军政府不再是独立灾难（0-100 稳定度博弈删除），
+	# 军人夺权（loyalty.3.a）后直接弹本事件，三选一当场了结军政府，
+	# 永久修正一生一次（coup_resolved 防重复政变）。原 loyalty.5/6/7 已并入。
 	type = country_event
 	title = blades_and_thrones_loyalty.4.title
 	desc = blades_and_thrones_loyalty.4.desc
 	outcome = neutral
+	major = yes
 	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
 	trigger = {
 	}
@@ -366,9 +375,46 @@ blades_and_thrones_loyalty.4 = { #军政府站稳脚跟：制度化 or 维持现
 	option = {
 		name = blades_and_thrones_loyalty.4.a
 		custom_tooltip = blades_and_thrones_loyalty.4.a.tt
+		# AI：正统尚在时倾向还政
 		ai_chance = {
-			factor = 55
+			factor = 40
+			modifier = {
+				factor = 1.5
+				legitimacy >= 50
+			}
 		}
+		remove_reform = government_reform:blades_and_thrones_military_junta_reform
+		add_country_modifier = {
+			modifier = blades_and_thrones_junta_restored_modifier
+		}
+		# 拨乱反正的回归礼：一次性正统性大额恢复（原 loyalty.7.a）
+		add_legitimacy = legitimacy_severe_bonus
+		add_stability = stability_weak_bonus
+		add_estate_satisfaction = {
+			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			value = estate_satisfaction_weak_penalty
+		}
+		# 因果链衔接：军人被夺权，心有不甘（复辟余波 12 个月）——
+		# 期间哗变触发阈值放宽（见 loyalty_pulse），处理不好就再哗变
+		set_variable = {
+			name = blades_and_thrones_restoration_unrest
+			value = yes
+			months = 12
+		}
+	}
+
+	option = {
+		name = blades_and_thrones_loyalty.4.b
+		custom_tooltip = blades_and_thrones_loyalty.4.b.tt
+		# AI：士兵满意时倾向制度化
+		ai_chance = {
+			factor = 40
+			modifier = {
+				factor = 1.5
+				"root.estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" >= 0.5
+			}
+		}
+		remove_reform = government_reform:blades_and_thrones_military_junta_reform
 		add_country_modifier = {
 			modifier = blades_and_thrones_junta_established_modifier
 		}
@@ -377,43 +423,24 @@ blades_and_thrones_loyalty.4 = { #军政府站稳脚跟：制度化 or 维持现
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_weak_bonus
 		}
-		set_variable = {
-			name = blades_and_thrones_junta_consolidated
-			value = yes
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
 	}
 
 	option = {
-		name = blades_and_thrones_loyalty.4.b
-		custom_tooltip = blades_and_thrones_loyalty.4.b.tt
+		name = blades_and_thrones_loyalty.4.c
+		custom_tooltip = blades_and_thrones_loyalty.4.c.tt
+		# AI：正统与稳定双低时破罐破摔倾向铁腕
 		ai_chance = {
-			factor = 45
+			factor = 20
+			modifier = {
+				factor = 2.0
+				legitimacy < 30
+			}
+			modifier = {
+				factor = 1.5
+				stability < 0
+			}
 		}
-		set_variable = {
-			name = blades_and_thrones_junta_consolidated
-			value = yes
-		}
-	}
-}
-
-blades_and_thrones_loyalty.5 = { #军政府内部分裂：清洗 or 崩溃 or 二次夺权
-	type = country_event
-	title = blades_and_thrones_loyalty.5.title
-	desc = blades_and_thrones_loyalty.5.desc
-	outcome = neutral
-	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
-	trigger = {
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.5.a
-		ai_chance = {
-			factor = 30
-		}
+		remove_reform = government_reform:blades_and_thrones_military_junta_reform
 		add_country_modifier = {
 			modifier = blades_and_thrones_junta_purge_aftermath_modifier
 			years = 10
@@ -452,234 +479,6 @@ blades_and_thrones_loyalty.5 = { #军政府内部分裂：清洗 or 崩溃 or �
 		add_estate_satisfaction = {
 			type = estate_type:burghers_estate
 			value = estate_satisfaction_severe_penalty
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
-		custom_tooltip = blades_and_thrones_loyalty.5.a.tt
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.5.b
-		custom_tooltip = blades_and_thrones_loyalty.5.b.tt
-		ai_chance = {
-			factor = 20
-		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_collapse_modifier
-			years = 10
-			mode = add
-		}
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_collapse_legacy_modifier
-		}
-		add_stability = stability_severe_penalty
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.5.c
-		custom_tooltip = blades_and_thrones_loyalty.5.c.tt
-		ai_chance = {
-			factor = 50
-		}
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_hardened_modifier
-		}
-		add_prestige = 5
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_severe_bonus
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_consolidated
-			value = yes
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
-	}
-}
-
-blades_and_thrones_loyalty.6 = { #军政府被迫还政：内忧外患下的交权
-	type = country_event
-	title = blades_and_thrones_loyalty.6.title
-	desc = blades_and_thrones_loyalty.6.desc
-	outcome = neutral
-	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
-	trigger = {
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.6.a
-		custom_tooltip = blades_and_thrones_loyalty.6.a.tt
-		ai_chance = {
-			factor = 40
-		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_restoration_pain_modifier
-			years = 10
-			mode = add
-		}
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_mild_penalty
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_forced_restoration_reopen
-			value = yes
-		}
-		set_variable = {
-			name = blades_and_thrones_coup_cooldown
-			value = yes
-			months = 36
-		}
-		remove_variable = blades_and_thrones_coup_resolved
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
-		custom_tooltip = blades_and_thrones_loyalty.6.a.tt
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.6.b
-		custom_tooltip = blades_and_thrones_loyalty.6.b.tt
-		ai_chance = {
-			factor = 40
-		}
-		add_stability = stability_mild_penalty
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_mild_bonus
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_restoration_refused
-			value = yes
-		}
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.6.c
-		custom_tooltip = blades_and_thrones_loyalty.6.c.tt
-		ai_chance = {
-			factor = 20
-		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_forced_cogovernance_modifier
-		}
-		add_legitimacy = legitimacy_weak_bonus
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_mild_bonus
-		}
-		add_estate_satisfaction = {
-			type = estate_type:nobles_estate
-			value = estate_satisfaction_weak_bonus
-		}
-		add_estate_satisfaction = {
-			type = estate_type:burghers_estate
-			value = estate_satisfaction_weak_bonus
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
-	}
-}
-
-blades_and_thrones_loyalty.7 = { #和平还政：主动交权王室的抉择
-	type = country_event
-	title = blades_and_thrones_loyalty.7.title
-	desc = blades_and_thrones_loyalty.7.desc
-	outcome = neutral
-	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
-	trigger = {
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.7.a
-		custom_tooltip = blades_and_thrones_loyalty.7.a.tt
-		ai_chance = {
-			factor = 40
-		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_restored_modifier
-		}
-		# 拨乱反正的回归礼：一次性正统性大额恢复（原为 mild，上调一档以补偿每月正统性奖励削减）
-		add_legitimacy = legitimacy_severe_bonus
-		add_stability = stability_weak_bonus
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_weak_penalty
-		}
-		# 因果链衔接：军人被夺权，心有不甘（复辟余波 12 个月）——
-		# 期间哗变触发阈值放宽（见 loyalty_pulse），处理不好就再哗变/再政变
-		set_variable = {
-			name = blades_and_thrones_restoration_unrest
-			value = yes
-			months = 12
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.7.b
-		custom_tooltip = blades_and_thrones_loyalty.7.b.tt
-		ai_chance = {
-			factor = 40
-		}
-		remove_reform = government_reform:blades_and_thrones_military_junta_reform
-		add_country_modifier = {
-			modifier = blades_and_thrones_junta_cogovernance_modifier
-		}
-		add_legitimacy = legitimacy_mild_bonus
-		add_stability = stability_weak_bonus
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_mild_bonus
-		}
-		add_estate_satisfaction = {
-			type = estate_type:nobles_estate
-			value = estate_satisfaction_weak_bonus
-		}
-		add_estate_satisfaction = {
-			type = estate_type:burghers_estate
-			value = estate_satisfaction_weak_bonus
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_resolved
-			value = yes
-		}
-	}
-
-	option = {
-		name = blades_and_thrones_loyalty.7.c
-		custom_tooltip = blades_and_thrones_loyalty.7.c.tt
-		ai_chance = {
-			factor = 20
-		}
-		set_variable = {
-			name = blades_and_thrones_junta_restoration_cooldown
-			value = yes
-			months = 36
-		}
-		add_stability = stability_weak_bonus
-		add_estate_satisfaction = {
-			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
-			value = estate_satisfaction_weak_bonus
 		}
 	}
 }
