@@ -31,7 +31,8 @@ blades_and_thrones_loyalty.8 = { #兵变之夜：低忠诚+低满意度的哗变
 		}
 	}
 	outcome = neutral
-	major = yes
+	# 2024-08：不 major、不强制暂停（同 loyalty.3/4——军队事件不应全球广播）
+	interface_lock = no
 	image = "gfx/interface/illustrations/disaster/peasants_war.dds"
 	trigger = {
 		is_human = yes
@@ -247,7 +248,9 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 	desc = blades_and_thrones_loyalty.3.desc
 	historical_info = blades_and_thrones_loyalty.3.historical_info
 	outcome = neutral
-	major = yes
+	# 2024-08：不再 major（major = yes 会让没视野的国家也收到通知，且更强制）；
+	# interface_lock = no：事件弹出不暂停游戏，玩家可稍后处理
+	interface_lock = no
 	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
 	trigger = {
 		# 防重复（2024-08 教训）：灾难 can_start 已有 NOT coup_resolved，
@@ -385,7 +388,8 @@ blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度�
 	title = blades_and_thrones_loyalty.4.title
 	desc = blades_and_thrones_loyalty.4.desc
 	outcome = neutral
-	major = yes
+	# 2024-08：同 loyalty.3——不 major（避免全球通知）、不强制暂停
+	interface_lock = no
 	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
 	trigger = {
 		# 防重复：loyalty.4 只应在持有军政府改革时触发（loyalty.3.a 设置后
