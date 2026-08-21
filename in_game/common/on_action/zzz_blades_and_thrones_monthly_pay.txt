@@ -360,7 +360,7 @@ blades_and_thrones_company_pulse = {
 				months = 8
 			}
 		}
-		# 鍐涘洟鍥藉凡鑷珛闂ㄦ埛锛堜笉鍐嶆槸鎴戠殑闄勫睘鍥斤級涓斿皻鏈彁渚涜繃鎵紨鏈轰細 鈫?寮圭獥涓€娆?
+		# 军团国已自立门户（不再是我们的附属国）且尚未提供过扮演机会 → 弹窗一次
 		if = {
 			limit = {
 				has_variable = mercenary_mutiny_company_ref
