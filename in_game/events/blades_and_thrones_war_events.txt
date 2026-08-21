@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_war
+﻿namespace = blades_and_thrones_war
 
 blades_and_thrones_war.1 = { #战争胜利：攻防分开结算的凯旋反馈
 	type = country_event
@@ -39,17 +39,6 @@ blades_and_thrones_war.1 = { #战争胜利：攻防分开结算的凯旋反馈
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_mild_bonus
 		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = 4
-				min = 0
-				max = 100
-			}
-		}
 		custom_tooltip = blades_and_thrones_war.1.a.tt
 	}
 
@@ -59,17 +48,6 @@ blades_and_thrones_war.1 = { #战争胜利：攻防分开结算的凯旋反馈
 		add_estate_satisfaction = {
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_mild_bonus
-		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = 6
-				min = 0
-				max = 100
-			}
 		}
 		custom_tooltip = blades_and_thrones_war.1.b.tt
 	}
@@ -81,17 +59,6 @@ blades_and_thrones_war.1 = { #战争胜利：攻防分开结算的凯旋反馈
 		add_estate_satisfaction = {
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_weak_penalty
-		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = -3
-				min = 0
-				max = 100
-			}
 		}
 		custom_tooltip = blades_and_thrones_war.1.c.tt
 	}
@@ -146,17 +113,6 @@ blades_and_thrones_war.2 = { #战争失利：战败耻辱与忠诚压力
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_weak_bonus
 		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = 3
-				min = 0
-				max = 100
-			}
-		}
 		remove_variable = blades_and_thrones_war_shame_variable
 		custom_tooltip = blades_and_thrones_war.2.a.tt
 	}
@@ -173,17 +129,6 @@ blades_and_thrones_war.2 = { #战争失利：战败耻辱与忠诚压力
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_severe_penalty
 		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = 5
-				min = 0
-				max = 100
-			}
-		}
 		remove_variable = blades_and_thrones_war_shame_variable
 		custom_tooltip = blades_and_thrones_war.2.b.tt
 	}
@@ -196,17 +141,6 @@ blades_and_thrones_war.2 = { #战争失利：战败耻辱与忠诚压力
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_weak_penalty
 		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = -2
-				min = 0
-				max = 100
-			}
-		}
 		remove_variable = blades_and_thrones_war_shame_variable
 		custom_tooltip = blades_and_thrones_war.2.c.tt
 	}
@@ -218,17 +152,6 @@ blades_and_thrones_war.2 = { #战争失利：战败耻辱与忠诚压力
 		add_estate_satisfaction = {
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_mild_penalty
-		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_junta_stability
-			}
-			change_variable = {
-				name = blades_and_thrones_junta_stability
-				add = -4
-				min = 0
-				max = 100
-			}
 		}
 		custom_tooltip = blades_and_thrones_war.2.d.tt
 	}
