@@ -310,10 +310,14 @@ blades_and_thrones_loyalty.3 = { #军事政变：军队夺权（接受接管/镇
 				name = blades_and_thrones_coup_resolved
 				value = yes
 			}
-			# 2024-08 重构（A+B：军政府不再独立成灾难）：军人夺权后直接进入
-			# 核心抉择（loyalty.4 还政/制度化/铁腕三选一），全程 2 个弹窗。
-			trigger_event_non_silently = {
+			# 2024-08 重构（A+B）：军人夺权后进入军政府执政期（24 个月），
+			# 执政期结束自动弹 loyalty.4 核心抉择（还政/制度化/铁腕三选一）。
+			# 延迟触发让军政府改革的真实影响（正统下滑/好战/阶层权力）落地，
+			# 且仍保持全程 2 个弹窗。loyalty.4 的 has_reform 门槛保证延迟期间
+			# reform 在、两年后能弹、重复触发被挡。
+			trigger_event_silently = {
 				id = blades_and_thrones_loyalty.4
+				days = 730
 			}
 		}
 	}
