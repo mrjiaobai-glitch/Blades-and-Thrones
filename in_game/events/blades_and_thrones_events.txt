@@ -1,4 +1,4 @@
-namespace = mercenary_mutiny_test
+﻿namespace = mercenary_mutiny_test
 
 mercenary_mutiny_test.1 = { #主调试菜单：危机/叛军/夺舍/切换/转化
 	type = country_event
@@ -740,28 +740,35 @@ mercenary_mutiny_test.10 = { #军团索饷：不忠附属国的巨额军饷要�
 		}
 		custom_tooltip = mercenary_mutiny_test.10.b.tt
 		hidden_effect = {
-			# refusals 变量在"佣兵自立门户"效果与"放任自立"选项处初始化 = 0，
-			# 这里只递增（变量必须已存在，否则引擎报 fetch 错误且计数失效）
-			change_variable = {
-				name = mercenary_mutiny_company_refusals
-				add = 1
-			}
-			change_variable = {
-				name = blades_and_thrones_military_crisis
-				add = 5
-				min = 0
-				max = 100
-			}
-			set_variable = {
-				name = blades_and_thrones_military_crisis_display
-				value = var:blades_and_thrones_military_crisis
-			}
+			# 2024-08 保护：仅当军团仍在（未跑路/未独立/未被收编）时拒绝才生效——
+			# 排队中的索饷事件在军团已离开后弹出时，拒绝不应计数/加危机
 			if = {
 				limit = {
-					var:mercenary_mutiny_company_refusals >= 2
+					exists = scope:mercenary_mutiny_company_scope
 				}
-				trigger_event_non_silently = {
-					id = mercenary_mutiny_test.11
+				# refusals 变量在"佣兵自立门户"效果与"放任自立"选项处初始化 = 0，
+				# 这里只递增（变量必须已存在，否则引擎报 fetch 错误且计数失效）
+				change_variable = {
+					name = mercenary_mutiny_company_refusals
+					add = 1
+				}
+				change_variable = {
+					name = blades_and_thrones_military_crisis
+					add = 5
+					min = 0
+					max = 100
+				}
+				set_variable = {
+					name = blades_and_thrones_military_crisis_display
+					value = var:blades_and_thrones_military_crisis
+				}
+				if = {
+					limit = {
+						var:mercenary_mutiny_company_refusals >= 2
+					}
+					trigger_event_non_silently = {
+						id = mercenary_mutiny_test.11
+					}
 				}
 			}
 		}
