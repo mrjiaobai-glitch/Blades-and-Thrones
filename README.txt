@@ -310,7 +310,7 @@ Event modding / Action modding / Localization / Script value 页面，1.3.11 时
 - event blades_and_thrones_intel.99  手动情报汇总
 - event blades_and_thrones_militia.99  团练一键流程
 
-【灾难因果链】（夺舍→哗变→政变→军政府，非四套独立掷骰子）
+【灾难因果链】（夺舍→哗变→政变→军政府，非四套独立掷骰子；政变需接纳"职业军队"思潮，1337 开局早期不会发生）
 - 链主线：佣兵依赖→军事危机→夺舍灾变→结局后军人自恃（12月）→忠诚请愿
   （loyalty.1）→哗变（loyalty.8）→军人怨恨（24月）→政变阈值放宽→军事政变→
   军政府→核心抉择（还政/制度化/铁腕）→复辟余波（12月）→再哗变风险。螺旋而非堆叠。
