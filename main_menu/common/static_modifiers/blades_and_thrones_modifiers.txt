@@ -141,9 +141,10 @@ blades_and_thrones_junta_purge_aftermath_modifier = {
 		decaying = yes
 	}
 	global_crown_estate_power = 0.10
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.20
-	# 2024-08 叙事统一（清洗旧精英而非军官）：删除原 army_tradition_decay
-	# （军队受损残留），补正统惩罚呼应 desc "正统与稳定受损"
+	# 2024-08 叙事统一（清洗旧精英而非军官）：军队是清洗的执行者——
+	# 士兵 power 应随清洗得势（+0.10）而非受损（原 -0.20 是旧"军官清洗"残留）
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.10
+	# 正统惩罚呼应 desc "正统与稳定受损"
 	monthly_legitimacy = -0.01
 	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.01
 }
@@ -153,11 +154,12 @@ blades_and_thrones_junta_purge_legacy_modifier = {
 		category = country
 	}
 	global_crown_estate_power = 0.10
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.15
+	# 铁腕秩序下军队是王权支柱：士兵 power 随清洗得势（原 -0.15 同理修正）
+	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.10
 	country_cabinet_efficiency = 0.10
 	stability_cost_efficiency = 0.10
 	monthly_rebel_growth = -0.001
-	# 2024-08 叙事统一：铁腕清洗的国际名声代价（内部秩序重建 vs 外部骂名）
+	# 铁腕清洗的国际名声代价（内部秩序重建 vs 外部骂名）
 	diplomatic_reputation = diplomatic_reputation_mild_penalty
 }
 
