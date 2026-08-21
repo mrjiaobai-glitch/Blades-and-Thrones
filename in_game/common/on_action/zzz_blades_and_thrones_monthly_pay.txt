@@ -986,7 +986,7 @@ blades_and_thrones_company_recruit_pulse = {
 # overlord_modifier 璐熼噾鏀跺叆 = 瀹椾富鏈堝害鎵ｆ锛宻ubject_modifier 姝ｉ噾鏀跺叆 = 鍐涘洟
 # 鏈堝害鍒拌处锛夛紝鏈剦鍐蹭笉鍐?add_gold锛堥伩鍏嶅弻閲嶆敮浠橈級锛屽彧鍋氳处鍗曞睍绀恒€?
 # 妗ｄ綅锛坆lades_and_thrones_subsidy_level 鍙橀噺锛夛細1 浣庣骇浣ｅ叺 300/骞达紙25/鏈堬級銆?
-# 2 浣庣骇浠ｇ 600/骞达紙50/鏈堬級銆? 楂樼骇浣ｅ叺 600/骞达紙50/鏈堬級銆? 楂樼骇浠ｇ 900/骞达紙75/鏈堬級锛?
+# 2 浣庣骇浠ｇ 420/骞达紙35/鏈堬級銆? 楂樼骇浣ｅ叺 600/骞达紙50/鏈堬級銆? 楂樼骇浠ｇ 900/骞达紙75/鏈堬級锛?
 # 鍐涢榾锛堟棤鍙橀噺銆佹棤 modifier锛変笉鍙戞斁鈥斺€旇棭闀囪嚜鑲ャ€?
 # ============================================================================
 yearly_country_pulse = {
@@ -1048,13 +1048,14 @@ blades_and_thrones_subsidy_pulse = {
 			else_if = {
 				limit = { var:blades_and_thrones_subsidy_level = 2 }
 				root = {
+					# 2024-08 平衡：代管补贴 50→35/月 → 年度账单 600→420
 					change_variable = {
 						name = blades_and_thrones_bill_total
-						add = 600
+						add = 420
 					}
 					change_variable = {
 						name = blades_and_thrones_bill_level2
-						add = 600
+						add = 420
 					}
 				}
 			}
