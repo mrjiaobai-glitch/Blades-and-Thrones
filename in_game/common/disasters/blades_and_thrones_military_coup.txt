@@ -1,4 +1,4 @@
-blades_and_thrones_military_coup = {
+﻿blades_and_thrones_military_coup = {
 	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
 	monthly_spawn_chance = blades_and_thrones_military_coup_spawn_chance
 
@@ -18,6 +18,9 @@ blades_and_thrones_military_coup = {
 		in_civil_war = no
 		NOT = { blades_and_thrones_coup_cooldown_active = yes }
 		NOT = { blades_and_thrones_coup_resolved = yes }
+		# 2024-08 重构（A+B）：军政府不再是灾难——loyalty.4 抉择前（弹窗间隙）
+		# 国家持有军政府改革，防政变灾难在此时再次触发
+		NOT = { has_reform = government_reform:blades_and_thrones_military_junta_reform }
 	}
 
 	can_end = {
