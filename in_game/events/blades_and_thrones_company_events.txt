@@ -1,7 +1,9 @@
-namespace = blades_and_thrones_company
+﻿namespace = blades_and_thrones_company
 
-# 外派军团组建完成后的性质选择：忠诚远征军团 / 放任自立（不忠附属国）
-blades_and_thrones_company.1 = { #军团性质抉择：忠诚远征 or 放任自立
+# 外派军团组建完成后的性质选择：忠诚远征军团 / 亲自统领 / 转为代管
+# （2024-08 删除"放任自立"——对玩家是自找麻烦的选项；不忠附庸仍由
+# 夺舍和解自立路径产生，索饷/独立链保留）
+blades_and_thrones_company.1 = { #军团性质抉择：忠诚远征 or 收编 or 亲领
 	type = country_event
 	title = blades_and_thrones_company.1.title
 	desc = blades_and_thrones_company.1.desc
@@ -55,48 +57,6 @@ blades_and_thrones_company.1 = { #军团性质抉择：忠诚远征 or 放任自
 				# 宗主选择信任并授予忠诚待遇 → 感化军团（性格转向代管）：
 				# 玩家用诚意改变军团的本质（路径→性格的合理场景）
 				set_personality = ai_personality:ai_trusted_company
-			}
-		}
-	}
-
-	option = {
-		name = blades_and_thrones_company.1.b
-		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 2
-				scope:blades_and_thrones_founded_company = {
-					ai_personality = ai_personality:ai_mercenary_company
-				}
-			}
-			modifier = {
-				factor = 0.5
-				scope:blades_and_thrones_founded_company = {
-					ai_personality = ai_personality:ai_trusted_company
-				}
-			}
-		}
-		custom_tooltip = blades_and_thrones_company.1.b.tt
-		hidden_effect = {
-			scope:blades_and_thrones_founded_company ?= {
-				set_variable = {
-					name = mercenary_mutiny_disloyal_subject
-					value = yes
-				}
-				add_country_modifier = {
-					modifier = mercenary_mutiny_disloyal_subject
-					years = -1
-					mode = add_and_extend
-				}
-				# 放任自立：顺其本性（佣兵人格保留——逐利是它的天性）
-			}
-			# 索饷拒绝计数初始化 = 0：计数在宗主侧（索饷事件选项 b 的
-			# change_variable 以宗主为 root 执行），初始化必须同侧
-			root = {
-				set_variable = {
-					name = mercenary_mutiny_company_refusals
-					value = 0
-				}
 			}
 		}
 	}
