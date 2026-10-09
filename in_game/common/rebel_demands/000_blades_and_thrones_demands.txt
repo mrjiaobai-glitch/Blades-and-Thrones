@@ -1,4 +1,4 @@
-mercenary_mutiny_demand = {
+﻿mercenary_mutiny_demand = {
 	trigger = {
 		rebel_category = pretender
 		rebel_name_key = mercenary_mutiny

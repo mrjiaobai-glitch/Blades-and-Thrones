@@ -1,4 +1,4 @@
-mercenary_mutiny_exiles_reform = {
+﻿mercenary_mutiny_exiles_reform = {
 	potential = {
 		country_type = army
 		OR = {

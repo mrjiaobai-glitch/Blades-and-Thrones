@@ -1,0 +1,20 @@
+﻿# 内阁行动"推动价值观"（Change Societal Values）的进度修正：
+# 引擎/脚本值按 <价值观端名>_progress_cabinet_efficiency 查找 static modifier，
+# 缺失则内阁行动无法推动该端（error.log："Cabinet 'Change Societal Values'
+# will not push this side"——2026-08 bug report 修复）。
+# 格式对齐原版 main_menu/common/static_modifiers/societal_values.txt；
+# 对应 modifier 类型（monthly_towards_militarism/civilianism）已定义于
+# modifier_type_definitions/zzz_blades_and_thrones_societal_values_modifiers.txt。
+militarism_progress_cabinet_efficiency = {
+	game_data = {
+		category = country
+	}
+	monthly_towards_militarism = 1
+}
+
+civilianism_progress_cabinet_efficiency = {
+	game_data = {
+		category = country
+	}
+	monthly_towards_civilianism = 1
+}

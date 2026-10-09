@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_militia
+﻿namespace = blades_and_thrones_militia
 
 # 团练所调试事件：event blades_and_thrones_militia.99
 # 一键测试 团练自治特权 / 士兵阶层注资 / 首都强制建团练所 / 撤销特权
@@ -11,7 +11,7 @@ blades_and_thrones_militia.99 = { #调试：团练所一键流程（授权/注�
 	orphan = yes
 	trigger = {
 		is_human = yes
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 
 	option = {

@@ -1,8 +1,8 @@
-zzz_rebalanced_nepal_mercenary_soldiers_estate = {
+﻿zzz_rebalanced_nepal_mercenary_soldiers_estate = {
 	color = pop_soldiers
-	# 士兵 POP 政治影响力 = 劳工/农民（0.025）的 20 倍。
-	# 士兵是武装集团，政治分量应显著高于平民，但低于传统精英（贵族 25 / 教士 10 / 市民 4）。
-	power_per_pop = 0.5
+	# 士兵 POP 政治力量：1.4 起 power_per_pop 是 POP 属性（不再属阶层），已移至
+	# in_game\common\pop_types\zzz_blades_and_thrones_soldiers.txt（数值不变 = 0.5）。
+	# 本文件保留阶层侧的收益/代价（satisfaction / high_power / low_power）。
 	tax_per_pop = 1
 	rival = -0.01
 	alliance = 0.01

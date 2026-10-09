@@ -1,4 +1,4 @@
-# 军事危机化装：按危机值区间返回一段欧式叙事（供转化面板/情报汇总引用）。
+﻿# 军事危机化装：按危机值区间返回一段欧式叙事（供转化面板/情报汇总引用）。
 # 写法同原版 GetHeathenInsult（多 text 块 + trigger 分块 + fallback）。
 
 blades_and_thrones_crisis_flavor = {

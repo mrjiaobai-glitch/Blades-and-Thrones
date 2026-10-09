@@ -1,6 +1,6 @@
-blades_and_thrones_army_loyalty_display = {
+﻿blades_and_thrones_army_loyalty_display = {
 	potential_trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 	scales_with = blades_and_thrones_army_loyalty
 	global_zzz_rebalanced_nepal_mercenary_soldiers_army_loyalty = 1.0
@@ -8,7 +8,7 @@ blades_and_thrones_army_loyalty_display = {
 
 blades_and_thrones_army_loyal_effect = {
 	potential_trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 		blades_and_thrones_army_loyalty > 0.7
 	}
 	scales_with = blades_and_thrones_army_loyalty
@@ -20,7 +20,7 @@ blades_and_thrones_army_loyal_effect = {
 
 blades_and_thrones_army_disloyal_effect = {
 	potential_trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 		blades_and_thrones_army_loyalty < 0.4
 	}
 	scales_with = {

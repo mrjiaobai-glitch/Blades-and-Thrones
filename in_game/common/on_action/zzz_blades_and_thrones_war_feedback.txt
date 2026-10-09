@@ -12,7 +12,7 @@ on_losing_war = {
 
 blades_and_thrones_war_victory = {
 	trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 	effect = {
 		set_variable = {
@@ -48,7 +48,7 @@ blades_and_thrones_war_victory = {
 
 blades_and_thrones_war_defeat = {
 	trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 	effect = {
 		if = {

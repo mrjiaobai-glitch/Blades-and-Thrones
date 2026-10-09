@@ -1,4 +1,4 @@
-# ============ 灾难触发条件本地化 ============
+﻿# ============ 灾难触发条件本地化 ============
 # 值比较触发词（脚本值作触发词时显示中文名）
 mercenary_mutiny_total_strength = {
 	none = BLADES_MERC_TOTAL_STRENGTH_TRIGGER

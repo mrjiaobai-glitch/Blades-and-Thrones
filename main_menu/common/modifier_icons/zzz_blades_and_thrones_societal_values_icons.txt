@@ -1,4 +1,4 @@
-# 军国主义 vs 文官主义轴的月度推动修正图标。
+﻿# 军国主义 vs 文官主义轴的月度推动修正图标。
 monthly_towards_militarism = {
 	positive = "gfx/interface/icons/modifier_types/monthly_towards_militarism.dds"
 }

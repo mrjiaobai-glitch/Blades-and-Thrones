@@ -1,4 +1,4 @@
-# 自定义 scripted effect 的本地化（对照原版 effect_localization/country_effects.txt 模式）。
+﻿# 自定义 scripted effect 的本地化（对照原版 effect_localization/country_effects.txt 模式）。
 # 引擎在 tooltip/日志中展示这些效果时，用这里的 global 键显示中文名而非脚本名。
 # 命名规则：BT_<EFFECT 名大写>_EFFECT；loc 键见 yml（BT_EFFECT_* 前缀）。
 

@@ -1,4 +1,4 @@
-# 驱逐无地国战争目标：摧毁无地国军队（参照 sengoku 的 destroy_army 用法）。
+﻿# 驱逐无地国战争目标：摧毁无地国军队（参照 sengoku 的 destroy_army 用法）。
 expel_landless_wargoal = {
 	type = destroy_army
 	war_name = "EXPEL_LANDLESS_WAR_NAME"

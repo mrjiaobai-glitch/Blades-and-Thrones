@@ -1,8 +1,8 @@
 ﻿# ============================================================================
-# 褰╄泲鍥斤紙BLT 鑷敱鍐涘洟锛夊紑灞€淇锛氱嫭绔嬫棤鍦板浗瀹舵病鏈夊ぉ鐒剁伯椋熻幏鍙栨潈
-# 锛堥檮搴搁潬 subject type 鐨?food_access = yes 娲伙紱鐙珛鍥藉闈犺嚜宸辩殑棰嗗湡鎴栧叧绯伙級锛?
-# 鍐涢槦浼氶タ姝烩€斺€斿紑灞€涓?CHI锛堝痉鍖栨墍鍦ㄥ浗锛夊缓绔嬮暱鏈?food_access 鍏崇郴锛?
-# 鍙欎簨锛氬紑灏佺姽澶ぞ鍖轰笌涓師鏈濆环鐨勯粯濂戯紝鑷敱鍐涘洟鍦ㄥ痉鍖栭┗鐣欒喘绮€?
+# 彩蛋国（BLT 自由军团）开局修正：独立无地国家没有天然粮食获取权
+# （附庸靠 subject type �?food_access = yes 活；独立国家靠自己的领土或关系）�?
+# 军队会饿死——开局�?CHI（德化所在国）建立长�?food_access 关系�?
+# 叙事：开封犹太社区与中原朝廷的默契，自由军团在德化驻留购粮�?
 # ============================================================================
 on_game_start = {
 	on_actions = {
@@ -15,7 +15,7 @@ blades_and_thrones_egg_start = {
 		has_tag = BLT
 	}
 	effect = {
-		# first/second 蹇呴』鐢?scope 寮曠敤锛坈:CHI锛夆€斺€旇８ tag 浼氶潤榛樺け璐?
+		# first/second 必须�?scope 引用（c:CHI）——裸 tag 会静默失�?
 		create_relation = {
 			first = c:CHI
 			second = root
@@ -40,28 +40,28 @@ monthly_country_pulse = {
 }
 
 # ============================================================================
-# 鍥涙捣涓哄锛坆lades_and_thrones_food_access_reform锛屽師"璐伯鏉?锛夌殑鍔ㄦ€佺淮鎶わ細
-# 鎷ユ湁璇ユ敼闈╃殑鏃犲湴鍐涘洟鍥借嚜鍔ㄨ幏寰椾袱绉嶇敓瀛樻潈鍒┾€斺€?
-#   1) 閫氳锛氫笌澶栦氦鑼冨洿鍐呮墍鏈夐潪浜ゆ垬鍥藉鑷姩寤虹珛 military access 鍏崇郴
-#      锛坆lades_and_thrones_landless_passage锛歮od 鑷畾涔夐殣钘忓叧绯伙紝鍚?
-#      military_access + food_access锛? 骞存湡闄愯嚜鍔ㄧ画鏈燂級銆傚啗闃熷洓娴蜂负瀹讹紝
-#      璧板埌鍝兘鑳借繃澧冣€斺€旀棤鍦板啗鍥笌鏃犲湴鍥介€氱敤閫氳鏈哄埗鍚屼竴鍏崇郴绫诲瀷銆?
-#   2) 璐伯锛氬啗闃熼┗鐣欑殑姣忎釜鏈変富鍦扮偣鑷姩鍚戝湴涓诲缓绔?food_access 鍏崇郴
-#      锛?0 骞存湡闄愶紱鍏崇郴涓嶅瓨鍦ㄦ椂寤虹珛锛屽ぉ鐒惰嚜鍔ㄧ画鏈燂級銆?
-# 娉ㄦ剰锛歝reate_relation 鐨?first/second 鐢ㄦ樉寮?scope锛坰ave_scope_as锛夛紝
-# 涓嶇敤 this锛堝師鐗堜粎 second = this 鏈夊厛渚嬶紝first 鏃犫€斺€旈伩鍏嶈涔夋涔夛級銆?
+# 四海为家（blades_and_thrones_food_access_reform，原"购粮�?）的动态维护：
+# 拥有该改革的无地军团国自动获得两种生存权利—�?
+#   1) 通行：与外交范围内所有非交战国家自动建立 military access 关系
+#      （blades_and_thrones_landless_passage：mod 自定义隐藏关系，�?
+#      military_access + food_access�? 年期限自动续期）。军队四海为家，
+#      走到哪都能过境——无地军团与无地国通用通行机制同一关系类型�?
+#   2) 购粮：军队驻留的每个有主地点自动向地主建�?food_access 关系
+#      �?0 年期限；关系不存在时建立，天然自动续期）�?
+# 注意：create_relation �?first/second 用显�?scope（save_scope_as），
+# 不用 this（原版仅 second = this 有先例，first 无——避免语义歧义）�?
 # ============================================================================
 blades_and_thrones_food_pulse = {
 	trigger = {
 		has_reform = government_reform:blades_and_thrones_food_access_reform
 	}
 	effect = {
-		# 鈥斺€?閫氳锛氬洓娴蜂负瀹讹紝澶勫鍙繃澧?鈥斺€?
+		# —�?通行：四海为家，处处可过�?—�?
 		every_country = {
 			limit = {
-				# 娉ㄦ剰锛氭帓闄よ嚜韬繀椤荤敤 this != root锛堝師鐗堟爣鍑嗗啓娉曪級锛?
-				# NOT = { this = root } 鍦?on_action 鐨?every 杩唬閲屾棤鏁堬紝
-				# 浼氭妸鍏崇郴寤虹粰鑷繁锛坈reate_relation 鎶?"the 2 countries are the same"锛?
+				# 注意：排除自身必须用 this != root（原版标准写法）�?
+				# NOT = { this = root } �?on_action �?every 迭代里无效，
+				# 会把关系建给自己（create_relation �?"the 2 countries are the same"�?
 				this != root
 				within_diplomatic_range = root
 				NOT = { is_at_war_with = root }
@@ -71,10 +71,10 @@ blades_and_thrones_food_pulse = {
 					}
 				}
 			}
-			# first 蹇呴』鐢?this锛堣凯浠ｅ厓绱狅級鑰岄潪 prev鈥斺€斿疄娴?on_action 鐨?every_country
-			# 涓讳綋閲?prev 鎸囧悜澶栧眰 root锛宖irst = prev 浼氬鑷?first = second = root锛?
-			# create_relation 鎶?"the 2 countries are the same"锛堝師鐗?create_alliance
-			# 鍚屾锛歠irst = this锛夈€?
+			# first 必须�?this（迭代元素）而非 prev——实�?on_action �?every_country
+			# 主体�?prev 指向外层 root，first = prev 会导�?first = second = root�?
+			# create_relation �?"the 2 countries are the same"（原�?create_alliance
+			# 同款：first = this）�?
 			create_relation = {
 				type = relation_type:blades_and_thrones_landless_passage
 				first = this
@@ -82,14 +82,18 @@ blades_and_thrones_food_pulse = {
 				years = 5
 			}
 		}
-		# 鈥斺€?璐伯锛氶┗鐣欎箣鍦板嵆鏈夌伯 鈥斺€?
+		# —�?购粮：驻留之地即有粮 —�?
 		every_army = {
 			unit_location ?= {
 				owner ?= {
-					# 鎺掗櫎鑷韩鍚屾牱鐢?this != root锛坥wner 浣滅敤鍩熷唴 this = 鍦颁富锛?
-					this != root
-					NOT = { gives_food_access_to = root }
-					save_scope_as = blades_and_thrones_food_owner
+					# 排除自身同样�?this != root（owner 作用域内 this = 地主�?
+					if = {
+						limit = {
+							this != root
+							NOT = { gives_food_access_to = root }
+						}
+						save_scope_as = blades_and_thrones_food_owner
+					}
 				}
 			}
 			scope:blades_and_thrones_food_owner ?= {
@@ -106,7 +110,7 @@ blades_and_thrones_food_pulse = {
 
 mercenary_mutiny_soldier_pay_pulse = {
 	trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 	effect = {
 		set_variable = {
@@ -117,7 +121,7 @@ mercenary_mutiny_soldier_pay_pulse = {
 			name = blades_and_thrones_pay_cost_display
 			value = mercenary_mutiny_monthly_pay_cost
 		}
-		# 鍐涗簨鍗辨満鍊肩疮璁★細濞佽儊姣旂巼椹卞姩锛屾弧 100 鏃跺ず鑸嶇伨鍙樺繀瀹氳Е鍙?
+		# 军事危机值累计：威胁比率驱动，满 100 时夺舍灾变必定触�?
 		if = {
 			limit = {
 				NOT = { has_variable = blades_and_thrones_military_crisis }
@@ -137,7 +141,7 @@ mercenary_mutiny_soldier_pay_pulse = {
 			name = blades_and_thrones_military_crisis_display
 			value = var:blades_and_thrones_military_crisis
 		}
-		# 鍗辨満鍙樺寲鍒嗚В锛?鍙樺寲鍘熷洜"鍙嶉锛夛細鍚勫垎椤瑰瓨鍏?display 鍙橀噺渚?GUI 鏄剧ず
+		# 危机变化分解�?变化原因"反馈）：各分项存�?display 变量�?GUI 显示
 		set_variable = {
 			name = blades_and_thrones_crisis_change_threat_display
 			value = blades_and_thrones_crisis_change_threat
@@ -158,9 +162,9 @@ mercenary_mutiny_soldier_pay_pulse = {
 			name = blades_and_thrones_crisis_change_decay_display
 			value = blades_and_thrones_crisis_change_decay
 		}
-		# 鍐涢シ鍙戞斁锛氬浗搴撳厖瓒冲垯姝ｅ父鍙戦シ锛堝苟閫愭娓呭伩娆犻シ锛夛紱鍥藉簱涓嶈冻鍒欐瑺楗封€斺€?
-		# 娆犻シ鏈堟暟绱Н銆佸＋鍏甸樁灞傛弧鎰忓害涓嬮檷銆佸啗闃熷繝璇氬彈鎹燂紙蹇犺瘹鑴氭湰鍊煎惈娆犻シ鍑忛」锛夛紝
-		# 琛ラシ鍚庢瑺楗锋湀鏁伴€愭湀鍥炶惤銆?
+		# 军饷发放：国库充足则正常发饷（并逐步清偿欠饷）；国库不足则欠饷—�?
+		# 欠饷月数累积、士兵阶层满意度下降、军队忠诚受损（忠诚脚本值含欠饷减项），
+		# 补饷后欠饷月数逐月回落�?
 		if = {
 			limit = {
 				gold >= root.mercenary_mutiny_monthly_pay_cost
@@ -217,7 +221,7 @@ mercenary_mutiny_soldier_pay_pulse = {
 
 blades_and_thrones_loyalty_pulse = {
 	trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 		is_human = yes
 	}
 	effect = {
@@ -235,10 +239,10 @@ blades_and_thrones_loyalty_pulse = {
 				id = blades_and_thrones_intel.1
 			}
 		}
-		# 蹇犺瘹璇锋効锛坙oyalty.1锛夛細浣庡繝璇氱殑甯歌鐗㈤獨銆傛敞鎰忎笌鍝楀彉锛坙oyalty.8锛変簰鏂モ€斺€?
-		# 璇锋効鏄?杩樿兘鍟嗛噺"鐨勪綆鍗变簨浠讹紝鍝楀彉鏄?宸茬粡鍔ㄦ墜"鐨勯珮鍗变簨浠讹紝浜岃€呬笉鍙悓鏈?
-		# 鍚屽脊銆傚綋鍝楀彉鏉′欢锛堝繝璇?0.3 涓旀弧鎰忓害<0.4锛屾垨鑷亙/浣欐尝鏈熼棿蹇犺瘹<0.4锛?
-		# 婊¤冻鏃讹紝鐩存帴璧板摋鍙樸€佽烦杩囪鎰匡紙鎺掗櫎鏉′欢涓庝笅鏂瑰摋鍙?if 瀹屽叏涓€鑷达級銆?
+		# 忠诚请愿（loyalty.1）：低忠诚的常规牢骚。注意与哗变（loyalty.8）互斥—�?
+		# 请愿�?还能商量"的低危事件，哗变�?已经动手"的高危事件，二者不可同�?
+		# 同弹。当哗变条件（忠�?0.3 且满意度<0.4，或自恃/余波期间忠诚<0.4�?
+		# 满足时，直接走哗变、跳过请愿（排除条件与下方哗�?if 完全一致）�?
 		if = {
 			limit = {
 				blades_and_thrones_army_loyalty < 0.35
@@ -284,15 +288,15 @@ blades_and_thrones_loyalty_pulse = {
 			}
 		}
 		# ==================================================================
-		# 鍥犳灉閾撅細鍝楀彉锛坙oyalty.8锛夆€斺€斾綆蹇犺瘹 + 浣庢弧鎰忓害鐨勫叺鍙樺墠鍏嗐€?
-		# 瑙﹀彂鏉′欢姣斿繝璇氳鎰匡紙loyalty.1锛屼粎蹇犺瘹 < 0.35锛夋洿涓ヨ嫑锛?
-		# 蹇犺瘹 < 0.3 涓斿＋鍏垫弧鎰忓害 < 0.4锛屼笖鏃犵伨闅捐繘琛屼腑锛堜笉涓庡叾浠栫伨闅惧爢鍙狅級銆?
-		# 12 涓湀鍐峰嵈锛涘摋鍙樺鐞嗕笉褰擄紙闀囧帇鈫掓€ㄦ仺/鏀句换鈫掓伓鍖栵級浼氭妸鏀垮彉闃堝€兼斁瀹姐€?
-		# 涓ょ被鎺ョ画浼氭斁瀹介槇鍊硷紙蹇犺瘹 < 0.4 鍗冲彲鍝楀彉锛夛細
-		#   路 鍐涗汉鑷亙锛坆lades_and_thrones_soldiers_emboldened锛屽ず鑸嶉晣鍘嬪悗 12 鏈堬級
-		#     鈥斺€旀墦璧㈠唴鎴樼殑鍐涢槦鏇撮毦浼哄€欙紱
-		#   路 澶嶈緹浣欐尝锛坆lades_and_thrones_restoration_unrest锛屽啗鏀垮簻杩樻斂鍚?12 鏈堬級
-		#     鈥斺€旇澶烘潈鐨勫啗浜哄績鏈変笉鐢樸€?
+		# 因果链：哗变（loyalty.8）——低忠诚 + 低满意度的兵变前兆�?
+		# 触发条件比忠诚请愿（loyalty.1，仅忠诚 < 0.35）更严苛�?
+		# 忠诚 < 0.3 且士兵满意度 < 0.4，且无灾难进行中（不与其他灾难堆叠）�?
+		# 12 个月冷却；哗变处理不当（镇压→怨恨/放任→恶化）会把政变阈值放宽�?
+		# 两类接续会放宽阈值（忠诚 < 0.4 即可哗变）：
+		#   · 军人自恃（blades_and_thrones_soldiers_emboldened，夺舍镇压后 12 月）
+		#     ——打赢内战的军队更难伺候；
+		#   · 复辟余波（blades_and_thrones_restoration_unrest，军政府还政�?12 月）
+		#     ——被夺权的军人心有不甘�?
 		# ==================================================================
 		if = {
 			limit = {
@@ -382,10 +386,10 @@ blades_and_thrones_company_pulse = {
 
 blades_and_thrones_war_pulse = {
 	trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 	effect = {
-		# 绱姞澹叺POP鎬昏妯★紙渚涜€佸叺杩斾埂"澹叺杩囧墿"妫€娴嬶紱鑴氭湰鍊兼棤娉曡凯浠OP锛屾晠鏁堟灉閲岀疮鍔狅級
+		# 累加士兵POP总规模（供老兵返乡"士兵过剩"检测；脚本值无法迭代POP，故效果里累加）
 		set_variable = {
 			name = blades_and_thrones_veteran_soldier_pool_size
 			value = 0
@@ -406,7 +410,7 @@ blades_and_thrones_war_pulse = {
 				}
 			}
 		}
-		# 璁板綍"涓婃湀鏄惁鍦ㄦ墦浠?锛堢敤浜庢娴嬫垬浜夊垰缁撴潫 鈫?瑙﹀彂鑰佸叺杩斾埂锛?
+		# 记录"上月是否在打�?（用于检测战争刚结束 �?触发老兵返乡�?
 		if = {
 			limit = {
 				has_variable = blades_and_thrones_war_months
@@ -442,7 +446,7 @@ blades_and_thrones_war_pulse = {
 		else = {
 			remove_variable = blades_and_thrones_war_months
 		}
-		# 鑰佸叺杩斾埂瑙﹀彂锛氬拰骞?+ 鏈夊＋鍏礟OP锛屼笖锛堟垬浜夊垰缁撴潫 OR 澹叺瑙勬ā杩囧墿锛?
+		# 老兵返乡触发：和�?+ 有士兵POP，且（战争刚结束 OR 士兵规模过剩�?
 		if = {
 			limit = {
 				at_war = no
@@ -454,9 +458,9 @@ blades_and_thrones_war_pulse = {
 					}
 				}
 				OR = {
-					# 鎴樹簤鍒氱粨鏉燂紙涓婃湀浣滄垬锛?
+					# 战争刚结束（上月作战�?
 					has_variable = blades_and_thrones_war_was_active
-					# 澹叺瑙勬ā杩囧墿锛氬＋鍏礟OP鎬昏妯?> 1000 涓斿父澶囧啗杩滃皬浜庡＋鍏礟OP锛堟棤宀楀彲渚濓級
+					# 士兵规模过剩：士兵POP总规�?> 1000 且常备军远小于士兵POP（无岗可依）
 					AND = {
 						var:blades_and_thrones_veteran_soldier_pool_size > 1000
 						mercenary_mutiny_total_strength < {
@@ -475,7 +479,7 @@ blades_and_thrones_war_pulse = {
 				id = blades_and_thrones_veterans.1
 			}
 		}
-		# 鑰佸叺楠氬姩锛氭瑺楗烽仯鏁ｇ殑鑰佸叺涓嶆弧 + 澹叺婊℃剰搴︿綆 鈫?楠氬姩鎶夋嫨锛?2鏈堝喎鍗达級
+		# 老兵骚动：欠饷遣散的老兵不满 + 士兵满意度低 �?骚动抉择�?2月冷却）
 		if = {
 			limit = {
 				is_human = yes
@@ -492,7 +496,7 @@ blades_and_thrones_war_pulse = {
 				id = blades_and_thrones_veterans.2
 			}
 		}
-		# 绮鹃攼褰掑锛氫繚鐣欑簿閿?+ 闀垮拰骞筹紙鎴樹簤鏈堟暟>24 鍚庢秷澶辩殑鍜屽钩鏈燂級鈫?绮鹃攼浣曞幓浣曚粠锛?4鏈堝喎鍗达級
+		# 精锐归宿：保留精�?+ 长和平（战争月数>24 后消失的和平期）�?精锐何去何从�?4月冷却）
 		if = {
 			limit = {
 				is_human = yes
@@ -507,12 +511,6 @@ blades_and_thrones_war_pulse = {
 			}
 			trigger_event_non_silently = {
 				id = blades_and_thrones_veterans.3
-			}
-		}
-		if = {
-			limit = {
-				has_variable = blades_and_thrones_war_months
-				var:blades_and_thrones_war_months >= 24
 			}
 		}
 		if = {
@@ -572,10 +570,10 @@ blades_and_thrones_war_pulse = {
 	}
 }
 
-# 鍥㈢粌鎵€鈥滈樁灞傝嚜寤衡€濇ā鎷燂細鍘熺敓闃跺眰 AI 瀵硅嚜瀹氫箟寤虹瓚鏃犲缓閫犳剰鎰匡紙纭紪鐮佸惎鍙戝紡鍙鐩栧師鐢熷缓绛戯級锛?
-# 鏁呯敱 mod 姣忔湀鑴夊啿浠ｈ銆傜帺瀹讹細姣忔湀 20% 姒傜巼鍦ㄩ殢鏈哄彲寤哄湴鐐硅惀寤轰竴搴э紙50 閲戠敱闃跺眰鎵挎媴锛夛紱
-# AI锛氭瘡鏈?5% 姒傜巼锛屼笖瑕佹眰澹叺闃跺眰婊℃剰搴?鈮?0.5锛堥樁灞傗€滄弧鎰忊€濇墠鎵╁啗锛夛紝鑺傚杩滄參浜庣帺瀹躲€?
-# 鎾ら攢鐗规潈鍚庣珛鍗冲仠姝€?
+# 团练所“阶层自建”模拟：原生阶层 AI 对自定义建筑无建造意愿（硬编码启发式只覆盖原生建筑）�?
+# 故由 mod 每月脉冲代行。玩家：每月 20% 概率在随机可建地点营建一座（50 金由阶层承担）；
+# AI：每�?5% 概率，且要求士兵阶层满意�?�?0.5（阶层“满意”才扩军），节奏远慢于玩家�?
+# 撤销特权后立即停止�?
 blades_and_thrones_militia_pulse = {
 	trigger = {
 		has_estate_privilege = estate_privilege:blades_and_thrones_militia_autonomy
@@ -599,9 +597,14 @@ blades_and_thrones_militia_pulse = {
 							NOT = { has_building = building_type:blades_and_thrones_militia_training_ground }
 							can_build_building = building_type:blades_and_thrones_militia_training_ground
 						}
-						"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
-							estate_add_gold = {
-								value = -50
+						# estate scope 不能在 location 作用域内直接访问（实测报
+						# "Invalid scope types for event target link, link: estate"）——
+						# 经 owner（random_owned_location 遍历的是本国地点，owner = root）取阶层扣款。
+						owner = {
+							"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+								estate_add_gold = {
+									value = -50
+								}
 							}
 						}
 						change_building_level_in_location = {
@@ -632,9 +635,14 @@ blades_and_thrones_militia_pulse = {
 							NOT = { has_building = building_type:blades_and_thrones_militia_training_ground }
 							can_build_building = building_type:blades_and_thrones_militia_training_ground
 						}
-						"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
-							estate_add_gold = {
-								value = -50
+						# estate scope 不能在 location 作用域内直接访问（实测报
+						# "Invalid scope types for event target link, link: estate"）——
+						# 经 owner（random_owned_location 遍历的是本国地点，owner = root）取阶层扣款。
+						owner = {
+							"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
+								estate_add_gold = {
+									value = -50
+								}
 							}
 						}
 						change_building_level_in_location = {
@@ -650,9 +658,9 @@ blades_and_thrones_militia_pulse = {
 	}
 }
 
-# 鏃犲湴鍥芥湀鑴夊啿锛氭祦娴€氳缁存姢 + 瀹夊/澶嶅浗妫€娴?+ 娲楀姭鏈轰細銆?
-# 閫氳锛氭瘡鏈堜负鏃犲湴鍥斤紙娴佷骸鑰?浣ｅ叺鍐涘洟鍥斤級琛ュ缓涓庡浜よ寖鍥村唴闈炰氦鎴樺浗瀹剁殑
-# 閫氳鍏崇郴锛? 骞磋嚜鍔ㄨ繃鏈燂紝姝ゅ缁缓锛夈€傛柟鍚戯細鏈夊湴鍥界粰銆佹棤鍦板浗鏀躲€?
+# 无地国月脉冲：流浪通行维护 + 安家/复国检�?+ 洗劫机会�?
+# 通行：每月为无地国（流亡�?佣兵军团国）补建与外交范围内非交战国家的
+# 通行关系�? 年自动过期，此处续建）。方向：有地国给、无地国收�?
 blades_and_thrones_landless_passage_pulse = {
 	trigger = {
 		country_type = army
@@ -664,10 +672,10 @@ blades_and_thrones_landless_passage_pulse = {
 		}
 	}
 	effect = {
-		# 娴佷骸浣ｅ叺鍥㈡敼闈╀繚搴曪細鏀归潻 potential 鏇炬紡鎺?volunteer_company 鍒嗘敮锛?
-		# 瀵艰嚧澶栨淳鍐涘洟鍥借繃鏈堣寮曟搸绉婚櫎鏀归潻锛堜粠鑰屽け鍘讳汉鍔涙睜/鍐涘洟娓缓閫犳潈锛夈€?
-		# potential 宸蹭慨澶嶏紙瑙?government_reforms/blades_and_thrones_exiles.txt锛夛紝
-		# 姝ゅ涓哄凡瀛樺湪瀛樻。/宸插垱寤哄啗鍥㈢殑骞傜瓑鎭㈠锛氭湁鍐涘洟韬唤浣嗘敼闈╃己澶卞垯琛ュ洖銆?
+		# 流亡佣兵团改革保底：改革 potential 曾漏�?volunteer_company 分支�?
+		# 导致外派军团国过月被引擎移除改革（从而失去人力池/军团港建造权）�?
+		# potential 已修复（�?government_reforms/blades_and_thrones_exiles.txt），
+		# 此处为已存在存档/已创建军团的幂等恢复：有军团身份但改革缺失则补回�?
 		if = {
 			limit = {
 				NOT = { has_reform = government_reform:mercenary_mutiny_exiles_reform }
@@ -682,7 +690,7 @@ blades_and_thrones_landless_passage_pulse = {
 		}
 		every_country = {
 			limit = {
-				# 鎺掗櫎鑷韩鐢?this != root锛堝師鐗堟爣鍑嗗啓娉曪紝瑙?food_pulse 閫氳鍧楁敞閲婏級
+				# 排除自身�?this != root（原版标准写法，�?food_pulse 通行块注释）
 				this != root
 				within_diplomatic_range = root
 				NOT = { is_at_war_with = root }
@@ -692,10 +700,10 @@ blades_and_thrones_landless_passage_pulse = {
 					}
 				}
 			}
-			# first 蹇呴』鐢?this锛堣凯浠ｅ厓绱狅級鑰岄潪 prev鈥斺€斿疄娴?on_action 鐨?every_country
-			# 涓讳綋閲?prev 鎸囧悜澶栧眰 root锛宖irst = prev 浼氬鑷?first = second = root锛?
-			# create_relation 鎶?"the 2 countries are the same"锛堝師鐗?create_alliance
-			# 鍚屾锛歠irst = this锛夈€?
+			# first 必须�?this（迭代元素）而非 prev——实�?on_action �?every_country
+			# 主体�?prev 指向外层 root，first = prev 会导�?first = second = root�?
+			# create_relation �?"the 2 countries are the same"（原�?create_alliance
+			# 同款：first = this）�?
 			create_relation = {
 				type = relation_type:blades_and_thrones_landless_passage
 				first = this
@@ -703,10 +711,13 @@ blades_and_thrones_landless_passage_pulse = {
 				years = 5
 			}
 		}
-		# 瀹夊妫€娴嬶細鑾峰緱绗竴鍧楀湡鍦?鈫?瀹夊绔嬩笟浜嬩欢锛圓I 鑷姩"鍦ㄦ鎵庢牴"锛夈€?
-		# 12 涓湀鍐峰嵈闃叉"缁х画娴佹氮"鍚庡弽澶嶅脊绐楋紱鎵庢牴鍚庣敱浜嬩欢璁剧疆 settled 鏍囪銆?
+		# 安家检测：获得第一块土�?�?安家立业事件（AI 自动"在此扎根"）�?
+		# 12 个月冷却防止"继续流浪"后反复弹窗；扎根后由事件设置 settled 标记�?
 		if = {
 			limit = {
+				# 身份门槛内聚（2026-09：pulse 子块 trigger 实测未生效，
+				# 原版有地军队国误收安家事件——此处与事件自身 trigger 双保险）
+				blades_and_thrones_is_landless_legion = yes
 				num_locations > 0
 				NOT = { has_variable = blades_and_thrones_landless_settled }
 				NOT = { has_variable = blades_and_thrones_settle_offer_cooldown }
@@ -720,9 +731,10 @@ blades_and_thrones_landless_passage_pulse = {
 				id = blades_and_thrones_landless.1
 			}
 		}
-		# 澶嶅浗妫€娴嬶細澶哄洖鏁呴兘 鈫?鍏夊浜嬩欢锛圓I 鑷姩"鍏夊鏁呴兘"锛?
+		# 复国检测：夺回故都 �?光复事件（AI 自动"光复故都"�?
 		if = {
 			limit = {
+				blades_and_thrones_is_landless_legion = yes
 				has_variable = mercenary_mutiny_homeland
 				NOT = { has_variable = blades_and_thrones_landless_settled }
 				var:mercenary_mutiny_homeland ?= {
@@ -733,9 +745,10 @@ blades_and_thrones_landless_passage_pulse = {
 				id = blades_and_thrones_landless.3
 			}
 		}
-		# 娲楀姭鏈轰細锛氶┗鎵庡湪浠栧浗棰嗗湴鏃讹紝姣忔湀灏忔鐜囪Е鍙戞礂鍔妷鎷╋紙AI 鎸?ai_chance 鍐冲畾锛?
+		# 洗劫机会：驻扎在他国领地时，每月小概率触发洗劫抉择（AI �?ai_chance 决定�?
 		if = {
 			limit = {
+				blades_and_thrones_is_landless_legion = yes
 				any_unit = {
 					unit_location = {
 						has_owner = yes
@@ -759,12 +772,12 @@ blades_and_thrones_landless_passage_pulse = {
 }
 
 # ============================================================================
-# 鍐涗汉鎽勬斂骞村害鑴夊啿锛氳拷鍔犲埌鍘熺増 in_regency_yearly_pulse銆?
-# Wiki锛圡od files load order 鈫?On actions 渚嬪锛夛細on_action 鍏佽杩藉姞
-# on_actions/events/random_events锛堝畼鏂圭ず渚嬪嵆 monthly_country_pulse 杩藉姞
-# on_actions鈥斺€斾笌 mod 鐜版湁鐢ㄦ硶涓€鑷达級锛屼笉鍏佽鏇挎崲 trigger/effect 鍧椼€?
-# 浠呭綋澶勪簬澹叺闃跺眰鎽勬斂鏃惰Е鍙戞憚鏀夸簨浠讹紱chance_to_happen = 20 瀵归綈鍘熺増
-# in_regency_yearly_pulse 涓诲潡鐨勮瘎浼伴鐜囥€?
+# 军人摄政年度脉冲：追加到原版 in_regency_yearly_pulse�?
+# Wiki（Mod files load order �?On actions 例外）：on_action 允许追加
+# on_actions/events/random_events（官方示例即 monthly_country_pulse 追加
+# on_actions——与 mod 现有用法一致），不允许替换 trigger/effect 块�?
+# 仅当处于士兵阶层摄政时触发摄政事件；chance_to_happen = 20 对齐原版
+# in_regency_yearly_pulse 主块的评估频率�?
 # ============================================================================
 in_regency_yearly_pulse = {
 	on_actions = {
@@ -777,21 +790,21 @@ blades_and_thrones_regency_pulse = {
 		has_regent = yes
 		regency_type = regency_type:zzz_rebalanced_nepal_mercenary_soldiers_estate_regency
 	}
-	effect = {
-		random_events = {
-			chance_to_happen = 20
-			10 = blades_and_thrones_regency.1
-			10 = blades_and_thrones_regency.2
-		}
+	# random_events 是 on_action 块的顶层键（与 trigger/effect 平级）——
+	# 写在 effect 内报 "Unknown effect random_events"，摄政事件永不触发。
+	random_events = {
+		chance_to_happen = 20
+		10 = blades_and_thrones_regency.1
+		10 = blades_and_thrones_regency.2
 	}
 }
 
 # ============================================================================
-# 鍐涘洟鍗囩骇鑴夊啿锛氭寜"鐩稿瀹椾富瀹炲姏"椹卞姩鍐涘洟鍥藉崌绾?闄嶇骇锛堝姏閲忓喅瀹氬湴浣嶏級銆?
-#   路 浣庣骇锛堝悎鍚屽伐/浠ｇ锛夌浉瀵瑰疄鍔?>= 0.5  鈫?鍗囬珮绾э紙寮哄姏浣ｅ叺鍥?澶у瀷浠ｇ锛?
-#   路 楂樼骇鐩稿瀹炲姏 < 0.35                 鈫?闄嶅洖浣庣骇锛堝姏閲忔病浜嗙壒鏉冩病浜嗭級
-#   路 鍐涢榾锛堟湁鍦扮洏锛変笉鍙備笌鍗囬檷锛堣川鍙樺舰鎬侊級
-# 鐜╁瀹椾富浼氭敹鍒伴€氱煡浜嬩欢锛汚I 瀹椾富闈欓粯鍗囬檷锛堝姩鎬佷笘鐣岋級銆?
+# 军团升级脉冲：按"相对宗主实力"驱动军团国升�?降级（力量决定地位）�?
+#   · 低级（合同工/代管）相对实�?>= 0.5  �?升高级（强力佣兵�?大型代管�?
+#   · 高级相对实力 < 0.35                 �?降回低级（力量没了特权没了）
+#   · 军阀（有地盘）不参与升降（质变形态）
+# 玩家宗主会收到通知事件；AI 宗主静默升降（动态世界）�?
 # ============================================================================
 blades_and_thrones_company_upgrade_pulse = {
 	trigger = {
@@ -815,7 +828,7 @@ blades_and_thrones_company_upgrade_pulse = {
 				}
 				NOT = { has_variable = blades_and_thrones_company_upgrade_cooldown }
 			}
-			# 鐩稿瀹椾富瀹炲姏 = 鍐涘洟 army_size / 瀹椾富 army_size
+			# 相对宗主实力 = 军团 army_size / 宗主 army_size
 			save_temporary_scope_value_as = {
 				name = strength_ratio
 				value = {
@@ -823,7 +836,7 @@ blades_and_thrones_company_upgrade_pulse = {
 					divide = root.army_size
 				}
 			}
-			# 鍗囩骇锛氱浉瀵瑰疄鍔?>= 0.5 鈫?楂樼骇褰㈡€侊紙鍙劚绂荤瓑鐗规潈瑙ｉ攣锛?
+			# 升级：相对实�?>= 0.5 �?高级形态（可脱离等特权解锁�?
 			if = {
 				limit = {
 					scope:strength_ratio >= 0.5
@@ -850,7 +863,7 @@ blades_and_thrones_company_upgrade_pulse = {
 					value = yes
 					months = 12
 				}
-				# 鎷ㄦ妗ｄ綅鍗囩骇锛氫剑鍏电嚎 1鈫?锛堣€佸叺鍚堝悓閲戯級锛屼唬绠＄嚎 2鈫?锛堝ぇ鍐涘洟鍐涜垂锛?
+				# 拨款档位升级：佣兵线 1�?（老兵合同金），代管线 2�?（大军团军费�?
 				if = {
 					limit = { is_subject_type = mercenary_company_veteran }
 					set_variable = {
@@ -874,7 +887,7 @@ blades_and_thrones_company_upgrade_pulse = {
 					}
 				}
 			}
-			# 闄嶇骇锛氱浉瀵瑰疄鍔?< 0.35 鈫?闄嶅洖浣庣骇
+			# 降级：相对实�?< 0.35 �?降回低级
 			else_if = {
 				limit = {
 					scope:strength_ratio < 0.35
@@ -901,7 +914,7 @@ blades_and_thrones_company_upgrade_pulse = {
 					value = yes
 					months = 12
 				}
-				# 鎷ㄦ妗ｄ綅闄嶇骇锛氫剑鍏电嚎 3鈫?锛屼唬绠＄嚎 4鈫?锛堝姏閲忔病浜嗘嫧娆句篃娌′簡锛?
+				# 拨款档位降级：佣兵线 3�?，代管线 4�?（力量没了拨款也没了�?
 				if = {
 					limit = { is_subject_type = mercenary_company }
 					set_variable = {
@@ -950,42 +963,62 @@ blades_and_thrones_company_recruit_pulse = {
 	}
 	effect = {
 		# 相对宗主实力 = 军团 army_size / 宗主 army_size
-		save_temporary_scope_value_as = {
-			name = strength_ratio
-			value = {
-				value = army_size
-				divide = overlord.army_size
-			}
-		}
-		random_list = {
-			15 = {
-				trigger = {
-					gold > 200
-					manpower > 0
-					scope:strength_ratio < 0.8
+		# 2026-10 修 1.4 除零（Div/0 at :966，单会话 3726 次 ×2 卷）：
+		# 根因 = 本 pulse 的 trigger 用 mod 自定义 is_subject_type 做门槛（可能对非附庸恒真），
+		# 于是对国家作用域直接 eval 'overlord.army_size' —— 无宗主者 overlord 未设 → 类型 none/any → Div/0。
+		# 改法与同文件 831 块（军团升级脉冲，1.3/1.4 均零报错）一致：
+		# 用 every_subject + limit 圈定军团国，除法只在该作用域内做，prev=军团 root=宗主。
+		every_subject = {
+			limit = {
+				OR = {
+					is_subject_type = mercenary_company
+					is_subject_type = mercenary_company_trusted
+					is_subject_type = mercenary_company_veteran
+					is_subject_type = mercenary_company_grand
+					is_subject_type = mercenary_company_warlord
 				}
-				add_gold = -100
-				capital = {
-					create_sub_unit_with_owner = {
-						type = a_footmen
-						owner = root
-						origin = this
-						experience = 50
+				# 双保险：宗主实力为 0 时不做除法（除数守卫）
+				overlord = { army_size > 0 }
+			}
+			# 作用域：改用 every_subject 后当前作用域是宗主，裸 root 会指向宗主（错）。
+			# 用相对作用域 prev 指向"本条军团"——比具名 scope 更抗造（具名 scope 有嵌套失效前科，见心得#31）。
+			save_temporary_scope_value_as = {
+				name = strength_ratio
+				value = {
+					value = prev.army_size
+					divide = root.army_size
+				}
+			}
+			random_list = {
+				15 = {
+					trigger = {
+						gold > 200
+						manpower > 0
+						scope:strength_ratio < 0.8
+					}
+					add_gold = -100
+					capital = {
+						create_sub_unit_with_owner = {
+							type = a_footmen
+							owner = prev
+							origin = this
+							experience = 50
+						}
 					}
 				}
-			}
-			85 = {
+				85 = {
+				}
 			}
 		}
 	}
 }
 
 # ============================================================================
-# 骞村害鎷ㄦ璐﹀崟鑴夊啿锛氱粺璁″啗鍥㈣ˉ鍔╁勾搴︽€婚锛屽悜鐜╁瀹椾富寮广€屽勾搴﹀啗璐硅处鍗曘€嶃€?
-# 瀹為檯杞处宸叉敼鐢卞睘鍥界被鍨?modifier 鎵挎媴锛堝師鐗堝厛渚?sco_auld_alliance_funding锛?
-# overlord_modifier 璐熼噾鏀跺叆 = 瀹椾富鏈堝害鎵ｆ锛宻ubject_modifier 姝ｉ噾鏀跺叆 = 鍐涘洟
-# 鏈堝害鍒拌处锛夛紝鏈剦鍐蹭笉鍐?add_gold锛堥伩鍏嶅弻閲嶆敮浠橈級锛屽彧鍋氳处鍗曞睍绀恒€?
-# 妗ｄ綅锛坆lades_and_thrones_subsidy_level 鍙橀噺锛夛細1 浣庣骇浣ｅ叺 300/骞达紙25/鏈堬級銆?
+# 年度拨款账单脉冲：统计军团补助年度总额，向玩家宗主弹「年度军费账单」�?
+# 实际转账已改由属国类�?modifier 承担（原版先�?sco_auld_alliance_funding�?
+# overlord_modifier 负金收入 = 宗主月度扣款，subject_modifier 正金收入 = 军团
+# 月度到账），本脉冲不�?add_gold（避免双重支付），只做账单展示�?
+# 档位（blades_and_thrones_subsidy_level 变量）：1 低级佣兵 300/年（25/月）�?
 # 档位（blades_and_thrones_subsidy_level 变量）：1 低级佣兵 240/年（20/月）；
 # 2 低级代管 300/年（25/月）；高级佣兵 420/年（35/月）；高级代管 600/年（50/月）；
 # 藩镇（无拨款、无 modifier）不发放——藩镇自肥。2024-08 整体下调一档（25/35/50/75 → 20/25/35/50）。
@@ -1086,7 +1119,7 @@ blades_and_thrones_subsidy_pulse = {
 				}
 			}
 		}
-		# 鐜╁瀹椾富锛氬勾搴﹀啗璐硅处鍗?
+		# 玩家宗主：年度军费账�?
 		if = {
 			limit = {
 				is_human = yes

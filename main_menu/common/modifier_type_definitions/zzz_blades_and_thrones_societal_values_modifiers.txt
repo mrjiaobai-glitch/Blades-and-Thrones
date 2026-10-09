@@ -1,4 +1,4 @@
-# 军国主义 vs 文官主义轴的月度推动修正。
+﻿# 军国主义 vs 文官主义轴的月度推动修正。
 # 格式对齐原版 monthly_towards_centralization（modifier_type_definitions/00_modifier_types.txt）。
 monthly_towards_militarism = {
 	color = neutral

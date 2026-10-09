@@ -1,4 +1,4 @@
-# 彩蛋国 BLT 统治者角色：蒋王公（开封犹太文化、什叶派、属性全 100）。
+﻿# 彩蛋国 BLT 统治者角色：蒋王公（开封犹太文化、什叶派、属性全 100）。
 # 仿照原版 05_characters.txt（角色先于 countries 加载——文件名 05 前缀
 # 保证角色定义在 countries 之前处理，ruler 引用必然有效）。
 # 命名规则（参考原版 character_names_dynamic + 05_characters.txt）：

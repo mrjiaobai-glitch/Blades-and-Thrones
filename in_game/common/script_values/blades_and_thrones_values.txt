@@ -34,7 +34,7 @@ mercenary_mutiny_soldier_satisfaction_scale = {
 	add = {
 		if = {
 			limit = {
-				country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 				estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate >= 0.5
 			}
 			value = 0.4
@@ -43,7 +43,7 @@ mercenary_mutiny_soldier_satisfaction_scale = {
 	add = {
 		if = {
 			limit = {
-				country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 				estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate >= 0.75
 			}
 			value = 0.5
@@ -55,7 +55,7 @@ mercenary_mutiny_soldier_suppression = {
 	add = {
 		if = {
 			limit = {
-				country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			}
 			value = {
 				value = mercenary_mutiny_loyal_army
@@ -104,14 +104,14 @@ mercenary_mutiny_rebel_progress_drive = {
 	# 士兵满意度修正（原 +0.05 / -0.05）
 	if = {
 		limit = {
-			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.5
 		}
 		add = 0.05
 	}
 	if = {
 		limit = {
-			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate >= 0.75
 		}
 		add = -0.05
@@ -157,7 +157,7 @@ blades_and_thrones_military_crisis_change = {
 	}
 	if = {
 		limit = {
-			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.5
 		}
 		add = 0.25
@@ -246,7 +246,7 @@ blades_and_thrones_crisis_change_satisfaction = {
 	value = 0
 	if = {
 		limit = {
-			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.5
 		}
 		value = 0.25
@@ -340,37 +340,44 @@ mercenary_mutiny_monthly_spawn_chance = {
 	}
 	if = {
 		limit = {
-			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.5
 		}
 		add = 0.001
 	}
 	if = {
 		limit = {
-			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.25
 		}
 		add = 0.002
 	}
 	if = {
 		limit = {
-			country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate >= 0.75
 		}
 		subtract = 0.001
 	}
+	# 各档 if 可叠加，峰值可达 1.017——按 readme 约束收在 0..1 区间（危机 100 仍为必定触发）
 	min = 0
+	max = 1
 }
 
 # 军饷（现金俸禄）：与维护费（补给/商品采购）完全脱钩的固定合同义务。
-# 士兵按人头领固定饷银（每千人每月 5 金），驻军每堡 1 金；
-# 维护费拉杆只管补给好坏（对应满意度目标），不再影响军饷金额。
+# 士兵按人头领固定饷银（每千人每月 5 金），驻军每堡 0.05 金（= 每 20 堡 1 金）。
+# 2026-08 实测修正：EU5 的 num_forts 实际是"有防御的城市数"（大国 30-50 座，
+# 察合台 270 地点有 30 城 → 军饷 30 金/月，而收入只有 6.5）——原 1 金/堡/月
+# 会让所有有城市的 AI 国家开局即欠饷 → 满意度每月 -5% → 忠诚崩 → 国家被
+# 肢解/附庸独立（察合台 1337.6 实测赤字 -8/月、pay_arrears 已触发）。
+# 0.05/堡符合"驻军饷银"量级（30 堡 = 1.5 金/月，收入可负担），
+# 玩家加饷/索饷等派生金额自动跟随本脚本值。
 mercenary_mutiny_monthly_pay_cost = {
 	value = root.regular_army_size
 	multiply = 0.005
 	add = {
 		value = root.num_forts
-		multiply = 1
+		multiply = 0.05
 	}
 	min = 0
 }
@@ -394,7 +401,7 @@ blades_and_thrones_army_loyalty = {
 	if = {
 		limit = {
 			root = {
-				country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 			}
 		}
 		add = {
@@ -422,7 +429,7 @@ blades_and_thrones_army_loyalty = {
 	if = {
 		limit = {
 			root = {
-				country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 				has_estate_privilege = estate_privilege:zzz_rebalanced_nepal_mercenary_soldiers_royal_hand
 				"root.estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" >= 0.5
 			}
@@ -432,7 +439,7 @@ blades_and_thrones_army_loyalty = {
 	if = {
 		limit = {
 			root = {
-				country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+				"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 				has_estate_privilege = estate_privilege:zzz_rebalanced_nepal_mercenary_soldiers_royal_hand
 				"root.estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate" < 0.5
 			}

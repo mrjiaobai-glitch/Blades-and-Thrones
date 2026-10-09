@@ -1,4 +1,4 @@
-country_name_construction = {
+﻿country_name_construction = {
 	type = country
 	text = {
 		localization_key = country_name_construction_ROM_republic # Senatus Populusque Romanus
@@ -103,6 +103,17 @@ country_name_construction = {
 		}
 	}
 
+	# 原版条目（1.3.11）：汉堡银行/吉罗银行专属"裸名"模板（此前整体覆盖时遗漏，已补回）
+	text = {
+		localization_key = country_name_construction_prefix_name_bank_special
+		trigger = {
+			OR = {
+				tag = HBURG #Bank of Hamburg
+				tag = BGIRO #Banco del Giro
+			}
+		}
+	}
+
 	text = {
 		localization_key = country_name_construction_prefix_adjective_rank
 		trigger = {
@@ -182,27 +193,6 @@ country_name_construction = {
 				tag = HAB
 				has_reform = government_reform:austrian_archduchy_reform
 			}
-		}
-	}
-
-	text = {
-		localization_key = country_name_construction_eyalet
-
-		trigger = {
-			is_subject = yes
-			# 原版正确写法是 is_subject_type（无 subject_type: 前缀）；
-			# 1644 原文件写的 subject_type = subject_type:eyalet 会报
-			# "Invalid right side during comparison 'subject_type'"（已修正）
-			is_subject_type = eyalet
-		}
-	}
-
-	text = {
-		localization_key = country_name_construction_charter_company
-
-		trigger = {
-			is_subject = yes
-			is_subject_type = charted_company
 		}
 	}
 

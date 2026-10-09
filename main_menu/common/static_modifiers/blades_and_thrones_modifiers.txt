@@ -125,90 +125,31 @@ blades_and_thrones_junta_purge_aftermath_modifier = {
 	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.01
 }
 
+# 2026-10-06 三分拆分：本修正只保留【制度性常量】——士兵得势、内阁接管、
+# 外交骂名（污点不随情绪褪色）。王室力量/稳定效率/叛乱威慑属"状态依赖"，
+# 移入 auto_modifiers\zzz_blades_and_thrones_coup_settlement.txt 的忠诚分支
+# （按军队忠诚缩放，需 coup_purged 旗标）。
 blades_and_thrones_junta_purge_legacy_modifier = {
 	game_data = {
 		category = country
 	}
-	global_crown_estate_power = 0.10
 	# 铁腕秩序下军队是王权支柱：士兵 power 随清洗得势（原 -0.15 同理修正）
 	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.10
 	country_cabinet_efficiency = 0.10
-	stability_cost_efficiency = 0.10
-	monthly_rebel_growth = -0.001
 	# 铁腕清洗的国际名声代价（内部秩序重建 vs 外部骂名）
 	diplomatic_reputation = diplomatic_reputation_mild_penalty
 }
 
-blades_and_thrones_junta_collapse_modifier = {
-	game_data = {
-		category = country
-		decaying = yes
-	}
-	global_crown_estate_power = 0.20
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.30
-	stability_cost_efficiency = -0.5
-	monthly_legitimacy = -0.05
-	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = 0.02
-}
-
-blades_and_thrones_junta_collapse_legacy_modifier = {
-	game_data = {
-		category = country
-	}
-	global_crown_estate_power = 0.15
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.20
-	monthly_legitimacy = 0.05
-	stability_cost_efficiency = 0.20
-	global_monthly_development = 0.002
-	diplomatic_reputation = diplomatic_reputation_weak_bonus
-}
-
+# 2026-10-06 三分拆分：本修正只保留【制度性常量】——士兵制度性贬抑、
+# 复辟班底、改革槽位。王室力量对半拆给正统/忠诚两个缩放分支，正统月收益
+# 与外交声誉也移入分支（见 coup_settlement 文件，需 coup_restored 旗标）。
+# 满缩放（正统 100/忠诚 1.0）时与原值总量守恒。
 blades_and_thrones_junta_restored_modifier = {
 	game_data = {
 		category = country
 	}
-	global_crown_estate_power = 0.20
 	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = -0.25
-	monthly_legitimacy = 0.02
-	diplomatic_reputation = diplomatic_reputation_mild_bonus
 	country_cabinet_efficiency = 0.10
-	stability_cost_efficiency = 0.20
-	government_reform_slots = 1
-}
-
-blades_and_thrones_junta_cogovernance_modifier = {
-	game_data = {
-		category = country
-	}
-	global_crown_estate_power = 0.05
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.20
-	global_nobles_estate_power = 0.10
-	global_burghers_estate_power = 0.10
-	country_cabinet_efficiency = 0.10
-	army_maintenance_efficiency = -0.15
-	monthly_legitimacy = 0.05
-	diplomatic_reputation = diplomatic_reputation_weak_penalty
-	government_reform_slots = 1
-}
-
-
-
-blades_and_thrones_junta_hardened_modifier = {
-	game_data = {
-		category = country
-	}
-	global_crown_estate_power = -0.10
-	global_zzz_rebalanced_nepal_mercenary_soldiers_estate_power = 0.35
-	global_nobles_estate_power = -0.25
-	global_clergy_estate_power = -0.25
-	global_burghers_estate_power = -0.25
-	global_peasants_estate_power = -0.25
-	monthly_army_tradition = 0.20
-	army_maintenance_efficiency = 0.15
-	monthly_legitimacy = -0.10
-	stability_cost_efficiency = -0.20
-	monthly_rebel_growth = -0.001
-	monthly_zzz_rebalanced_nepal_mercenary_soldiers_estate_rebel_growth = -0.03
 	government_reform_slots = 1
 }
 

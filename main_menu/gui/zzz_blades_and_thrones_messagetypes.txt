@@ -1,4 +1,4 @@
-# 消息类型：ask_soldiers_for_suppression（请求士兵平叛）
+﻿# 消息类型：ask_soldiers_for_suppression（请求士兵平叛）
 # 依据官方 Wiki（Action modding → Generic actions → Messages）：
 # generic action 需要定义 PERFORM_<key>_ACTION 消息类型（格式同原版
 # main_menu/gui/messagetypes.txt 的 PERFORM_bribe_estate_ACTION）。

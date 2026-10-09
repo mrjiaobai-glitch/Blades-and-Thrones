@@ -8,6 +8,9 @@ blades_and_thrones_landless.1 = { #安家立业：获得第一块土地后的抉
 	outcome = neutral
 	major = yes
 	trigger = {
+		# 身份门槛（2026-09 修复：防原版军队国误收事件，见
+		# scripted_triggers/blades_and_thrones_is_landless_legion）
+		blades_and_thrones_is_landless_legion = yes
 		# 防重复：安家一次后不可再触发（控制台直接触发会绕过脉冲门槛）
 		NOT = { has_variable = blades_and_thrones_landless_settled }
 	}
@@ -22,7 +25,7 @@ blades_and_thrones_landless.1 = { #安家立业：获得第一块土地后的抉
 			# 夺舍残部（original_exile_marker）同样结束流亡身份，恢复原名
 			remove_variable = mercenary_mutiny_original_exile_marker
 			# 转正：从军队型国家变为正常领土国家
-			trigger_if = {
+			if = {
 				limit = { country_type = army }
 				change_country_type = location
 			}
@@ -55,6 +58,16 @@ blades_and_thrones_landless.2 = { #纵兵劫掠：驻扎他国时的洗劫抉择
 	desc = blades_and_thrones_landless.2.desc
 	outcome = neutral
 	trigger = {
+		# 身份门槛（2026-09 修复）+ 驻外检查（原在调用侧，内聚防绕过）
+		blades_and_thrones_is_landless_legion = yes
+		any_unit = {
+			unit_location = {
+				has_owner = yes
+				owner = {
+					NOT = { this = root }
+				}
+			}
+		}
 	}
 
 	immediate = {
@@ -108,6 +121,8 @@ blades_and_thrones_landless.3 = { #还都：光复故都，结束流亡
 	outcome = neutral
 	major = yes
 	trigger = {
+		# 身份门槛（2026-09 修复，同 landless.1）
+		blades_and_thrones_is_landless_legion = yes
 		# 防重复：复国一次后不可再触发
 		NOT = { has_variable = blades_and_thrones_landless_settled }
 	}
@@ -120,7 +135,7 @@ blades_and_thrones_landless.3 = { #还都：光复故都，结束流亡
 			# 夺舍残部（original_exile_marker）同样结束流亡身份，恢复原名
 			remove_variable = mercenary_mutiny_original_exile_marker
 			# 转正：从军队型国家变为正常领土国家（若已转正则跳过）
-			trigger_if = {
+			if = {
 				limit = { country_type = army }
 				change_country_type = location
 			}

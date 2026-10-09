@@ -1,4 +1,4 @@
-global_zzz_rebalanced_nepal_mercenary_soldiers_army_loyalty = {
+﻿global_zzz_rebalanced_nepal_mercenary_soldiers_army_loyalty = {
 	color = good
 	percent = yes
 	game_data = {

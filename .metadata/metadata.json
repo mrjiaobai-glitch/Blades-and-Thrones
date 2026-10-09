@@ -1,8 +1,8 @@
-{
+﻿{
 	"name":	"刀锋与王座",
 	"id":	"blades_and_thrones",
-	"version":	"0.2",
-	"supported_game_version":	"1.*",
+	"version":	"0.4.0",
+	"supported_game_version":	"1.4.0",
 	"short_description":	"佣兵、常备军与国家政治的联动机制",
 	"tags":	["Events", "Military", "Gameplay"],
 	"relationships":	[],

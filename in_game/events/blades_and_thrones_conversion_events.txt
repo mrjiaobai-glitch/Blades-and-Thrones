@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_conversion
+﻿namespace = blades_and_thrones_conversion
 
 # 军事转化菜单：常备军 ↔ 雇佣兵 ↔ 无地军团国 ↔ 士兵POP
 # 入口：军事情报汇总事件选项 / 调试菜单选项

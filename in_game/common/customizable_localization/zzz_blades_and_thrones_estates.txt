@@ -1,4 +1,4 @@
-zzz_rebalanced_nepal_mercenary_soldiers_estate = {
+﻿zzz_rebalanced_nepal_mercenary_soldiers_estate = {
 	type = country
 
 	text = {

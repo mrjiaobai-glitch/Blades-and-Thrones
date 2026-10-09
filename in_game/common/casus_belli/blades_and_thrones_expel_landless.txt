@@ -1,4 +1,4 @@
-# 驱逐无地国 CB：驻扎在己方领土上的无地军团（流亡者/佣兵军团国）可以被驱逐。
+﻿# 驱逐无地国 CB：驻扎在己方领土上的无地军团（流亡者/佣兵军团国）可以被驱逐。
 # 战争目标 = 摧毁其军队（destroy_army）：无地国无军则亡。
 # root = 驻在国，scope:target = 无地国
 cb_blades_and_thrones_expel_landless = {

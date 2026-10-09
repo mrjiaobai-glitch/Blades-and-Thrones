@@ -1,4 +1,4 @@
-# 军阀人格（ai_warlord）：给天生军阀相的军团国 AI 用（如流亡者安家转正后）。
+﻿# 军阀人格（ai_warlord）：给天生军阀相的军团国 AI 用（如流亡者安家转正后）。
 # 高侵略、低谨慎、轻视外交与稳定——藩镇割据的天然性格：
 # 听调不听宣，拥兵自重，宗主受难时倒戈独立（对齐 warlord subject type 的
 # will_join_independence_wars + subject_can_cancel 设计）。

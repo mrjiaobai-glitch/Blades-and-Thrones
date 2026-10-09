@@ -1,5 +1,9 @@
-REPLACE_OR_CREATE:soldiers = {
+﻿REPLACE_OR_CREATE:soldiers = {
 	color = pop_soldiers
+
+	# 士兵 POP 政治力量：1.4 起政治力量是 POP 属性（原属阶层的 power_per_pop 已废弃）。
+	# 0.5 = 1.4 原版 soldiers（0.0625）的 8 倍、peasants（0.025）的 20 倍 —— 沿用 mod 原设计意图。
+	power_per_pop = 0.5
 
 	editor = 1.0
 

@@ -3,6 +3,18 @@
 本文是《刀锋与王座》开发过程中长期对话沉淀下来的独立心得，适合在动手改模组之前先读一遍。
 （原 README 中的【设计心得】【开发心得】章节已并入本文，README 只留指引。）
 
+【文档地图（给改代码的 agent）】
+- README.txt = 速查入口：文档地图（各文档触发条件）、改代码流程（扫坑→对值→修 BOM，
+  三步各有完成标准）、目录结构、命名约定、已知坑速查（每条带踩坑编号）、
+  调试入口、灾难因果链、机制索引（指针）。
+- 心得.txt = 深度参考（本文）：设计哲学、踩坑记录（第七章 1-57 是最高价值内容）、
+  事件写法规范、测试方法（含存档分析法）。
+- 平衡性数据表_BalanceSheet.txt = 数值单一事实源（军饷/忠诚/危机/夺舍/特权/时代/军政府/出租/团练/军团补贴）。
+- 改代码流程（README 已写全）：①扫踩坑 43/50/51/53/55/56/57（2026-08/09 四大坑：country_has_estate
+  恒真、军队国碎国、num_forts 量级、法律易变 potential 自动撤销；2026-10 三新坑：
+  is_subject_type 恒真锁死 AI、跨版本复制降级、单位行动漏类型过滤）②对照平衡表数值 ③动代码，改完复制
+  D:\小程序\修复BOM.ps1 到 mod 根运行补 BOM（跑完删除，上传不得带工具文件）。
+
 【强烈建议】多参考创意工坊模组 3659311464「1644」（明末清初历史模组）：
 它的写法是社区公认的优良范本——事件结构（ID 行中文注释、fire_only_once、
 major、image、historical_info、hidden_effect、链式触发）、本地化组织
@@ -195,7 +207,7 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
     实测全 mod 84 个 yml/txt 一次补回 66 个缺 BOM 文件（含 events/scripted_effects/
     generic_actions/setup）——无 BOM 是"侥幸解析"，补齐后脚本错误显著减少。
     注意：脚本自身也要带 BOM——无 BOM 时 Windows PowerShell 按 GBK 解析中文
-    注释会直接报解析错误（2024-08 已修复脚本本体）。
+    注释会直接报解析错误（2026-07 已修复脚本本体）。
 
 20. random_subject + has_variable 组合不可靠（索饷/独立事件教训）：
     vanilla 44 处 random_subject 用例无一配 has_variable；实测 limit 永不满足
@@ -221,7 +233,7 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
 23. 自定义外交关系的 loc 键 = <关系名>_relation + <关系名>_relation_desc
     （vanilla 模板：food_access_relation / fondaco_rights_relation）——
     流浪通行关系 blades_and_thrones_landless_passage 忘了写 loc →
-    外交关系列表显示 raw key（2024-08 补）。
+    外交关系列表显示 raw key（2026-07 补）。
 
 24. CB 的 loc 键带 cb_ 前缀：cb_<名> + cb_<名>_desc（如 cb_blades_and_thrones_
     claim_foothold）——generic action 的无前缀键不能顶替（claim_foothold 教训：
@@ -234,11 +246,11 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
     不需要 loc（别浪费时间）：modifier 类型名（modifier_type_definitions，
     引擎处理）、rebel demand 名（vanilla 全无，叛军面板显示效果文本）。
 
-26. 自检方法论（2024-08 全量自检）：
+26. 自检方法论（2026-07 全量自检）：
     - 写对照脚本提取"名即 loc 键"的引用（事件 title/desc/选项名/tt、
       modifier 引用、CB/reform/subject/estate/law/societal_value/AI 人格/
       disaster/关系名、AUTO/STATIC_MODIFIER_NAME_、war_name），逐个核对
-      4 个 loc 文件（main_menu 与 in_game 镜像两侧键数必须一致，816/816）。
+      4 个 loc 文件（main_menu 与 in_game 镜像两侧键数必须一致；2026-09 复核 = 784/784），逐个核对
     - REPLACE_OR_CREATE 覆写原版条目（如 soldiers pop_type）要逐字段对比
       原版（has_cap / estate 关联 / literacy_impact 全保留，只替换需要改的
       字段，如 estate 关联换成自定义阶层）——覆盖不全会悄悄改变原版行为。
@@ -247,16 +259,18 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
 
 27. EU5 文件夹式 mod 注册不用 .mod 文件（EU4 时代的 descriptor.mod 认知已过时）：
     注册靠 mod 目录内 .metadata/metadata.json（name/id/version/tags/
-    supported_game_version，建议写 "1.*" 防版本警告）+ playsets.json 的
+    supported_game_version——写实际测试的精确版本 "1.3.11"，不要写 "1.*"
+    防版本警告：旧版本玩家会收到不兼容警告，避免把"旧版不兼容"的差评算到
+    模组头上；确需放宽再改 "1.3.*"）+ playsets.json 的
     path 引用。重装游戏只丢 playset 注册，不丢 mod 本体。
 
 28. error.log 归属甄别：TARGET_COUNTRY.GetName（约 288 条）是 1644 的 bug
     （约 70 个事件文件在错误上下文引用该 scope），GREAT_POWER_HIGHEST_RANK_
     COUNTRY_INFO_AND_THRESHOLD / NOT_GIVING_SCRIPTED_RELATION_TRIGGER 是
     原版层——查错先看 "Script location:" 行的文件归属（mod/1644/原版）
-    再动手，别把别人的 bug 算到自己头上（2024-08 实测甄别）。
+    再动手，别把别人的 bug 算到自己头上（2026-07 实测甄别）。
 
-29. AI 全面放开（2024-08 决策，观察者模式验证）：观察者 160 年实测 0 无地军团
+29. AI 全面放开（2026-07 决策，观察者模式验证）：观察者 160 年实测 0 无地军团
     ——根因是全部生成路径有玩家门槛（on_annex 的 is_human、组建 ai_will_do
     -100、索饷脉冲 is_human）。放开方式与防刷屏：
     · AI 吞并转流亡：残军 ≥ 5 单位 + 15% 概率（random trigger）——AI 互吞
@@ -294,7 +308,7 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
     can_end 依赖哪些标记；"一次性灾难"的防重复变量绝不能在 on_end 删。
     （对比：coup 灾难没有 on_end，coup_resolved 一直保留，无此问题。）
 
-33. 军政府重构（2024-08，用户拍板 A+B）：原"军政府统治"灾难（0-100 稳定度
+33. 军政府重构（2026-07，用户拍板 A+B）：原"军政府统治"灾难（0-100 稳定度
     博弈 + 6 月度触发点 + 5 个事件）整体删除，并入政变链——忠诚低 → 政变灾难
     → loyalty.3（镇压/妥协/接受军人接管三选一）→ 接受接管 → loyalty.4 核心
     抉择（还政王室/制度化巩固/铁腕清洗三选一当场了结）→ 全程 2 个弹窗。
@@ -311,7 +325,7 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
      （正统 -0.05/月、阶层满意度、AI 好战倾向）真正落地，而非瞬间了结。
      用户实测确认 1825 天准时弹 loyalty.4。】
 
-34. 选项预览执行副作用（政变链卡顿教训，2024-08）：EU5 悬停事件选项会执行
+34. 选项预览执行副作用（政变链卡顿教训，2026-07）：EU5 悬停事件选项会执行
     选项体的效果（但不执行 set_variable）——create_character / set_new_ruler /
     trigger_event_non_silently 写在选项体会**每次悬停重复执行** → 预览卡顿 +
     事件堆积导致无响应（用户实测：悬停 loyalty.3 选项一卡顿，选择后 loyalty.4
@@ -373,6 +387,203 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
     删除旧选项后的残留都会绕开初始化）。loc 侧同批 688 条错误是 GetValue 缺
     |V0（旧文件），与脚本错误独立，修 loc 即可。
 
+43. 【重大】country_has_estate 对 EU5 所有国家恒为真——不能当"国家是否有该阶层"用！
+    2026-08 观察者模式 + 存档分析实证：EU5 为每个国家创建所有阶层的对象
+    （存档里 2376 个国家都有 zzz_..._soldiers_estate 对象），country_has_estate
+    只是"阶层对象是否存在"（永远 yes）。后果：本 mod 全部 35 处
+    `country_has_estate = soldiers_estate` 门槛全部失效 → 军饷/忠诚/危机/
+    AI 转化行动/军制法律对全世界无差别运行 → 开局没有士兵 POP 的国家
+    （察合台等游牧汗国）也被扣军饷（实测 pay_cost_display=30.08 金/月 vs
+    收入 8.5）→ 持续欠饷 → 满意度/忠诚崩溃 → 国力崩溃被 AI 肢解
+    （察合台 80 省 → 1 省、人口 1411 万 → 2.67 万）→ 附庸独立 +
+    "凭空出现"军团国/流亡者（大元周边同样遭殃）。修复：全部替换为
+    `"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0`
+    （有实际 POP 支持的阶层才启用机制；estate_power 是触发器，country 作用域，
+    vanilla 先例 prefection.txt 的 crown_estate 同款）。教训：EU5 判断"某阶层
+    是否实质存在"用 estate_power > 0 或 any_pop 检查，永远别用 country_has_estate。
+
+44. EU4 触发器语法 random = 0.15 混入（吞并转流亡者 AI 概率失效）：
+    EU5 触发器没有 random（报 "Unknown trigger type: random"，且该行被跳过 →
+    "15% 概率"变成 100% 无条件）。EU5 概率是效果块：`random = { chance = 15 ... }`
+    （vanilla castilian_civil_war.txt 同款）。修复 on_annex：AI 分支用
+    random 块包转换逻辑，玩家分支无条件。自查：grep `random = \d`（数字紧跟
+    = 的裸写法基本全是 EU4 残留）。
+
+45. trigger_if 是 EU4 语法：EU5 用 `if = { limit = {...} }`。trigger_if 报
+    "Unknown effect trigger_if"，整个效果块失效且不报错——安家/复国事件的
+    "军队型→领土型转正"（change_country_type = location）一直静默失效。
+    自查：grep `trigger_if`。
+
+46. estate_add_gold 不支持 multiply 参数（报 "Failed to read 'multiply' for
+    'estate_add_gold'"）：倍数计算写进 value 的脚本值块
+    `estate_add_gold = { value = { value = xxx multiply = 6 } }`（add_gold
+    支持 multiply，estate_add_gold 不支持——同族效果参数面不同，别想当然）。
+
+47. random_events 是 on_action 块的顶层键（与 trigger/effect 平级）：
+    写在 effect 内报 "Unknown effect random_events"，摄政事件永不触发。
+    正确：on_action 块顶层 `random_events = { chance_to_happen = 20 10 = 事件 }`
+    （vanilla country_four_yearly.txt 同款，chance_to_happen 控制评估概率）。
+
+48. `?=` 可选作用域块内是 effect 上下文，不能写裸 trigger 语法：
+    `unit_location ?= { owner ?= { this != root NOT = {...} } }` 报
+    "Unknown effect this/NOT"——条件判断包进 `if = { limit = {...} }`。
+    同理 estate scope 不能在 location 作用域内访问（报 "Invalid scope types
+    for event target link, link: estate"）——先经 `owner = { ... }`（location
+    的 owner 是 country scope）再访问阶层，团练所扣款已按此修复。
+
+49. 覆盖原版文件必须基于当前游戏版本：country_name_construction.txt 整体
+    覆盖原版时带进了 1644 的附庸类型（is_subject_type = eyalet / charted_company），
+    当前 1.3.x 不存在 → 加载报 "Invalid database object" + PostValidate 失败
+    （条目被禁用，纯噪音但每次加载刷）。自查：error.log 搜 "Invalid database
+    object" / "PostValidate"，逐个核对引用的 database 对象在当前版本是否存在；
+    从 1644 借文件时只借写法，借来的对象引用要按当前版本重查。
+
+50. 【重大】num_forts 是"有防御的城市数"，不是"玩家建的堡垒数"——EU5 城市
+    自动带防御，大国有 30-50 座（察合台 270 地点实测 30 城；瑞典更多）。
+    原军饷公式 `regular_army_size × 0.005 + num_forts × 1` 的堡垒权重 1 金/堡/月
+    对任何有城市的国家都是灾难：察合台军饷 30 金/月 vs 收入 6.5 → 开局 2 个月
+    花光金币 → 持续欠饷 → 满意度每月 -5%（estate_satisfaction_weak_penalty）
+    → 忠诚崩 → 军队弱化被 AI 肢解 → 附庸独立；瑞典军饷实测 50 金/月（收入
+    26）。修复：堡垒权重 1 → 0.05（每 20 堡 1 金，符合"驻军饷银"量级，30 堡
+    = 1.5 金/月可负担）。教训：按"EU5 实际数值量级"设计金额权重，不要按
+    "个位数堡垒"的假设写 1 金/堡；派生金额（加饷 6 倍、索饷 24 倍 min 300）
+    引用脚本值会自动跟随，改一处即可。
+    另：EU5 开局军队会自动生成 soldiers POP（军队即士兵）——察合台
+    veteran_soldier_pool_size 实测 174.8 千——estate_power > 0 门槛只挡
+    "纯平民国家"，军事国家（游牧/征兵制）必然有士兵阶层，军饷金额本身
+    必须按大国可负担设计，门槛不能当金额保险。
+    再注（2026-08 已被 4 档对照推翻，正确结论见踩坑 51）：type=location +
+    政府降级 tribe 不是 EU5 原版自动行为，是"军队国军队全灭 → 碎国"的
+    mod 触发结果——无 MOD 档察合台 7 个月保持 army+steppe_horde+legacy 正常。
+
+51. 【重大】EU5 引擎机制：军队国（country_type = army）军队全灭 → 碎国！
+    on_shatter_country（on_action/_hardcoded.txt:5415）效果：change_country_type
+    = location + change_government_type = tribe + 摧毁 kurultai；触发条件为
+    引擎硬编码（社区证实：destroy all their armies → the tag breaks apart）。
+    后果链：type=army 国家军队清零 → 碎裂 → type 变 location → legacy_of_genghis
+    改革 potential（要求 country_type = army）失效被移除 → steppe_horde 降级
+    tribe → 军队/继承人/核心结构被清。存档实证（用户 4 档对照，2026-08）：
+    察合台开局 type=army 且只有 1 支军队（units={ 300 }）——无 MOD 档 7 个月
+    仍 army+steppe_horde+legacy 正常；有 MOD 档 4 个月正常、5 个月 3 天内碎裂
+    （army→location、steppe_horde→tribe、legacy 移除、units/subunits/heir 清空、
+    provinces 21→1）。真凶 = mod 的 AI 转化行动（found_company 组建军团转移
+    军队 / demobilize_army 遣散 / lease_army 出租）——AI 察合台（士兵阶层
+    存在 → AI 列表评估）把唯一军队转移/销毁 → 军队国军队全灭 → 碎裂"暴毙"。
+    修复：generic_action_ai_lists 的 potential 加 NOT country_type = army
+    （AI 军队国不评估转化行动），并在 found_company/demobilize_army/lease_army
+    的 ai_will_do 加军队国 -1000 一票否决（双保险）；玩家军队国仍可手动使用。
+    军团国（mercenary_company 系列）同为 type=army 军队国，除 country_type
+    判断外再显式加 is_subject_type 五形态排除（AI 列表 potential + 三个行动的
+    ai_will_do 双保险，2026-08 追加）——AI 军团国把自己常备军送出去同样是
+    "军队全灭 → 碎国"。
+    教训：①EU5 里"军队国无军 = 亡国"，任何能让 AI 军队国军队清零的机制都
+    是自杀按钮；②验证"是不是 mod 的锅"最有力的是同 playthrough 的无 MOD
+    对照档（用户 4 档对照直接锁定）；③国家碎裂是"3 天内一次性"的日级机制，
+    与月度脉冲无关——排查时先按时间窗口排除慢机制。
+    2026-10 追记：本坑修复引入的 is_subject_type"双保险"实为全锁（对独立国
+    恒真/恒假翻转），已在踩坑 55 中拆除。碎国守卫最终形态 = 列表 potential
+    与 ai_will_do 里各留一行 country_type = army。
+
+52. 【bug report 修复】①附庸国使用宗主国颜色：subject type 里写
+    use_overlord_map_color = no 会硬编码"不同色"、覆盖玩家的全局设置
+    （原版 vassal 不写该字段 = 跟随设置）。军团国 5 形态已删除该字段
+    （保留 use_overlord_map_name = no——军团国保持自己的名字）。
+    ②内阁行动"推动价值观"（Change Societal Values）对 mod 新增价值观
+    不生效：引擎/脚本值按 <价值观端名>_progress_cabinet_efficiency 查找
+    static modifier（error.log："Cabinet 'Change Societal Values' will not
+    push this side"），新价值观 militarism_vs_civilianism 缺这两个 modifier。
+    修复：static_modifiers 新增 militarism_progress_cabinet_efficiency /
+    civilianism_progress_cabinet_efficiency（monthly_towards_militarism/
+    civilianism = 1，格式对齐原版 societal_values.txt），loc 键
+    STATIC_MODIFIER_NAME_<键>: "$CABINET_INFLUENCING$"（原版同款变量引用，
+    双侧 yml 镜像）。教训：新增社会价值轴必须同时补 <side>_progress_
+    cabinet_efficiency static modifier + loc，否则内阁推动按钮对该轴无效
+    （error.log 的 "will not push this side" 是明确信号）。
+
+53. 【bug report 修复】法律级 potential 用易变条件 = 法律反复被自动撤销！
+    2026-09 玩家反馈"军制法律反复被撤销"。根因：EU5 引擎周期复查法律
+    potential，失效即整条法律连同已选政策被自动撤销（与改革同族机制，
+    见踩坑 37；原版 feudal_de_jure_law 等以 government_type 为 potential，
+    政体一变法律即消失，证明引擎自动撤销是标准行为）。本 mod 军制法律
+    potential = 士兵阶层 power > 0——EU5 军队即 soldiers POP（踩坑 50），
+    estate_power 归零 ⟺ 国家无任何军队单位：战争全灭、整军遣散
+    （demobilize_army）、组建军团（found_company 的 change_unit_owner
+    转移全部部队）、出租整军等都会触发；重建军队后法律回来，再选再被撤。
+    修复：potential 改 OR 加四个 has_policy（已持有任一政策的国家的法律
+    永久有效；门控只挡"从未选过且无士兵阶层"的纯平民国家）。教训：①
+    法律级 potential 只放"几乎不变"的条件（政体/宗教/改革），别放随兵力
+    波动的动态值；②"想隐藏 UI"用 potential、"想防止撤销"就要保证已生效
+    后 potential 恒真（OR has_policy 是最小改法，也可直接删 law 级
+    potential——原版 army_doctrine_law 就没有）；③AI 侧次要噪音：
+    AI_PERFORMANCE_POLICIES_MONTHS_BETWEEN_UPDATES=6（defines），AI 每
+    半年按 wants_this_policy_bias 重选政策，四个军制 bias 值域重叠
+    （10-33/5-26/15-20/5-25）且随战争/收入波动 → AI 军制政策频繁切换，
+    观感上像"反复改法/撤销"；若要压制，给 bias 加"当前政策惯性"
+    （if has_policy = 当前政策 add 大值）或拉开差异化。
+
+54. 【机制边界】阶层私兵接口对自定义阶层关闭（2026-10 实查 1.4，Q22 关闭）！
+    1.4 新机制"阶层私兵"（TT#119）实装为 private_army_per_pop +
+    private_army_unit_categories 字段，但三重证据表明它是原版阶层专属：①
+    estates\readme.txt **未声明**该字段（按本 mod 规矩：未声明=不支持）；②
+    全游戏仅 nobles_estate 与 cossacks_estate 带此字段（00_default.txt）；③
+    *_allowed_private_army 修正虽覆盖 8 个原版阶层，但那是"给原版阶层开
+    私兵"的特权门槛，不是自定义阶层的钩子。决策：**不删士兵阶层**——本 mod
+    的 private_army 字段用量为 0 处，设计从未依赖它；阶层的"武力"表达走
+    军团国附庸体系（有名字、有领土、可雇佣/出租/收编/自立，比隐藏单位式
+    私兵更符合"能看见、能解释、能回应"原则），"政治力量"表达走 1.4 的 POP
+    岗位 power_per_pop（挂在 pop_types 侧，已实装）。教训：①一个关闭的
+    接口不构成推翻整体架构的理由——先算引用面（士兵阶层 = 535 处引用 /
+    49 个文件）再决定去留；②"官方没开放 X"≠"我的设计缺了 X 就不成立"，
+    找 X 在本设计里的真实对应物（私兵→军团国）比补接口更重要。
+
+55. 【AI 生态修复】is_subject_type 恒真把"双保险"变成了"全锁"！（2026-10）
+    2026-08 为防 AI 军队国碎国（踩坑 51），在 AI 列表 potential 与三个行动
+    （found_company/demobilize_army/lease_army）的 ai_will_do 里加了
+    is_subject_type = mercenary_company_* 五形态"双保险"。而 2026-10 审计
+    确认：is_subject_type = <mod 自定义类型> 对独立国疑似恒真（与踩坑 43
+    country_has_estate 同族，KB pitfalls §7 存档实证）——两层保险实际都是
+    杀手：①列表 potential 的 NOT = { is_subject_type ... } 对独立国恒假 →
+    整个列表永不评估；②ai_will_do 的 OR 臂对独立国恒真 → 所有独立国
+    add = -1000。后果：自 2026-08 起 AI 从未使用过这三个行动——观察者档
+    世界里从没出现过 AI 军团国，根源在此。修复：两层全部删掉
+    is_subject_type 臂，只留 country_type = army（军团国五形态都是军队国，
+    单臂全覆盖）；同时 12 个行动按角色登记进四个列表（常规国/无地军团/
+    军团宗主/定居地宗主，appoint_company_ruler 的 ai_tick 由 never 解锁为
+    monthly/12）。教训：①加"冗余保险"前必须验证该触发器在**非目标人群**
+    （独立国）上的行为，否则保险丝就是自杀开关；②"没再看到问题"≠"修复
+    生效"——碎国停了，但 AI 罢工同样静默，且更难察觉；③恒真类 bug 的
+    审计方法：对每个 NOT 包裹的 mod 类型触发器问一句"独立国跑这里返回
+    什么？"。
+
+56. 【重大】跨版本复制原版块 = 静默降级——1.3.11 的复制把 1.4 新字段全丢了！
+    2026-10-06 审计 estate_actions.txt：有人用 REPLACE_OR_CREATE 给原版
+    extraordinary_taxes 补士兵分支（原版 else_if 链只覆盖 7 个原版阶层，士兵
+    被征收却拿不到 max_tax 补偿——**思路正确**），但注释自曝"逐行忠实复制原版
+    （1.3.11）"。游戏已升 1.4：原版给该行动新增 price = price:extraordinary_taxes
+    （50 点政治影响力）、estate_interaction_action = yes、icon——1.3.11 复制版
+    全丢。REPLACE 的语义是"整块替换"：**用旧版复制替换新版 = 把新版本行动降级
+    回旧版，零报错、零异常**。同一文件还叠加了双贴损坏（新内容整份贴了两遍，
+    第二份嵌进 ask_soldiers 块体内 → 每次启动 2 条 Unexpected token）。
+    修复：以 1.4 原版为底逐行重建，士兵分支重新插入，终检与原版 diff
+    = 恰好 8 行（纯士兵分支）；双贴段整体删除。教训：①任何 REPLACE/
+    REPLACE_OR_CREATE/同名覆写，复制源必须是**当前版本**的文件，改完与原版
+    逐行 diff，验收标准 = 差异行数恰好等于意图改动；②原版每次大版本更新，
+    清点 mod 全部覆写文件重验——**覆写即负债**，每个覆写文件都是要在每次
+    升级时偿还的债；③大块挪动后跑"顶层块清单 + 括号深度轨迹"，双贴这类
+    结构性损坏一抓一个准。
+
+57. 【机制边界】选单位行动不写单位类型 = 海军能被"遣散成士兵"！（2026-10-06）
+    demobilize_army（遣散军队）与 found_company（组建军团）的 select_trigger
+    的 visible 缺 is_army = yes。玩家实测：27 艘船的舰队可被选中遣散——
+    every_sub_unit 把每艘船按 subunit_strength 折算成士兵 POP 塞进驻地，
+    destroy_unit 拆船，**全程零报错**（引擎不知道你不该这么干，逻辑上它全对）。
+    组建军团更危险：舰队可被"组建"成由帆船组成的无地军团国。修复：两个行动
+    visible 补 is_army = yes（lease_army 原本就有）。教训：①looking_for_a =
+    unit 的 unit 作用域同时覆盖陆军与海军，凡消耗/转化单位的行动必须在
+    visible 显式声明单位类型；②"日志零报错"≠"语义正确"——这类漏洞只在
+    玩家做出"设计师没想到的操作"时才现形，验收时要故意乱点一遍（本例即用户
+    拿海军试出来的）。
+
 八、事件写法规范（参考创意工坊 3659311464「1644」+ 原版，长期适用）
 
 【事件骨架模板】写新事件照此抄：
@@ -431,7 +642,7 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
   * 复杂效果必须包 hidden_effect（选项正文只留直观效果），否则玩家看到
     效果刷屏、动画卡顿。
 
-【优良写法清单】（1644 提炼，已全量应用到本 mod 47 个事件）
+【优良写法清单】（1644 提炼，已全量应用到本 mod 41 个事件；2026-09 复核：11 个事件文件 / 41 个事件）
 1. 事件 ID 行直接跟 #中文注释（如 event.1 = { #进京赶考），一读即知内容。
 2. 一次性事件用 fire_only_once = yes，不用手写变量冷却。
 3. 重大事件加 major = yes + 原版插图 image。
@@ -454,7 +665,7 @@ GetVariable(...).GetValue 配 FixedPointToFloat，比较用 GreaterThan_float。
 5. fire_only_once 只用于真正一次性事件；循环事件用冷却变量。
 6. outcome 只写 neutral；事件 ID 不重复。
 
-【1644 二轮自检：组织与完整度规范】（2024 年对照创意工坊 3659311464 逐项检查）
+【1644 二轮自检：组织与完整度规范】（2026-07 对照创意工坊 3659311464 逐项检查）
 - 事件选项必须有 custom_tooltip（1644 全覆盖）：核心抉择事件（政变/军政府/
   哗变/摄政/安家）全部补齐（23 个 tt，loyalty + regency）；选项后果不透明的
   事件（loyalty.1.c 强硬拒绝、loyalty.8.b 镇压等）尤其必须有——玩家要知道
@@ -505,6 +716,19 @@ event blades_and_thrones_militia.99
 3. 再打真实战争验证攻防差异、长期战争和多场战争。
 4. 最后查 error.log 和 debug.log，先清脚本错误，再调数值。
 5. 本地化问题先查 yml 缩进和 BOM，不要一开始就怀疑“缺键”。
+6. 【AI 世界异常诊断】观察者模式 + 存档分析法（2026-08 察合台"暴毙"排查沉淀）：
+   EU5 存档是明文文本（SAV0200 头 + metadata + 数据块，数百 MB 正常）：
+   · 国家块格式 `<id>={ country_name="CHG" ... `，tag→ID 映射表在文件中部
+     （`897=CHG`），存档数据区只用 ID 引用；
+   · 变量 identity 是 FixedPoint×10000 编码（identity=300800 = 30.08）——
+     军饷 pay_cost_display 直接读出每月扣款；
+   · 诊断"国家为何崩"看五处：provinces={ } 数量（领土）、historical_population
+     （两值对比开局/当前人口）、last_months_subject_tax（附庸税，归零=附庸
+     刚独立）、recent_balance（逐月财政）、variables（mod 变量是否在跑）。
+   · 批量分析用 PowerShell ReadAllText（数百 MB 约 1 秒）+ IndexOf/正则定位，
+     不要逐行 ReadLine（2700 万行要 10 分钟）。
+   · 判定 mod 机制影响面：数 `estate_type=zzz_..._soldiers_estate` 块数量
+     （2026-08 实测 2376 = 全世界都有 → 直接暴露 country_has_estate 恒真 bug）。
 
 十、下一步方向
 
@@ -514,3 +738,28 @@ event blades_and_thrones_militia.99
 4. 无地军团国的长期玩法：复国、安家、佣兵王朝和自由军团路线。
 5. 用真实测试数据重跑平衡表，尤其是军费叠加和永久修正的强度。
 6. 彩蛋国 BLT 长期线：军阀化/称王路线、与中原政权的互动、军团国分级升级体验。
+
+十一、未来开发方向（2026-08 设计树决策记录；执行清单见 开发路线图_Roadmap.txt）
+
+- 愿景：最小可扮演单位从"国家"下沉到"军队"（经属国机制）。官方"Army Based"
+  国家类型（失去全部军队即瓦解）即底座——本 mod 碎国修复即此机制背书。
+- 三阶段：①近期只修 8 项 bug（error.log 审计清单见路线图）→ ②1.4 适配
+  （测试版直接硬进旧 mod 按报错兼容；雇佣兵大改+阶层私兵是两大冲击/机会点）
+  → ③无地国内容线（IO 雇佣市场→夺舍泛化→佣兵帝国）。
+- 关键决策（为什么）：
+  · IO 做雇佣市场而非自建系统：IO payments/special_statuses/政策是现成骨架，
+    与官方 1.4"雇佣抽成+佣兵市场法"设计语言对齐；全世界默认加入、分有地/
+    无地两身份、内置按钮"请无地军团国参战"；与 lease_army 并存，成熟后取代。
+  · 夺舍泛化保持无地+傀儡化（新 subject type"傀儡国"）：夺舍后变有地国会
+    稀释"军队=最小单位"愿景；现有夺舍灾变保留为被动惩罚。
+  · 流亡者三路不锁定：反攻（需祖国——没有祖国的军队没有地方能反攻）、
+    转进（安家）、流亡（终局=佣兵帝国）。故国=故都+国家实体引用。
+  · 佣兵帝国附庸可含定居国：新 subject type"保护国"（武力保护/威慑换臣服）。
+  · 完全取代雇佣兵是长期目标（官方 AI 用雇佣兵是设计目标，AI 雇佣承接是难点）。
+  · 阶层私兵：✅ 2026-10 实查关闭——接口硬编码（nobles/cossacks 专属，
+    readme 未声明），自定义阶层不可用；士兵阶层保留（踩坑 54），武力表达
+    走军团国体系、政治力量走 POP 岗位 power_per_pop，均不经私兵接口。
+  · 叙事线放弃（不擅长）。
+- 1.4 官方情报（TT#117-121）：雇佣兵招募费翻倍/维护+35%/耗粮+50%/抽成/
+  佣兵市场法；阶层私兵（贵族+哥萨克特权、随人口、内战联动、政治影响力资源）；
+  军队国无改动；骑兵削弱/攻城提速/后勤多源/征召受控制力限制。

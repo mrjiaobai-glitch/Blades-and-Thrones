@@ -1,4 +1,4 @@
-# ============ 灾难触发条件封装 ============
+﻿# ============ 灾难触发条件封装 ============
 # 把 has_variable 等裸变量名条件包成脚本触发词，灾难浮窗条件列表即可显示本地化文本。
 
 blades_and_thrones_mutiny_disaster_resolved = {
@@ -33,4 +33,21 @@ blades_and_thrones_junta_cooldown_active = {
 
 blades_and_thrones_junta_resolved = {
 	has_variable = blades_and_thrones_junta_resolved
+}
+
+# 无地军团身份门槛（2026-09 landless bug 修复）：
+# 原版有地军队国（察合台等）错误收到"安家立业"事件——pulse 子块 trigger 未生效，
+# 门槛改为内聚在事件自身 trigger 与 pulse 弹事件分支（双保险），
+# 任何触发路径下只有真流亡/军团国能收到安家/洗劫/复国事件。
+# 2026-09 二修：移除 is_subject_type = mercenary_company 分支——实测可疑
+# （原版军队国无任何附庸关系仍通过检查，疑似对 mod 自定义类型恒真），
+# 且 mod 全部创建路径（夺舍/吞并/外派/收编）都 set 下方三个变量之一，
+# 变量检查已完整覆盖，is_subject_type 分支冗余。
+blades_and_thrones_is_landless_legion = {
+	country_type = army
+	OR = {
+		has_variable = mercenary_mutiny_exiles_country
+		has_variable = mercenary_mutiny_original_exile_marker
+		has_variable = blades_and_thrones_volunteer_company
+	}
 }

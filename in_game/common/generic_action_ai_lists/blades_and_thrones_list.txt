@@ -1,9 +1,25 @@
-# 刀锋与王座的军事转化行动 AI 列表：
-# 显式注册供 AI 评估/执行（未注册的 action 会导致 AI 执行命令无效）。
-# potential：仅士兵阶层存在的国家才评估这些行动（性能优化，root scope = 评估国家）。
+﻿# ============ 军事转化行动 AI 列表（刀锋与王座）============
+# 依据 generic_action_ai_lists\readme.txt：行动可同时属于多个列表；未登记行动
+# 落入 global 列表（error.log 的 "not explicitly listed in an ai list" 警告 =
+# 性能问题，AI 仍会评估但拖慢全局）。potential 的 root scope = 评估国。
+#
+# —— 碎国守卫（2026-08 教训；2026-10 修正实现）——
+# EU5 引擎对"军队国军队全灭"触发碎国（on_shatter_country：type→location、
+# 政府→tribe、移除改革/军队/继承人；察合台开局实证 05_18 正常 → 05_21 碎裂）。
+# 军团国五形态与一切无地势力都是 country_type = army，**一行
+# NOT = { country_type = army } 即覆盖全部排除**。
+# 2026-08 版另加 5 行 NOT = { is_subject_type = mercenary_company_* }"双保险"，
+# 2026-10 判定为危险冗余并删除：is_subject_type = <mod 自定义类型> 对独立国
+# 疑似恒真（2026-09 存档实证，见心得踩坑 55），NOT 翻转后整个列表对独立国
+# 恒假 → 已登记的 6 个行动 AI 可能从未真正评估过。
+# 玩家军队国仍可手动使用这些行动（AI 列表不影响玩家操作）。
+
+# —— 列表 1：有地常规国（经营自身军队 + 请士兵镇压）——
+# 士兵阶层 power > 0 才评估（性能）；排除军队国防碎国。
 blades_and_thrones_list = {
 	potential = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
+		NOT = { country_type = army }
 	}
 	actions = {
 		blades_and_thrones_integrate_mercs
@@ -12,5 +28,56 @@ blades_and_thrones_list = {
 		blades_and_thrones_demobilize_army
 		blades_and_thrones_resettle_soldiers
 		blades_and_thrones_lease_army
+		ask_soldiers_for_suppression
+	}
+}
+
+# —— 列表 2：无地军团（夺取立足地 = 求生/立国行为）——
+# claim_foothold 让无地军拿到土地转为有地国，恰是"脱碎国"的方向，无全灭风险；
+# 行动自身 potential 再筛（流亡/志愿/军团标记）。注意：该 potential 的
+# is_subject_type 臂对独立无地国疑似恒真 → 效果是所有军队国都能尝试立国，
+# 与"以刀剑立国"的愿景一致，暂按宽松处理（2026-10 决策）。
+blades_and_thrones_landless_list = {
+	potential = {
+		country_type = army
+	}
+	actions = {
+		blades_and_thrones_claim_foothold
+	}
+}
+
+# —— 列表 3：有军团附庸的宗主（指派统治者 / 收回、交换藩地）——
+# any_subject 内的 scope 必有 overlord，is_subject_type 在此作用域可靠
+# （恒真问题只发生在独立国身上）；appoint 需任意军团形态、revoke/exchange
+# 需 warlord 藩镇——列表做粗门，行动自身 potential 做细筛。
+blades_and_thrones_company_overlord_list = {
+	potential = {
+		any_subject = {
+			OR = {
+				is_subject_type = mercenary_company
+				is_subject_type = mercenary_company_trusted
+				is_subject_type = mercenary_company_veteran
+				is_subject_type = mercenary_company_grand
+				is_subject_type = mercenary_company_warlord
+			}
+		}
+	}
+	actions = {
+		blades_and_thrones_appoint_company_ruler
+		blades_and_thrones_revoke_warlord_land
+		blades_and_thrones_exchange_warlord_land
+	}
+}
+
+# —— 列表 4：有地宗主（赐予定居地收拢无地武装）——
+# 列表只放最便宜的必要条件 num_locations > 0；"世界上存在无地军团/流亡者"
+# 的全局条件（any_country + 标记）留在行动自身 potential 里按
+# ai_tick_frequency = 24 的节奏评估，避免每国重复全库扫描。
+blades_and_thrones_settlement_patron_list = {
+	potential = {
+		num_locations > 0
+	}
+	actions = {
+		blades_and_thrones_grant_settlement
 	}
 }

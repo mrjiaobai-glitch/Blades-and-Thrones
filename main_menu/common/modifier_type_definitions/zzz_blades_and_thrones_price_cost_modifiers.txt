@@ -1,0 +1,86 @@
+﻿# ============================================================================
+# 军事转化行动的价格修正类型（price cost modifiers）· 1.4
+# ----------------------------------------------------------------------------
+# 为何需要本文件：
+#   price_database 会为每个 price 按命名约定查找配套的 `<price id>_cost_modifier`
+#   修正类型。缺失则报：
+#     [price_database.cpp:121] Missing modifier type for price. <price id>_cost_modifier
+#   原版同理：prices\08_estate_emergency.txt 定义了 ask_for_extra_levies，
+#   就有 ask_for_extra_levies_cost_modifier（见 00_modifier_types.txt:660）。
+# 结构照抄原版：color=bad / percent=yes / game_data{category=country}。
+#   （不使用 should_show_in_modifiers_tab：这是内部成本修正，无需出现在修正列表。）
+# 放置位置说明：mod 的自定义修正类型统一放在 main_menu\common\ 侧
+#   （同 zzz_rebalanced_nepal_mercenary_soldiers_estate_modifiers.txt）。
+# ============================================================================
+
+blades_and_thrones_lease_army_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_found_company_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_reinstate_company_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_appoint_company_ruler_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_grant_settlement_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_revoke_warlord_land_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_exchange_warlord_land_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_claim_foothold_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}
+
+blades_and_thrones_ask_soldiers_for_suppression_cost_modifier = {
+	color = bad
+	percent = yes
+	game_data = {
+		category = country
+	}
+}

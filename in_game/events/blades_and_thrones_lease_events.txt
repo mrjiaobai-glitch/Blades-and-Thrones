@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_lease
+﻿namespace = blades_and_thrones_lease
 
 # 出租军团报价通知：目标国收到出租方的主动推销。
 # root = 目标国，scope:from = 出租方；租不租由目标国按自身利益判断（去佣兵市场雇佣）。

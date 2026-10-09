@@ -191,8 +191,13 @@ mercenary_mutiny_test.2 = { #切换扮演：接管已生成的佣兵军团国
 
 	immediate = {
 		error_log = "MERC_DEBUG .2 fired"
-		var:mercenary_mutiny_army_country_ref = {
-			save_scope_as = mercenary_mutiny_army_country
+		if = {
+			limit = {
+				has_variable = mercenary_mutiny_army_country_ref
+			}
+			var:mercenary_mutiny_army_country_ref = {
+				save_scope_as = mercenary_mutiny_army_country
+			}
 		}
 		if = {
 			limit = {
@@ -211,7 +216,7 @@ mercenary_mutiny_test.2 = { #切换扮演：接管已生成的佣兵军团国
 			is_human = yes
 		}
 		error_log = "MERC_DEBUG .2 option A selected"
-		ROOT = {
+		root = {
 			every_character = {
 				limit = {
 					is_alive = yes
@@ -291,7 +296,7 @@ mercenary_mutiny_test.3 = { #吞并转军团测试：模拟"国家被吞并→�
 					}
 					save_scope_as = mercenary_mutiny_annex_target
 				}
-				scope:mercenary_mutiny_annex_target = {
+				scope:mercenary_mutiny_annex_target ?= {
 					mercenary_mutiny_convert_annexed_to_army_country_effect = yes
 					error_log = "MERC_DEBUG .3 conversion done"
 					if = {
@@ -450,6 +455,11 @@ mercenary_mutiny_test.7 = { #夺舍灾变爆发：镇压 / 赎买 / 放任（灾
 	}
 	option = {
 		name = mercenary_mutiny_test.7.b
+		trigger = {
+			gold >= {
+				value = blades_and_thrones_mutiny_buyout_cost_early
+			}
+		}
 		ai_chance = {
 			factor = 10
 			modifier = {
@@ -576,6 +586,11 @@ mercenary_mutiny_test.9 = { #士兵哗变：王室之手失控时的军队反噬
 	}
 	option = {
 		name = mercenary_mutiny_test.9.b
+		trigger = {
+			gold >= {
+				value = mercenary_mutiny_extra_pay_cost
+			}
+		}
 		ai_chance = {
 			factor = 1
 			modifier = {
@@ -658,6 +673,19 @@ mercenary_mutiny_test.10 = { #军团索饷：不忠附属国的巨额军饷要�
 			set_variable = {
 				name = blades_and_thrones_company_demand_display
 				value = mercenary_mutiny_company_demand_cost
+			}
+			# 拒绝计数兜底初始化（2026-09 修复）：老档/无拒绝历史时
+			# mercenary_mutiny_company_refusals 未设置，选项 b tooltip 的
+			# GetVariable 渲染报错（error.log "Data error in loc string
+			# mercenary_mutiny_test.10.b.tt"）——弹事件时幂等兜底，见心得 42。
+			if = {
+				limit = {
+					NOT = { has_variable = mercenary_mutiny_company_refusals }
+				}
+				set_variable = {
+					name = mercenary_mutiny_company_refusals
+					value = 0
+				}
 			}
 			if = {
 				limit = {
@@ -871,7 +899,7 @@ mercenary_mutiny_test.11 = { #军团独立：撕毁臣属条约，宣布自立
 		trigger = {
 			exists = scope:mercenary_mutiny_company_scope
 		}
-		custom_tooltip = mercenary_mutiny_test.11.a.tt
+		custom_tooltip = mercenary_mutiny_test.11.b.tt
 		change_player = scope:mercenary_mutiny_company_scope
 	}
 }

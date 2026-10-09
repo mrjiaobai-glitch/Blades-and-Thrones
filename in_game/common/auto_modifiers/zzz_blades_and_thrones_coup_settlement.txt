@@ -1,0 +1,55 @@
+﻿# ============ 夺权结算红利（auto_modifier · 2026-10-06 三分拆分方案）============
+# 参照原版 court_and_country_modifier（auto_modifiers\country.txt:1403）的形态：
+#   永久结局旗标 + 随资源缩放的 auto_modifier = "终身分红"而非"一次性买断"。
+# 制度性常量（士兵贬抑/内阁/槽位/骂名）留在 static_modifiers\blades_and_thrones_modifiers.txt
+# 的 junta_restored / junta_purge_legacy；本文件只装"状态依赖"的部分。
+# 无保底（用户拍板，同原版：资源归零红利归零）。
+# 总量守恒：正统 100 / 忠诚 1.0 时，分支之和 = 拆分前的原值。
+# 旗标由 blades_and_thrones_loyalty.4 的选项 a（复辟 coup_restored）与
+#   选项 c（清洗 coup_purged）设置，永久不清除（幂等：auto_modifier 实时评估，
+#   二次政变重设旗标不会叠加双发）。
+
+# --- 复辟 · 血统的承认（正统分支）---
+# 外国宫廷承认的是正统王朝：声誉与一部分王权随正统性兑现。
+# uses_government_power = legitimacy 排他同原版——共和国没有这条腿。
+blades_and_thrones_coup_restored_legitimacy = {
+	potential_trigger = {
+		has_variable = blades_and_thrones_coup_restored
+		uses_government_power = legitimacy
+	}
+	scales_with = {
+		value = legitimacy
+		multiply = 0.01
+	}
+	global_crown_estate_power = 0.10
+	diplomatic_reputation = diplomatic_reputation_mild_bonus
+}
+
+# --- 复辟 · 军队的背书（忠诚分支）---
+# 复辟的国王是靠在位军队点头才坐回去的：另一半王权、维稳效率、
+# 以及"王者归来"的正统叙事都按军队忠诚兑现（忠诚 0-1，直接缩放）。
+# 链条单向：忠诚→正统月收益→王权，正统不回灌忠诚，无复利循环。
+blades_and_thrones_coup_restored_loyalty = {
+	potential_trigger = {
+		has_variable = blades_and_thrones_coup_restored
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
+	}
+	scales_with = blades_and_thrones_army_loyalty
+	global_crown_estate_power = 0.10
+	stability_cost_efficiency = 0.20
+	monthly_legitimacy = 0.02
+}
+
+# --- 清洗 · 铁腕的背书（忠诚分支）---
+# 铁腕秩序的王权、威慑与维稳全部押在"军队肯再开一次枪"上。
+# 无正统分支（用户拍板）：血染的王座不随王朝光彩增值。
+blades_and_thrones_coup_purged_loyalty = {
+	potential_trigger = {
+		has_variable = blades_and_thrones_coup_purged
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
+	}
+	scales_with = blades_and_thrones_army_loyalty
+	global_crown_estate_power = 0.10
+	stability_cost_efficiency = 0.10
+	monthly_rebel_growth = -0.001
+}

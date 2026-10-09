@@ -1,6 +1,6 @@
-zzz_rebalanced_nepal_mercenary_soldiers_royal_hand_disloyal = {
+﻿zzz_rebalanced_nepal_mercenary_soldiers_royal_hand_disloyal = {
 	potential_trigger = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 		has_estate_privilege = estate_privilege:zzz_rebalanced_nepal_mercenary_soldiers_royal_hand
 		estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.5
 	}

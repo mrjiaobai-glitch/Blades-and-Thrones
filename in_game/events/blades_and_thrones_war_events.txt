@@ -153,6 +153,7 @@ blades_and_thrones_war.2 = { #战争失利：战败耻辱与忠诚压力
 			type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 			value = estate_satisfaction_mild_penalty
 		}
+		remove_variable = blades_and_thrones_war_shame_variable
 		custom_tooltip = blades_and_thrones_war.2.d.tt
 	}
 }
@@ -174,8 +175,10 @@ blades_and_thrones_war.99 = { #调试：战争反馈测试
 			value = 1
 			years = 5
 		}
-		trigger_event_non_silently = {
-			id = blades_and_thrones_war.1
+		hidden_effect = {
+			trigger_event_non_silently = {
+				id = blades_and_thrones_war.1
+			}
 		}
 	}
 
@@ -186,8 +189,10 @@ blades_and_thrones_war.99 = { #调试：战争反馈测试
 			value = 1
 			years = 5
 		}
-		trigger_event_non_silently = {
-			id = blades_and_thrones_war.2
+		hidden_effect = {
+			trigger_event_non_silently = {
+				id = blades_and_thrones_war.2
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-# 夺舍叛军进度驱动（auto_modifier）：
+﻿# 夺舍叛军进度驱动（auto_modifier）：
 # 把原 on_monthly 里手动 add_rebel_progress 的档位逻辑转为 modifier 驱动——
 # modifier（monthly_pretender_rebel_growth）会进入叛军界面的 GetMonthlyChange
 # 显示（"由 xxx 产生：+15%"），玩家看到的就是实际发生的，不再出现

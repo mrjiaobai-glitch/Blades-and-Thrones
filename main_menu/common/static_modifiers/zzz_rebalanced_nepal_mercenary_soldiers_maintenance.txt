@@ -1,4 +1,4 @@
-INJECT:army_maintenance_mod = {
+﻿INJECT:army_maintenance_mod = {
 	zzz_rebalanced_nepal_mercenary_soldiers_estate_target_satisfaction = 0.05
 }
 

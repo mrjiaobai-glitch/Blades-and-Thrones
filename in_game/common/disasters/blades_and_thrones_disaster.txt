@@ -1,4 +1,4 @@
-mercenary_mutiny = {
+﻿mercenary_mutiny = {
 	image = "gfx/interface/illustrations/disaster/coup_attempt.dds"
 
 	monthly_spawn_chance = mercenary_mutiny_monthly_spawn_chance
@@ -61,7 +61,7 @@ mercenary_mutiny = {
 			# 此处只保留进度满/清零的结算检查（见下）。
 			if = {
 				limit = {
-					country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+					"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 					has_estate_privilege = estate_privilege:zzz_rebalanced_nepal_mercenary_soldiers_royal_hand
 					estate_satisfaction:zzz_rebalanced_nepal_mercenary_soldiers_estate < 0.5
 					NOT = { has_variable = mercenary_mutiny_soldier_mutiny_cooldown }

@@ -1,0 +1,17 @@
+# 工具与临时文件（上传红线）
+*.ps1
+*.py
+*.tmp
+*.bak
+
+# 系统杂物
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# 会话工具产物
+.scrape-images/
+
+# 内部文档（暂不公开：未发布规划与数值底牌）
+开发路线图_Roadmap.txt
+平衡性数据表_BalanceSheet.txt

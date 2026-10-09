@@ -53,6 +53,12 @@ blades_and_thrones_loyalty.8 = { #兵变之夜：低忠诚+低满意度的哗变
 
 	option = {
 		name = blades_and_thrones_loyalty.8.a
+		trigger = {
+			gold >= {
+				value = root.mercenary_mutiny_monthly_pay_cost
+				multiply = 6
+			}
+		}
 		custom_tooltip = blades_and_thrones_loyalty.8.a.tt
 		# 加饷安抚：花钱消灾，军队满意，但王室示弱（稳定小降、正统小降）
 		ai_chance = {
@@ -79,8 +85,12 @@ blades_and_thrones_loyalty.8 = { #兵变之夜：低忠诚+低满意度的哗变
 			}
 			"estate(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" = {
 				estate_add_gold = {
-					value = root.mercenary_mutiny_monthly_pay_cost
-					multiply = 6
+					# estate_add_gold 不支持 multiply 参数（实测报 "Failed to read
+					# 'multiply' for 'estate_add_gold'"）——倍数计算写进 value 脚本值块
+					value = {
+						value = root.mercenary_mutiny_monthly_pay_cost
+						multiply = 6
+					}
 				}
 			}
 		}
@@ -421,6 +431,12 @@ blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度�
 				type = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 				value = estate_satisfaction_weak_penalty
 			}
+			# 结算红利旗标（永久）：激活 auto_modifiers\zzz_blades_and_thrones_coup_settlement.txt
+			# 的正统/忠诚双分支（2026-10-06 三分拆分，参照原版灾难奖励形态）
+			set_variable = {
+				name = blades_and_thrones_coup_restored
+				value = yes
+			}
 			# 因果链衔接：军人被夺权，心有不甘（复辟余波 12 个月）——
 			# 期间哗变触发阈值放宽（见 loyalty_pulse），处理不好就再哗变
 			set_variable = {
@@ -510,6 +526,12 @@ blades_and_thrones_loyalty.4 = { #军政府核心抉择：还政王室 / 制度�
 			add_estate_satisfaction = {
 				type = estate_type:burghers_estate
 				value = estate_satisfaction_severe_penalty
+			}
+			# 结算红利旗标（永久）：激活 coup_settlement 的忠诚分支
+			# （王权/维稳/威慑按军队忠诚缩放；清洗无正统分支，2026-10-06 拍板）
+			set_variable = {
+				name = blades_and_thrones_coup_purged
+				value = yes
 			}
 		}
 	}

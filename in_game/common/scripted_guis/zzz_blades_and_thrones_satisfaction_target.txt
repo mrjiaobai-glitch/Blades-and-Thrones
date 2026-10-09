@@ -1,4 +1,4 @@
-# 覆盖原版 economy_satisfaction_target 的 9 个 ScriptedGUI：追加士兵阶层分支。
+﻿# 覆盖原版 economy_satisfaction_target 的 9 个 ScriptedGUI：追加士兵阶层分支。
 # 用 REPLACE_OR_CREATE 条目级合并——不整文件覆盖，避免影响 toggle_auto_coin_minting，
 # 并与未来原版更新、其他新增阶层 mod 的冲突面最小化（仅本条目冲突）。
 

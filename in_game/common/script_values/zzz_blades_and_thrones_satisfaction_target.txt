@@ -1,4 +1,4 @@
-# 覆盖原版 current_target_satisfaction：追加士兵阶层分支（其余阶层与原版一致）。
+﻿# 覆盖原版 current_target_satisfaction：追加士兵阶层分支（其余阶层与原版一致）。
 # 用 REPLACE_OR_CREATE 实现条目级合并——不整文件覆盖，避免影响 auto_coin_minting_enabled
 # 等其他条目，并与未来原版更新、其他新增阶层 mod 的冲突面最小化（仅本条目冲突）。
 REPLACE_OR_CREATE:current_target_satisfaction = {

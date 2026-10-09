@@ -1,7 +1,8 @@
-# ============ 三态转化系统：通用行动 ============
+﻿# ============ 三态转化系统：通用行动 ============
 # 常备军 ↔ 雇佣兵 ↔ 无地军团国 ↔ 士兵POP 的玩家主动转化。
 # 入口：军事转化菜单事件（fire_generic_action 启动，带完整选择流程）。
-# ai_tick = never（仅玩家使用）。
+# AI：12 个行动全部登记进 generic_action_ai_lists\blades_and_thrones_list.txt
+# 的四个角色列表（常规国/无地军团/军团宗主/定居地宗主）；碎国守卫见该文件。
 
 # --- 收编佣兵（佣兵公司 → 常备军）---
 blades_and_thrones_integrate_mercs = {
@@ -88,6 +89,7 @@ blades_and_thrones_integrate_mercs = {
 # --- 组建军团（常备军 → 无地军团国）---
 blades_and_thrones_found_company = {
 	type = owncountry
+	price = price:blades_and_thrones_found_company
 
 	potential = {
 		scope:actor = {
@@ -110,6 +112,8 @@ blades_and_thrones_found_company = {
 			data = name
 		}
 		visible = {
+				# 2026-10-06 补：海军不得进入本行动（every_sub_unit 会把船只按兵力折算成士兵 POP——语义错误，实测海军可被选中）
+				is_army = yes
 			has_mercenaries = no
 			has_levies = no
 			trigger_if = {
@@ -147,6 +151,21 @@ blades_and_thrones_found_company = {
 
 	ai_will_do = {
 		value = -100
+		# 军队国（country_type = army）AI 一票否决：转移军队 → 军队国军队全灭
+		# → EU5 碎国（察合台"暴毙"实证 2026-08）。玩家军队国仍可手动使用。
+		if = {
+			limit = {
+				scope:actor = {
+					OR = {
+						country_type = army
+						# 2026-10 修正：删除 is_subject_type 五臂"双保险"——该触发器对独立国疑似
+						# 恒真（踩坑 55），OR 臂会把所有独立国一并 -1000 否决；军团国同为
+						# country_type = army，单臂已全覆盖。
+					}
+				}
+			}
+			add = -1000
+		}
 		# 2024-08 放开 AI：和平期有闲置兵力 + 财政能力 → 组建外派军团
 		# （世界会出现 AI 佣兵军团国；危机深重时也会"甩包袱"式组建）
 		if = {
@@ -194,6 +213,7 @@ blades_and_thrones_found_company = {
 # --- 收编军团（无地军团国 → 常备军）---
 blades_and_thrones_reinstate_company = {
 	type = owncountry
+	price = price:blades_and_thrones_reinstate_company
 
 	potential = {
 		scope:actor = {
@@ -302,6 +322,8 @@ blades_and_thrones_demobilize_army = {
 			data = name
 		}
 		visible = {
+				# 2026-10-06 补：海军不得进入本行动（every_sub_unit 会把船只按兵力折算成士兵 POP——语义错误，实测海军可被选中）
+				is_army = yes
 			has_mercenaries = no
 			has_levies = no
 			trigger_if = {
@@ -334,6 +356,22 @@ blades_and_thrones_demobilize_army = {
 
 	ai_will_do = {
 		value = -120
+		# 军队国（country_type = army）AI 一票否决：EU5 军队国军队全灭会触发
+		# 碎国（on_shatter_country）→ 国家直接"暴毙"（察合台 2026-08 实证），
+		# AI 遣散军队 = 自杀。玩家军队国仍可手动使用（AI 列表亦已排除）。
+		if = {
+			limit = {
+				scope:actor = {
+					OR = {
+						country_type = army
+						# 2026-10 修正：删除 is_subject_type 五臂"双保险"——该触发器对独立国疑似
+						# 恒真（踩坑 55），OR 臂会把所有独立国一并 -1000 否决；军团国同为
+						# country_type = army，单臂已全覆盖。
+					}
+				}
+			}
+			add = -1000
+		}
 		if = {
 			limit = {
 				scope:actor = {
@@ -438,6 +476,7 @@ blades_and_thrones_resettle_soldiers = {
 # --- 指派军团统治者（为佣兵军团国指派一位宫廷角色出任统治者）---
 blades_and_thrones_appoint_company_ruler = {
 	type = owncountry
+	price = price:blades_and_thrones_appoint_company_ruler
 
 	potential = {
 		scope:actor = {
@@ -450,7 +489,11 @@ blades_and_thrones_appoint_company_ruler = {
 	allow = {
 	}
 
-	ai_tick = never
+	ai_tick = monthly
+	# 2026-10 解锁 AI（原 never）：宗主 AI 需要能指派军团统治者，配合
+	# generic_action_ai_lists\blades_and_thrones_list.txt 的 company_overlord
+	# 列表；频率对齐 revoke/exchange（一年一检，统治更迭不该太频繁）。
+	ai_tick_frequency = 12
 
 	select_trigger = {
 		looking_for_a = country
@@ -531,6 +574,7 @@ blades_and_thrones_appoint_company_ruler = {
 # 到期自动归还；目标国收到报价通知事件，租不租由对方按自身利益决定。
 blades_and_thrones_lease_army = {
 	type = owncountry
+	price = price:blades_and_thrones_lease_army
 
 	potential = {
 		scope:actor = {
@@ -567,7 +611,7 @@ blades_and_thrones_lease_army = {
 	# 第二步：选目标国（外交范围内任意非敌对国家）
 	select_trigger = {
 		looking_for_a = country
-		target_flag = recipient
+		target_flag = target
 		interaction_source_list = {
 			scope:actor = {
 				every_country = {
@@ -610,7 +654,7 @@ blades_and_thrones_lease_army = {
 		if = {
 			limit = {
 				exists = scope:lease_unit_target
-				exists = scope:recipient
+				exists = scope:target
 			}
 			scope:lease_unit_target = {
 				make_unit_available_for_hire = {
@@ -620,21 +664,21 @@ blades_and_thrones_lease_army = {
 				}
 			}
 			# 报价通知（scope:from = 出租方）
-			scope:recipient = {
+			scope:target = {
 				trigger_event_non_silently = {
 					id = blades_and_thrones_lease.1
 				}
 			}
 			scope:actor = {
 				add_opinion = {
-					target = scope:recipient
+					target = scope:target
 					modifier = opinion_lent_unit
 				}
 			}
 			# 帮助潜在盟友：并肩作战者同仇敌忾（共同敌人 → 深化同盟纽带）
 			if = {
 				limit = {
-					scope:recipient = {
+					scope:target = {
 						any_current_war = {
 							is_in_war = scope:actor
 						}
@@ -642,19 +686,19 @@ blades_and_thrones_lease_army = {
 				}
 				scope:actor = {
 					add_opinion = {
-						target = scope:recipient
+						target = scope:target
 						modifier = blades_and_thrones_opinion_shared_war
 					}
 				}
 			}
 			# 抑制敌国：目标正在与我方不参与的战争交战 → 敌方阵营对我反感
-			scope:recipient = {
+			scope:target = {
 				every_current_war = {
 					limit = {
 						NOT = { is_in_war = scope:actor }
 					}
 					if = {
-						limit = { is_an_attacker = scope:recipient }
+						limit = { is_an_attacker = scope:target }
 						defender_leader = {
 							if = {
 								limit = { NOT = { this = scope:actor } }
@@ -666,7 +710,7 @@ blades_and_thrones_lease_army = {
 						}
 					}
 					if = {
-						limit = { is_a_defender = scope:recipient }
+						limit = { is_a_defender = scope:target }
 						attacker_leader = {
 							if = {
 								limit = { NOT = { this = scope:actor } }
@@ -685,6 +729,21 @@ blades_and_thrones_lease_army = {
 	# AI 判断：自身利益 + 外交立场（帮助潜在盟友 / 抑制敌国）
 	ai_will_do = {
 		value = -800
+		# 军队国（country_type = army）AI 一票否决：出租军队可能让军队国军队
+		# 全灭 → EU5 碎国（察合台"暴毙"实证 2026-08）。玩家军队国仍可手动使用。
+		if = {
+			limit = {
+				scope:actor = {
+					OR = {
+						country_type = army
+						# 2026-10 修正：删除 is_subject_type 五臂"双保险"——该触发器对独立国疑似
+						# 恒真（踩坑 55），OR 臂会把所有独立国一并 -1000 否决；军团国同为
+						# country_type = army，单臂已全覆盖。
+					}
+				}
+			}
+			add = -1000
+		}
 		if = {
 			limit = {
 				scope:actor = {
@@ -702,20 +761,20 @@ blades_and_thrones_lease_army = {
 		}
 		if = {
 			limit = {
-				scope:recipient = { opinion = { target = scope:actor value >= 50 } }
+				scope:target = { opinion = { target = scope:actor value >= 50 } }
 			}
 			add = 150
 		}
 		if = {
 			limit = {
-				scope:recipient = { is_neighbor_of = scope:actor }
+				scope:target = { is_neighbor_of = scope:actor }
 			}
 			add = -200
 		}
 		# 帮助潜在盟友：并肩作战（共同敌人）→ 联合对抗
 		if = {
 			limit = {
-				scope:recipient = {
+				scope:target = {
 					any_current_war = {
 						is_in_war = scope:actor
 					}
@@ -726,14 +785,14 @@ blades_and_thrones_lease_army = {
 		# 战争中的国家更需要兵力
 		if = {
 			limit = {
-				scope:recipient = { at_war = yes }
+				scope:target = { at_war = yes }
 			}
 			add = 40
 		}
 		# 抑制敌国：目标正在打我的敌人 → 资助其对抗（代理战争）
 		if = {
 			limit = {
-				scope:recipient = {
+				scope:target = {
 					any_current_war = {
 						NOT = { is_in_war = scope:actor }
 						OR = {
@@ -750,7 +809,7 @@ blades_and_thrones_lease_army = {
 			limit = {
 				any_country = {
 					is_at_war_with = scope:actor
-					scope:recipient = { is_allied_with = { target = prev } }
+					scope:target = { is_allied_with = { target = prev } }
 				}
 			}
 			add = -150
@@ -763,6 +822,7 @@ blades_and_thrones_lease_army = {
 # 流亡者获得第一块土地后，由月脉冲自动触发"安家立业"转正。
 blades_and_thrones_grant_settlement = {
 	type = owncountry
+	price = price:blades_and_thrones_grant_settlement
 
 	potential = {
 		scope:actor = {
@@ -980,6 +1040,7 @@ blades_and_thrones_grant_settlement = {
 # · 无主地（如新大陆）→ 直接占领建立据点，随后可安家转正。
 blades_and_thrones_claim_foothold = {
 	type = owncountry
+	price = price:blades_and_thrones_claim_foothold
 
 	potential = {
 		scope:actor = {
@@ -1260,6 +1321,7 @@ blades_and_thrones_claim_foothold = {
 # ============================================================================
 blades_and_thrones_revoke_warlord_land = {
 	type = owncountry
+	price = price:blades_and_thrones_revoke_warlord_land
 
 	potential = {
 		scope:actor = {
@@ -1410,6 +1472,7 @@ blades_and_thrones_revoke_warlord_land = {
 # ============================================================================
 blades_and_thrones_exchange_warlord_land = {
 	type = owncountry
+	price = price:blades_and_thrones_exchange_warlord_land
 
 	potential = {
 		scope:actor = {

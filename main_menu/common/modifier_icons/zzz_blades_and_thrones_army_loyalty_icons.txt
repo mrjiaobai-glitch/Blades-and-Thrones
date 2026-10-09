@@ -1,4 +1,4 @@
-global_zzz_rebalanced_nepal_mercenary_soldiers_army_loyalty = {
+﻿global_zzz_rebalanced_nepal_mercenary_soldiers_army_loyalty = {
 	positive = "gfx/interface/icons/modifier_types/global_peasant_enfranchisment.dds"
 }
 monthly_zzz_rebalanced_nepal_mercenary_soldiers_pay = {

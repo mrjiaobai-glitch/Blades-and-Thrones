@@ -49,8 +49,6 @@
 				area = scope:mercenary_mutiny_origin_location.area
 			}
 			every_pop = {
-				limit = {
-				}
 				add_pop_satisfaction = pop_satisfaction_radical_penalty
 				change_pop_allegiance = scope:mercenary_mutiny_rebel_scope
 			}
@@ -60,8 +58,6 @@
 		# 起源地在国外（佣兵驻扎或被租出到外国）→ 回退首都执行骚乱转化
 		capital = {
 			every_pop = {
-				limit = {
-				}
 				add_pop_satisfaction = pop_satisfaction_radical_penalty
 				change_pop_allegiance = scope:mercenary_mutiny_rebel_scope
 			}
@@ -131,13 +127,6 @@ mercenary_mutiny_takeover_effect = {
 }
 
 mercenary_mutiny_create_army_country_effect = {
-	# 记录佣兵军团战力（此时雇佣兵尚未销毁），供后续索饷事件计算金额
-	root = {
-		set_variable = {
-			name = mercenary_mutiny_company_strength
-			value = mercenary_mutiny_total_strength
-		}
-	}
 	create_character = {
 		age = { 30 60 }
 		adm = { 40 80 }
@@ -171,7 +160,7 @@ mercenary_mutiny_create_army_country_effect = {
 		save_scope_as = mercenary_mutiny_current_merc
 		destroy_mercenary = scope:mercenary_mutiny_current_merc
 	}
-	scope:mercenary_mutiny_capital = {
+	scope:mercenary_mutiny_capital ?= {
 		create_sub_unit_with_owner = {
 			type = a_supply_carts
 			owner = scope:mercenary_mutiny_army_country
@@ -182,10 +171,6 @@ mercenary_mutiny_create_army_country_effect = {
 	scope:mercenary_mutiny_army_country = {
 		copy_country_name_and_adjective = root
 		copy_country_flag = root
-		set_variable = {
-			name = mercenary_mutiny_original_country
-			value = root
-		}
 		set_variable = {
 			name = mercenary_mutiny_exiles_country
 			value = yes
@@ -286,10 +271,6 @@ mercenary_mutiny_convert_annexed_to_army_country_effect = {
 	scope:mercenary_mutiny_army_country ?= {
 		copy_country_name_and_adjective = scope:mercenary_mutiny_annexed_country
 		copy_country_flag = scope:mercenary_mutiny_annexed_country
-		set_variable = {
-			name = mercenary_mutiny_original_country
-			value = scope:mercenary_mutiny_annexed_country
-		}
 		set_variable = {
 			name = mercenary_mutiny_exiles_country
 			value = yes
@@ -465,7 +446,13 @@ mercenary_mutiny_convert_annexed_to_army_country_effect = {
 mercenary_mutiny_country_takeover_effect = {
 	if = {
 		limit = {
-			NOT = { exists = var:mercenary_mutiny_strength_to_convert }
+			# 2026-09 修复：exists = var:X 在 trigger 上下文对数值变量不可靠
+			# （mod 中 exists = var: 仅用于国家引用变量；数值变量守卫用
+			# has_variable——全 mod 54 处惯例）。旧写法导致初始化被跳过，
+			# 调试路径（绕过 mercenary_mutiny_xxx_effect 的 66-69 行无条件 set）
+			# 触发时刷 "Failed to fetch variable strength_to_convert" + 后续
+			# capital 拷贝/读取连锁报错（error.log 670 次实测）。
+			NOT = { has_variable = mercenary_mutiny_strength_to_convert }
 		}
 		set_variable = {
 			name = mercenary_mutiny_strength_to_convert
@@ -507,7 +494,8 @@ mercenary_mutiny_country_takeover_effect = {
 		}
 		if = {
 			limit = {
-				NOT = { has_variable = mercenary_mutiny_skip_pop_conversion }
+				# 标记由国家（root）侧设置；变量不跨 scope，须在 root 上检查
+				NOT = { root = { has_variable = mercenary_mutiny_skip_pop_conversion } }
 			}
 			add_pop = {
 				culture = scope:mercenary_mutiny_country_scope.culture
@@ -598,8 +586,6 @@ mercenary_mutiny_create_regular_units_from_stored_strength_effect = {
 		name = mercenary_mutiny_recreate_count
 		value = {
 			value = var:mercenary_mutiny_strength_to_convert
-			divide = 1
-			min = 1
 		}
 	}
 	while = {

@@ -79,3 +79,49 @@ global_zzz_rebalanced_nepal_mercenary_soldiers_crisis = {
 allow_blades_and_thrones_militia_training_ground = {
 	positive = "gfx/interface/icons/modifier_types/_default.dds"
 }
+
+# cost_modifier 图标（2026-10-06 补，error.log "Missing Icon for Modifier"）：复用原版共享图标（同 ask_for_extra_levies_cost_modifier 的做法）
+blades_and_thrones_found_company_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_reinstate_company_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_appoint_company_ruler_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_lease_army_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_grant_settlement_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_revoke_warlord_land_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_exchange_warlord_land_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_claim_foothold_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+blades_and_thrones_ask_soldiers_for_suppression_cost_modifier = {
+	positive = "gfx/interface/icons/modifier_types/pardon_price_cost_modifier.dds"
+}
+
+# 引擎通用查询的两个阶层修正（2026-10-09 补，消除 Missing Icon；引用原版贴图）
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_noble_marriage = {
+	positive = "gfx/interface/icons/modifier_types/nobles_estate_allowed_in_cabinet.dds"
+}
+
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_private_army = {
+	positive = "gfx/interface/icons/modifier_types/nobles_estate_allowed_private_army.dds"
+}

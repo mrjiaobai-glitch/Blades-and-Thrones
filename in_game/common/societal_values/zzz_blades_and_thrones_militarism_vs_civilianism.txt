@@ -1,11 +1,11 @@
-# 军国主义 vs 文官主义：刀锋与王座专属价值观轴。
+﻿# 军国主义 vs 文官主义：刀锋与王座专属价值观轴。
 # 两端均为正面修正（"两条路线"型轴，先例：原版 mysticism_vs_jurisprudence、
 # latinization_vs_hellenization）——玩家选择国家走的路线，而非好坏权衡。
 # 深层张力：军国端抬升士兵阶层影响力（权力）→ 直接喂给军事危机/政变机制（mod 核心循环）。
 # 门控：仅拥有士兵阶层的国家可见此轴（原版 mysticism 用 modifier:allow_xxx 同款思路）。
 militarism_vs_civilianism = {
 	allow = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 
 	left_modifier = { # 军国（Militarism）：以武立国

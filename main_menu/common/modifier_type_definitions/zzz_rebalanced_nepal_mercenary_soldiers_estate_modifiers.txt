@@ -102,6 +102,28 @@ zzz_rebalanced_nepal_mercenary_soldiers_estate_cannot_marry = {
 	}
 }
 
+# 2026-10-09 补：引擎代码对**每个阶层**都按名查这两个修正（原版 8 阶层全部
+# 定义），缺失则每次启动报 Important assertion：
+#   "Modifier type definition zzz_..._estate_allowed_noble_marriage /
+#    allowed_private_army must exist in DB, code will try to use it."
+# 定义即消除断言；值默认 0 = 不允许联姻/无私兵——与 Q22 结论一致
+# （私兵接口对自定义阶层未开放，本 mod 的对应物是军团国附庸体系）。
+# ⚠️ 注：断言文案"code will try to use it"说明引擎代码路径对自定义阶层也会
+# 读 allowed_private_army——若未来想重测 Q22（私兵能否生效），从这里入手。
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_noble_marriage = {
+	boolean = yes
+	game_data = {
+		category = country
+	}
+}
+
+zzz_rebalanced_nepal_mercenary_soldiers_estate_allowed_private_army = {
+	boolean = yes
+	game_data = {
+		category = country
+	}
+}
+
 zzz_rebalanced_nepal_mercenary_soldiers_estate_can_participate_in_parliament = {
 	boolean = yes
 	game_data = {

@@ -7,7 +7,7 @@ blades_and_thrones_intel.1 = { #军事情报汇总：月度军情报告
 	outcome = neutral
 	trigger = {
 		is_human = yes
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
 	}
 
 	option = {

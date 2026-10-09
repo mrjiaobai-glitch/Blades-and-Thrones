@@ -1,4 +1,4 @@
-on_annex = {
+﻿on_annex = {
 	on_actions = {
 		mercenary_mutiny_on_annex
 	}
@@ -18,13 +18,13 @@ mercenary_mutiny_on_annex = {
 				scope:target = {
 					# 玩家被吞并：任何残军都转流亡者（原设计）；
 					# AI 被吞并：军队规模 ≥ 5 且 15% 概率（防刷屏——AI 互吞频繁，
-					# 无门槛会满世界流亡者；有门槛则观察者模式也能看到流亡军团）
+					# 无门槛会满世界流亡者；有门槛则观察者模式也能看到流亡军团）。
+					# 概率判断放在 effect 内用 EU5 random 块实现——EU5 触发器没有
+					# random（旧写法 random = 0.15 是 EU4 语法，加载报 "Unknown trigger
+					# type: random" 并被跳过，导致 AI 分支 100% 触发转换）。
 					OR = {
 						is_human = yes
-						AND = {
-							regular_army_size >= 5
-							random = 0.15
-						}
+						regular_army_size >= 5
 					}
 					OR = {
 						regular_army_size > 0
@@ -32,35 +32,68 @@ mercenary_mutiny_on_annex = {
 					}
 				}
 			}
-			scope:target = {
-				mercenary_mutiny_convert_annexed_to_army_country_effect = yes
-				if = {
-					limit = {
-						is_human = yes
-						has_variable = mercenary_mutiny_army_country_ref
+			if = {
+				limit = {
+					scope:target = {
+						is_ai = yes
 					}
-					var:mercenary_mutiny_army_country_ref = {
-						save_scope_as = mercenary_mutiny_army_country
+				}
+				# AI 被吞并：15% 概率转流亡者（防刷屏门槛）
+				random = {
+					chance = 15
+					scope:target = {
+						mercenary_mutiny_convert_annexed_to_army_country_effect = yes
 					}
-					trigger_event_non_silently = {
-						id = mercenary_mutiny_test.2
+					# 把军团国引用存到吞并国(本作用域 root)身上：
+					# 被吞并国即将灭亡，引用存它身上 on_annexed 时读不到。
+					if = {
+						limit = {
+							scope:target = { has_variable = mercenary_mutiny_army_country_ref }
+						}
+						scope:target = {
+							var:mercenary_mutiny_army_country_ref = {
+								save_scope_as = mercenary_mutiny_army_country
+							}
+						}
+						set_variable = {
+							name = mercenary_mutiny_annex_army_country
+							value = scope:mercenary_mutiny_army_country
+						}
 					}
 				}
 			}
-			# 把军团国引用存到吞并国(本作用域 root)身上：
-			# 被吞并国即将灭亡，引用存它身上 on_annexed 时读不到。
-			if = {
-				limit = {
-					scope:target = { has_variable = mercenary_mutiny_army_country_ref }
-				}
+			else = {
+				# 玩家被吞并：任何残军都无条件转流亡者（原设计）
 				scope:target = {
-					var:mercenary_mutiny_army_country_ref = {
-						save_scope_as = mercenary_mutiny_army_country
+					mercenary_mutiny_convert_annexed_to_army_country_effect = yes
+					if = {
+						limit = {
+							is_human = yes
+							has_variable = mercenary_mutiny_army_country_ref
+						}
+						var:mercenary_mutiny_army_country_ref = {
+							save_scope_as = mercenary_mutiny_army_country
+						}
+						trigger_event_non_silently = {
+							id = mercenary_mutiny_test.2
+						}
 					}
 				}
-				set_variable = {
-					name = mercenary_mutiny_annex_army_country
-					value = scope:mercenary_mutiny_army_country
+				# 把军团国引用存到吞并国(本作用域 root)身上：
+				# 被吞并国即将灭亡，引用存它身上 on_annexed 时读不到。
+				if = {
+					limit = {
+						scope:target = { has_variable = mercenary_mutiny_army_country_ref }
+					}
+					scope:target = {
+						var:mercenary_mutiny_army_country_ref = {
+							save_scope_as = mercenary_mutiny_army_country
+						}
+					}
+					set_variable = {
+						name = mercenary_mutiny_annex_army_country
+						value = scope:mercenary_mutiny_army_country
+					}
 				}
 			}
 		}

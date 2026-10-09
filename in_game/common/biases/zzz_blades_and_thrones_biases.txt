@@ -1,4 +1,4 @@
-# 出租军团的外交后果修正（biases/opinion modifiers）
+﻿# 出租军团的外交后果修正（biases/opinion modifiers）
 # 帮助潜在盟友：并肩作战者同仇敌忾
 blades_and_thrones_opinion_shared_war = {
 	value = 15

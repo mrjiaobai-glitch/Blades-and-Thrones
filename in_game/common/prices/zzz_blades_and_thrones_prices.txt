@@ -1,0 +1,67 @@
+﻿# ============================================================================
+# 军事转化 · 政治影响力定价（1.4 新资源）
+# ----------------------------------------------------------------------------
+# 结构照抄原版 prices\08_estate_emergency.txt：**顶层平铺**，无包裹块。
+# 设计意图：军事转化不只是花钱，还要付出「政治资本」。
+#   · 阶层侧产出：士兵阶层 10 个特权带 monthly_political_influence_gain_modifier
+#     负值（照搬 1.4 原版阶层特权惯例：给阶层特权 = 削弱王室政治影响力生成）。
+#   · 行动侧花费：本文件。让「军队政治化程度」成为军事转化的真实约束——
+#     想大动军队，先要有政治资本；而政治资本又因你给了士兵阶层多少特权而缩水。
+# 数值对齐 1.4 原版阶梯（main_menu\common\script_values\default_values.txt）：
+#   weak 5 / mild 10 / severe 15 / extreme 25 / ultimate 50
+#   原版阶层紧急行动定价 15-50；本文件按「改写军队政治版图的程度」分档。
+# ----------------------------------------------------------------------------
+# 2026-10-06 用户拍板（方案 B）：**只有政治版图变动的行动收费**——
+#   遣散军队 / 退伍安置 / 收编佣兵 三个纯后勤行动改为免费（删除其定价块与
+#   行动内 price 引用、cost_modifier 类型与本地化键，共 4 处同步）。
+#   免费行动清单：demobilize_army、resettle_soldiers、integrate_mercs。
+# ----------------------------------------------------------------------------
+# 字段说明：`political_influence` 用于 price 块
+#   ⚠️ prices\readme.txt 的字段表**未列出** political_influence，
+#      但 1.4 原版 prices\08_estate_emergency.txt 实际在用（= 文档不全，以实际用法为准）。
+#   引用方式：generic_action 里写 price = price:<本文件中的 id>
+# ============================================================================
+
+# --- 温和偏上（20）——涉及外交承诺的军队处置 ---
+blades_and_thrones_lease_army = {
+	political_influence = 20
+}
+
+# --- 极端档（25 = 原版 extreme）——军队脱离王室直接控制 ---
+blades_and_thrones_found_company = {
+	political_influence = 25
+}
+
+blades_and_thrones_reinstate_company = {
+	political_influence = 25
+}
+
+blades_and_thrones_appoint_company_ruler = {
+	political_influence = 25
+}
+
+# --- 终极档（50 = 原版 ultimate）——改写领地与主权，政治震动最大 ---
+blades_and_thrones_grant_settlement = {
+	political_influence = 50
+}
+
+blades_and_thrones_revoke_warlord_land = {
+	political_influence = 50
+}
+
+blades_and_thrones_exchange_warlord_land = {
+	political_influence = 50
+}
+
+blades_and_thrones_claim_foothold = {
+	political_influence = 50
+}
+
+# --- 政治事件档（30）——王室信用换刀锋对内（2026-10-06 方案①）---
+# 对齐原版 ask_nobility_for_diplomats = 30；高于组建军团 25（对外派兵），
+# 低于主权改写 50。语义：把武装力量开向自己的臣民，是王室在透支
+# 「不必收买也能被服从」的信用。士兵满意度 -0.15 与 5 年冷却为既有代价，
+# 三者叠加 = 镇压是政治支出，不是免费按钮。
+blades_and_thrones_ask_soldiers_for_suppression = {
+	political_influence = 30
+}

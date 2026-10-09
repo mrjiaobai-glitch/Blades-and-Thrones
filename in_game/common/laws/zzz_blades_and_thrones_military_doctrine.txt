@@ -1,7 +1,20 @@
-blades_and_thrones_military_doctrine_law = {
+﻿blades_and_thrones_military_doctrine_law = {
 	law_category = military
+	# 门控修复（2026-09 bug report：军制法律反复被撤销）：
+	# 引擎会周期复查法律 potential，失效即整条法律连同已选政策被自动撤销。
+	# 旧写法只查 estate_power > 0——士兵阶层 power 归零 = 国家没有任何士兵 POP
+	# （EU5 军队即 soldiers POP），军队全灭/整军遣散/组建军团转移部队等都会触发
+	# 撤销；重建军队后法律回来，再选再被撤，表现为"反复被撤销"。
+	# 修复：已持有任一军制政策的国家的法律永久有效（引擎语义：已生效即保留），
+	# 门控只影响"从未选过且无士兵阶层"的纯平民国家（保留原设计意图）。
 	potential = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
+		OR = {
+			"estate_power(estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate)" > 0
+			has_policy = standing_army_state_policy
+			has_policy = mercenary_league_policy
+			has_policy = mixed_military_policy
+			has_policy = levy_state_policy
+		}
 	}
 	allow = {}
 

@@ -1,8 +1,11 @@
 ﻿blades_and_thrones_military_junta_reform = {
 	# potential 以“政变变量”门控：仅政变事件添加改革时设置该变量，
 	# 正常游玩永不满足 → 改革不出现在改革面板，只能通过军事政变获得。
+	# 2026-09 修复：删除 estate_power > 0 支——它是易变条件，军队清零
+	# （全灭/整军遣散）会让引擎月度检查静默移除改革（同军制法律撤销 bug
+	# 同类，见心得 53）。变量设置后从不移除，仅凭变量即可完全实现门控，
+	# 改革只可能由 loyalty.4 的 remove_reform 结束。
 	potential = {
-		country_has_estate = estate_type:zzz_rebalanced_nepal_mercenary_soldiers_estate
 		has_variable = blades_and_thrones_junta_reform_eligible
 	}
 

@@ -1,10 +1,23 @@
-# 军事转化面板：主窗口（5 个转化按钮，直接执行通用行动）
-# 按钮执行 left_action = { action_name = X }，行动自带目标选择流程
+# 军事转化面板：主窗口（8 个转化按钮，直接执行通用行动）
+# 按钮执行 scripted_action_tooltip = { action_name = X }，行动自带目标选择流程。
+# 2026-10 修 1.4：原 left_action = { action_name = X } 写法在 1.4 已不存在（全本体 0 命中），
+#   改为原版 disaster/situation 面板同款（cards.gui:2747）：
+#     targetted_button_regular + datacontext = [GetGenericAction('X')] + scripted_action_tooltip
+#   原 action_button_regular 也不是 widget 类型（只是贴图名）→ 曾报 not a valid widget/type/property。
+# 按钮策略：**不用 visible**（始终显示 8 个，不可用时由 enabled 灰显 + tooltip 说明原因），
+#   便于玩家发现全部功能并知道为何不可用；原版做法（visible = [PdxGuiWidget.IsUberButtonVisible]）
+#   会隐藏不可用按钮，玩家无从悬停查看原因。
+# 注意：targetted_button_regular 类型**不自带 text**（仅 button + 贴图 + tooltip），
+#   每个按钮实例必须显式写 text = "<action_key>"，否则标签空白。
+# 2026-10-06 美化：①标题/分组头用原版字体模板（Font_Type_Headers）；②军情行加原版
+#   扁平图标（全部实查存在于 main_menu\gfx\interface\icons\flat_icons\）；③军队忠诚与
+#   军事危机两条进度条（green_red / red 模板，写法照 confirm_offer_loan_popup.gui:266）；
+#   ④按钮按功能分三组并加组头；⑤窗口 780→860 吸收新增高度。
 window = {
 	name = "blades_and_thrones_main_window"
 	parentanchor = center
 	position = { 0 0 }
-	size = { 620 780 }
+	size = { 620 1040 }
 	allow_outside = yes
 	visible = "[GetVariableSystem.Exists('blades_and_thrones_main_visible')]"
 	enabled = "[GetVariableSystem.Exists('blades_and_thrones_main_visible')]"
@@ -29,6 +42,7 @@ window = {
 
 			text_single = {
 				text = "BLADES_CONVERSION_TITLE"
+				using = Font_Type_Headers
 				fontsize = 22
 				align = center|nobaseline
 			}
@@ -41,66 +55,160 @@ window = {
 				autoresize = yes
 			}
 
-			# 军情报告：实时显示本月军饷、军队忠诚、士兵满意度、佣兵威胁、
-			# 军政府掌控力、战争持续月数与军事危机（变量由月度脉冲刷新）
+			# ============ 军情报告（变量由月度脉冲刷新；行首图标全为原版资源） ============
 			text_single = {
 				text = "BLADES_CONVERSION_REPORT_TITLE"
+				using = Font_Type_Headers
 				fontsize = 15
 				align = center|nobaseline
 				layoutpolicy_horizontal = expanding
 			}
 
-			text_single = {
-				text = "BLADES_CONVERSION_REPORT_PAY"
-				fontsize = 13
-				align = left|nobaseline
+			hbox = {
 				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/gold.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_CONVERSION_REPORT_PAY"
+					using = Font_Size_Small
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+					tooltip = "BLADES_ROW_TT_PAY"
+				}
 			}
 
-			text_single = {
-				text = "BLADES_CONVERSION_REPORT_LOYALTY"
-				fontsize = 13
-				align = left|nobaseline
+			hbox = {
 				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/subjects_loyalty.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_CONVERSION_REPORT_LOYALTY"
+					using = Font_Size_Small
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+				}
 			}
 
-			text_single = {
-				text = "BLADES_CONVERSION_REPORT_SATISFACTION"
-				fontsize = 13
-				align = left|nobaseline
+			# 军队忠诚进度条：绿色填充 = 忠诚比例，红色底槽 = 缺口。
+			# 数据源与文字行同一变量（loyalty_display，0-100），两者永不打架。
+			# tooltip：progressbar 无原版先例，但 tooltip 是 widget 通用属性（icon 块 11 处实证）。
+			progressbar_framed = {
+				size = { -1 14 }
 				layoutpolicy_horizontal = expanding
+				using = progress_bar_green_red_alt
+				min = 0
+				max = 100
+				value = "[Multiply_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_army_loyalty_display').GetValue), '(float)100')]"
+				tooltip = "BLADES_BAR_TT_LOYALTY"
 			}
 
-			text_single = {
-				text = "BLADES_CONVERSION_REPORT_PRESSURE"
-				fontsize = 13
-				align = left|nobaseline
+			hbox = {
 				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/pop_satisfaction.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_CONVERSION_REPORT_SATISFACTION"
+					using = Font_Size_Small
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+					tooltip = "BLADES_ROW_TT_SATISFACTION"
+				}
 			}
 
-			text_single = {
-				text = "BLADES_CONVERSION_REPORT_JUNTA"
-				fontsize = 13
-				align = left|nobaseline
+			hbox = {
 				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/war_human_enemy.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_CONVERSION_REPORT_PRESSURE"
+					using = Font_Size_Small
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+					tooltip = "BLADES_ROW_TT_PRESSURE"
+				}
 			}
 
-			text_single = {
-				text = "BLADES_CONVERSION_REPORT_WAR"
-				fontsize = 13
-				align = left|nobaseline
+			hbox = {
 				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/military.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_CONVERSION_REPORT_JUNTA"
+					using = Font_Size_Small
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+					tooltip = "BLADES_ROW_TT_JUNTA"
+				}
 			}
 
-			text_single = {
-				text = "BLADES_CONVERSION_REPORT_CRISIS"
-				fontsize = 13
-				align = left|nobaseline
+			hbox = {
 				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/war_enthusiasm.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_CONVERSION_REPORT_WAR"
+					using = Font_Size_Small
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+					tooltip = "BLADES_ROW_TT_WAR"
+				}
 			}
 
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/disaster.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_CONVERSION_REPORT_CRISIS"
+					using = Font_Size_Small
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+				}
+			}
+
+			# 军事危机进度条：红色填充 = 危机水位（越高越危险，与忠诚条反向语义）。
+			progressbar_framed = {
+				size = { -1 14 }
+				layoutpolicy_horizontal = expanding
+				using = progress_bar_red_alt
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_military_crisis_display').GetValue)]"
+				tooltip = "BLADES_BAR_TT_CRISIS"
+			}
+
+			# 危机风味文案（customizable_localization 动态生成）
 			text_single = {
 				text = "[Player.Custom('blades_and_thrones_crisis_flavor')]"
+				using = Font_Type_Flavor
 				fontsize = 12
 				align = left|nobaseline
 				layoutpolicy_horizontal = expanding
@@ -110,7 +218,7 @@ window = {
 			# 危机变化原因（本月各分项贡献；仅当该项 > 0 时显示）
 			text_single = {
 				text = "BLADES_CONVERSION_REPORT_CHANGE_TITLE"
-				fontsize = 12
+				using = Font_Size_Very_Small
 				align = left|nobaseline
 				layoutpolicy_horizontal = expanding
 				visible = "[Or(Or(Or(Or(GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_threat_display').GetValue), '(float)0'), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_loyalty_display').GetValue), '(float)0')), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_satisfaction_display').GetValue), '(float)0')), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_war_display').GetValue), '(float)0')), GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_decay_display').GetValue), '(float)0'))]"
@@ -118,7 +226,7 @@ window = {
 
 			text_single = {
 				text = "BLADES_CONVERSION_REPORT_CHANGE_THREAT"
-				fontsize = 12
+				using = Font_Size_Very_Small
 				align = left|nobaseline
 				layoutpolicy_horizontal = expanding
 				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_threat_display').GetValue), '(float)0')]"
@@ -126,7 +234,7 @@ window = {
 
 			text_single = {
 				text = "BLADES_CONVERSION_REPORT_CHANGE_LOYALTY"
-				fontsize = 12
+				using = Font_Size_Very_Small
 				align = left|nobaseline
 				layoutpolicy_horizontal = expanding
 				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_loyalty_display').GetValue), '(float)0')]"
@@ -134,7 +242,7 @@ window = {
 
 			text_single = {
 				text = "BLADES_CONVERSION_REPORT_CHANGE_SATISFACTION"
-				fontsize = 12
+				using = Font_Size_Very_Small
 				align = left|nobaseline
 				layoutpolicy_horizontal = expanding
 				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_satisfaction_display').GetValue), '(float)0')]"
@@ -142,7 +250,7 @@ window = {
 
 			text_single = {
 				text = "BLADES_CONVERSION_REPORT_CHANGE_WAR"
-				fontsize = 12
+				using = Font_Size_Very_Small
 				align = left|nobaseline
 				layoutpolicy_horizontal = expanding
 				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_war_display').GetValue), '(float)0')]"
@@ -150,199 +258,263 @@ window = {
 
 			text_single = {
 				text = "BLADES_CONVERSION_REPORT_CHANGE_DECAY"
-				fontsize = 12
+				using = Font_Size_Very_Small
 				align = left|nobaseline
 				layoutpolicy_horizontal = expanding
 				visible = "[GreaterThan_float(FixedPointToFloat(Player.MakeScope.GetVariable('blades_and_thrones_crisis_change_decay_display').GetValue), '(float)0')]"
 			}
 
-			action_button_regular = {
+			# ============ 转化按钮：三组（组头 = 原版标题字体 + 扁平图标） ============
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/unit_type.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_SECTION_CONVERSION_A"
+					using = Font_Type_Headers
+					fontsize = 14
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+				}
+			}
+
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_integrate_mercs')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_integrate_mercs"
 				text = "blades_and_thrones_integrate_mercs"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_integrate_mercs" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_integrate_mercs"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_integrate_mercs"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_integrate_mercs"
 				}
 			}
 
-			action_button_regular = {
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_found_company')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_found_company"
 				text = "blades_and_thrones_found_company"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_found_company" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_found_company"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_found_company"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_found_company"
 				}
 			}
 
-			action_button_regular = {
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_reinstate_company')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_reinstate_company"
 				text = "blades_and_thrones_reinstate_company"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_reinstate_company" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_reinstate_company"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_reinstate_company"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_reinstate_company"
 				}
 			}
 
-			action_button_regular = {
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_lease_army')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_lease_army"
+				text = "blades_and_thrones_lease_army"
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_lease_army"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_lease_army"
+				}
+			}
+
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/pop_satisfaction.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_SECTION_CONVERSION_B"
+					using = Font_Type_Headers
+					fontsize = 14
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+				}
+			}
+
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_demobilize_army')]"
+				layoutpolicy_horizontal = expanding
+				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_demobilize_army"
 				text = "blades_and_thrones_demobilize_army"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_demobilize_army" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_demobilize_army"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_demobilize_army"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_demobilize_army"
 				}
 			}
 
-			action_button_regular = {
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_resettle_soldiers')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_resettle_soldiers"
 				text = "blades_and_thrones_resettle_soldiers"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_resettle_soldiers" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_resettle_soldiers"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_resettle_soldiers"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_resettle_soldiers"
 				}
 			}
 
-			action_button_regular = {
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				spacing = 6
+				icon = {
+					size = { 18 18 }
+					texture = "gfx/interface/icons/flat_icons/overlord.dds"
+					texture_density = 2
+				}
+				text_single = {
+					text = "BLADES_SECTION_CONVERSION_C"
+					using = Font_Type_Headers
+					fontsize = 14
+					align = left|vcenter
+					layoutpolicy_horizontal = expanding
+				}
+			}
+
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_appoint_company_ruler')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_appoint_company_ruler"
 				text = "blades_and_thrones_appoint_company_ruler"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_appoint_company_ruler" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_appoint_company_ruler"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_appoint_company_ruler"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_appoint_company_ruler"
 				}
 			}
 
-			action_button_regular = {
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_revoke_warlord_land')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_revoke_warlord_land"
 				text = "blades_and_thrones_revoke_warlord_land"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_revoke_warlord_land" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_revoke_warlord_land"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_revoke_warlord_land"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_revoke_warlord_land"
 				}
 			}
 
-			action_button_regular = {
+			targetted_button_regular = {
+				datacontext = "[GetGenericAction('blades_and_thrones_exchange_warlord_land')]"
 				layoutpolicy_horizontal = expanding
 				size = { -1 42 }
+				name = "BLADES_ACTION_blades_and_thrones_exchange_warlord_land"
 				text = "blades_and_thrones_exchange_warlord_land"
-				actor = "[Player]"
-				left_action = { action_name = "blades_and_thrones_exchange_warlord_land" }
-				default_format = "#High"
-				tooltipwidget = {
-					ContextualTooltipType = {
-						blockoverride "title_text" {
-							text = "blades_and_thrones_exchange_warlord_land"
-						}
-						block "concept_link" {
-						}
-						blockoverride "tooltip_content" {
-							using = action_tooltip_inner_content
-						}
-						block "title_icon" {
-						}
-					}
+				enabled = "[PdxGuiWidget.IsUberButtonEnabled]"
+				tooltipwidget = { using = generic_action_tooltip }
+
+				scripted_action_tooltip = {
+					click_type = left
+					click_mode = single
+					action_name = "blades_and_thrones_exchange_warlord_land"
+					actor = "[Player]"
+				}
+
+				button_tooltip_override = {
+					title = "blades_and_thrones_exchange_warlord_land"
 				}
 			}
 
 			text_single = {
+				text = "BLADES_CONVERSION_INIT_NOTE"
+				using = Font_Size_Very_Small
+				align = center|nobaseline
+				layoutpolicy_horizontal = expanding
+			}
+
+			text_single = {
 				text = "BLADES_CONVERSION_FOOTER"
-				fontsize = 11
+				using = Font_Size_Very_Small
 				align = center|nobaseline
 				maximumsize = { 560 -1 }
 				autoresize = yes

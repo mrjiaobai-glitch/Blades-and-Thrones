@@ -1,4 +1,4 @@
-mercenary_mutiny_manpower_pool = {
+﻿mercenary_mutiny_manpower_pool = {
 	audio_tier = 2
 	is_foreign = yes
 	is_special = yes

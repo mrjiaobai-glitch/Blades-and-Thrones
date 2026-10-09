@@ -1,4 +1,4 @@
-namespace = blades_and_thrones_regency
+﻿namespace = blades_and_thrones_regency
 
 # ============================================================================
 # 军人摄政事件链

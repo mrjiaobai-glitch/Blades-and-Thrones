@@ -1,4 +1,4 @@
-# Building Types 字段速查（本 mod 用）
+﻿# Building Types 字段速查（本 mod 用）
 # 参考：创意工坊 3659311464「1644」building_types/readme.txt + EU5 Wiki Building modding
 #
 # ATTRIBUTES
